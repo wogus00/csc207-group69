@@ -1,13 +1,14 @@
 package app;
 
 import view.CreateProjectView;
+import data_access.FileProjectDataAccessObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class main {
-    public static void main(String[] args) {
+public class Main {
+    public static void Main(String[] args) {
 
         // main application window
         JFrame application = new JFrame("Create Project");
@@ -25,9 +26,10 @@ public class main {
         // ViewModels
         CreateProjectViewModel createProjectViewModel = new CreateProjectViewModel();
 
-        FileUserDataAccessObject userDataAccessObject;
+        FileProjectDataAccessObject projectDataAcessObject;
+
         try {
-            userDataAccessObject = new FileUserDataAccessObject("./users.csv", new CommonUserFactory());
+            projectDataAcessObject = new FileUserDataAccessObject("./projects.csv", new ProjectFactory());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

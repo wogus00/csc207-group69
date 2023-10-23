@@ -1,5 +1,7 @@
 package data_access;
 
+import entity.Project;
+import entity.ProjectFactory
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -7,14 +9,14 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class FileProjectDataAccessObject {
+public class FileProjectDataAccessObject implements CreateProjectDataAcessInterface {
     private final File csvFile;
 
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, Project> projects = new HashMap<>();
 
-    private projectFactory;
+    private ProjectFactory projectFactory;
 
     public FileProjectDataAccessObject(String csvPath, ProjectFactory projectFactory) throws IOException {
         this.projectFactory = projectFactory;
