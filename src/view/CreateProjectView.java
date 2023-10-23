@@ -21,7 +21,7 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
     private final CreateProjectViewModel createProjectViewModel;
     private final JTextField projectNameInputField = new JTextField(15);
     private final JTextField leaderEmailInputField = new JTextField(15);
-    private final JTextField memberEmailInputField = new JPasswordField(15);
+    private final JTextField memberEmailInputField = new JTextField(15);
     private final CreateProjectController createProjectController;
 
     private final JButton create;
