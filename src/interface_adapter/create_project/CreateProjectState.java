@@ -7,21 +7,16 @@ public class CreateProjectState {
     private String projectName = "";
     private String projectNameError = null;
     private String leaderEmail = "";
-    private String leaderEmailError = null;
     private ArrayList<String> memberEmail = new ArrayList<>();
-    private String memberEmailError = null;
 
     public CreateProjectState(CreateProjectState copy) {
         projectName = copy.projectName;
         projectNameError = copy.projectNameError;
         leaderEmail = copy.leaderEmail;
-        leaderEmailError = copy.leaderEmailError;
         memberEmail = copy.memberEmail;
-        memberEmailError = copy.memberEmailError;
     }
 
-    public CreateProjectState() {
-    }
+    public CreateProjectState() {}
 
     public String getProjectName() {
         return projectName;
@@ -35,16 +30,8 @@ public class CreateProjectState {
         return leaderEmail;
     }
 
-    public String getLeaderEmailError() {
-        return leaderEmailError;
-    }
-
     public ArrayList<String> getMemberEmail() {
         return memberEmail;
-    }
-
-    public String getMemberEmailError() {
-        return memberEmailError;
     }
 
     public void setProjectName(String projectName) {
@@ -59,20 +46,12 @@ public class CreateProjectState {
         this.leaderEmail = leaderEmail;
     }
 
-    public void setLeaderEmailError(String leaderEmailError) {
-        this.leaderEmailError = leaderEmailError;
-    }
-
     public void setMemberEmail(String memberEmailString) {
         String[] parts = memberEmailString.split(",");
         for (int i = 0; i < parts.length; i++) {
-            parts[i] = parts[i].trim();
+            parts[i] = parts[i].strip();
         }
         this.memberEmail = new ArrayList<>(Arrays.asList(parts));
-    }
-
-    public void setMemberEmailError(String memberEmailError) {
-        this.memberEmailError = memberEmailError;
     }
 
     @Override
