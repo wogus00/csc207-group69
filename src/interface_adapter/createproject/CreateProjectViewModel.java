@@ -19,7 +19,7 @@ public class CreateProjectViewModel extends ViewModel {
     private CreateProjectState state = new CreateProjectState();
 
     public CreateProjectViewModel() {
-        super("create projet");
+        super("create project");
     }
 
     public void setState(CreateProjectState state) {
@@ -28,7 +28,7 @@ public class CreateProjectViewModel extends ViewModel {
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-    // This is what the Signup Presenter will call to let the ViewModel know
+    // This is what the Project Create Presenter will call to let the ViewModel know
     // to alert the View
     public void firePropertyChanged() {
         support.firePropertyChange("state", null, this.state);
