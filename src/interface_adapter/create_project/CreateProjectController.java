@@ -1,4 +1,4 @@
-package interface_adapter.createproject;
+package interface_adapter.create_project;
 
 import use_case.createproject.CreateProjectInputBoundary;
 import use_case.createproject.CreateProjectInputData;
