@@ -17,6 +17,8 @@ public class CreateProjectInteractor implements CreateProjectBoundary {
         String project = create_projectInputData.getProject_name();
         if (!projectDataAccessObject.existsByName(project)) {
             create_projectPresenter.prepareFailView(project + ": this project does not exist.");
+        } else {
+            projectPresenter.prepareSuccessView(new CreateProjectOutputData(projectName))
         }
     }
 }
