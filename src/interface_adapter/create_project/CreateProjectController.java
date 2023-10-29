@@ -1,7 +1,9 @@
 package interface_adapter.create_project;
 
-import use_case.createproject.CreateProjectInputBoundary;
-import use_case.createproject.CreateProjectInputData;
+import use_case.create_project.CreateProjectInputBoundary;
+import use_case.create_project.CreateProjectInputData;
+
+import java.util.ArrayList;
 
 public class CreateProjectController {
 
@@ -10,9 +12,8 @@ public class CreateProjectController {
         this.userCreateProjectUseCaseInteractor = userCreateProjectUseCaseInteractor;
     }
 
-    public void execute(String projectName, String leaderEmail, String memberEmail) {
-        CreateProjectInputData createProjectInputData = new CreateProjectInputData(
-                projectName, leaderEmail, memberEmail);
+    public void execute(String projectName, String leaderEmail, ArrayList<String> memberEmail) {
+        CreateProjectInputData createProjectInputData = new CreateProjectInputData(projectName, leaderEmail, memberEmail);
 
         userCreateProjectUseCaseInteractor.execute(createProjectInputData);
     }

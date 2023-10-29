@@ -1,8 +1,9 @@
 package data_access;
 
 import entity.Project;
-import entity.ProjectFactory
+import entity.ProjectFactory;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -46,6 +47,9 @@ public class FileProjectDataAccessObject implements CreateProjectDataAcessInterf
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private void save() {
     }
 
     public boolean checkProjectName(String newProjectName) {
