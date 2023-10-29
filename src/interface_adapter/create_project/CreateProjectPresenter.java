@@ -7,6 +7,7 @@ import use_case.create_project.CreateProjectOutputData;
 public class CreateProjectPresenter implements CreateProjectOutputBoundary {
 
     private final CreateProjectViewModel createProjectViewModel;
+    private ViewManagerModel viewManagerModel;
 
     public CreateProjectPresenter(ViewManagerModel viewManagerModel,
                            CreateProjectViewModel createProjectViewModel) {
@@ -21,7 +22,7 @@ public class CreateProjectPresenter implements CreateProjectOutputBoundary {
 
     @Override
     public void prepareFailView(String error) {
-        createProjectState createProjectState = CreateProjectViewModel.getState();
+        CreateProjectState createProjectState = createProjectViewModel.getState();
         createProjectState.setProjectNameError(error);
         createProjectViewModel.firePropertyChanged();
     }
