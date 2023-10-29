@@ -11,7 +11,7 @@ public class CreateProjectController {
     }
 
     public void execute(String projectName, String leaderEmail, String memberEmail) {
-        CreateProjectInputData createProjectInputData = new CreateProjectController(
+        CreateProjectInputData createProjectInputData = new CreateProjectInputData(
                 projectName, leaderEmail, memberEmail);
 
         userCreateProjectUseCaseInteractor.execute(createProjectInputData);
