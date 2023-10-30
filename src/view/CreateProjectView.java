@@ -48,8 +48,6 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
         buttons.add(create);
 
 
-
-
         create.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
@@ -138,3 +136,14 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
         this.add(memberEmailInfo);
         this.add(buttons);
     }
+
+    public void actionPerformed(ActionEvent evt){}
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        CreateProjectState state = (CreateProjectState) evt.getNewValue();
+        if (state.getProjectNameError() != null) {
+            JOptionPane.showMessageDialog(this, state.getProjectNameError());
+        }
+    }
+}
