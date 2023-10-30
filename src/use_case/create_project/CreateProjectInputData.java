@@ -14,7 +14,7 @@ public class CreateProjectInputData {
         return project;
     }
 
-    public String getProject_name() {
+    public String getProjectName() {
         return this.project;
     }
 }

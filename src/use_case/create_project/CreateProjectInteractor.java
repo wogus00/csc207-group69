@@ -20,7 +20,7 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
 
     @Override
     public void execute(CreateProjectInputData createProjectInputData) {
-        String projectName = createProjectInputData.getProject_name();
+        String projectName = createProjectInputData.getProjectName();
 
         if (!createProjectDataAccessObject.existsByName(projectName)) {
             createProjectPresenter.prepareFailView(projectName + ": this project does not exist.");
