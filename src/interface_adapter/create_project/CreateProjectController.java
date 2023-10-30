@@ -7,14 +7,14 @@ import java.util.ArrayList;
 
 public class CreateProjectController {
 
-    final CreateProjectInputBoundary userCreateProjectUseCaseInteractor;
-    public CreateProjectController(CreateProjectInputBoundary userCreateProjectUseCaseInteractor) {
-        this.userCreateProjectUseCaseInteractor = userCreateProjectUseCaseInteractor;
+    final CreateProjectInputBoundary createProjectUseCaseInteractor;
+    public CreateProjectController(CreateProjectInputBoundary CreateProjectUseCaseInteractor) {
+        this.createProjectUseCaseInteractor = CreateProjectUseCaseInteractor;
     }
 
-    public void execute(String projectName, String leaderEmail, ArrayList<String> memberEmail) {
-        CreateProjectInputData createProjectInputData = new CreateProjectInputData(projectName, leaderEmail, memberEmail);
+    public void execute(String projectName, String leaderEmail, ArrayList<String> memberEmails) {
+        CreateProjectInputData createProjectInputData = new CreateProjectInputData(projectName, leaderEmail, memberEmails);
 
-        userCreateProjectUseCaseInteractor.execute(createProjectInputData);
+        createProjectUseCaseInteractor.execute(createProjectInputData);
     }
 }
