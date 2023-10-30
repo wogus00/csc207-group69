@@ -1,15 +1,18 @@
 package data_access;
 
 import entity.Project;
-import entity.ProjectFactory
+import entity.ProjectFactory;
+import use_case.create_project.CreateProjectDataAccessInterface;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class FileProjectDataAccessObject implements CreateProjectDataAcessInterface {
+public class FileProjectDataAccessObject implements CreateProjectDataAccessInterface {
     private final File csvFile;
 
     private final Map<String, Integer> headers = new LinkedHashMap<>();
@@ -41,11 +44,14 @@ public class FileProjectDataAccessObject implements CreateProjectDataAcessInterf
                     Project project = projectFactory.create(projectName, leaderEmail, memberEmails);
                     projects.put(projectName, project);
                 }
-                writer.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private void save() {
+        ;
     }
 
     public boolean checkProjectName(String newProjectName) {
