@@ -4,8 +4,6 @@ import interface_adapter.create_project.CreateProjectController;
 import interface_adapter.create_project.CreateProjectState;
 import interface_adapter.create_project.CreateProjectViewModel;
 
-
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
