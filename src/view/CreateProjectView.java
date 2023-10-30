@@ -145,6 +145,9 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
+        CreateProjectState state = (CreateProjectState) evt.getNewValue();
+        if (state.getProjectNameError() != null) {
+            JOptionPane.showMessageDialog(this, state.getProjectNameError());
+        }
     }
 }
