@@ -2,7 +2,7 @@ package use_case.create_project;
 
 import entity.Project;
 import entity.ProjectFactory;
-import entity.ProjectName;
+import entity.Project;
 
 public class CreateProjectInteractor implements CreateProjectInputBoundary {
     final CreateProjectDataAccessInterface createProjectDataAccessObject;
@@ -17,14 +17,27 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
         this.projectFactory = projectFactory;
     }
 
+
     @Override
     public void execute(CreateProjectInputData createProjectInputData) {
-        Object createProjectInputData;
-        String project = createProjectInputData.getProject_name();
-        if (!projectDataAccessObject.existsByName(project)) {
-            create_projectPresenter.prepareFailView(project + ": this project does not exist.");
+        String projectName = createProjectInputData.getProject_name();
+
+        if (!createProjectDataAccessObject.existsByName(projectName)) {
+            createProjectPresenter.prepareFailView(projectName + ": this project does not exist.");
         } else {
-            projectPresenter.prepareSuccessView(new CreateProjectOutputData(projectName));
+            CreateProjectOutputData outputData = new CreateProjectOutputData() {
+                @Override
+                public void prepareSuccessView(CreateProjectOutputData project) {
+                    System.out.println("Project creation was successful!");
+                }
+
+                @Override
+                public void prepareFailView(String error) {
+                    System.out.println("Error: " + error);
+                }
+            };
+            createProjectPresenter.prepareSuccessView(outputData);
+
         }
     }
 }
