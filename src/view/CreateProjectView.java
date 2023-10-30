@@ -26,7 +26,6 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
     private final JButton create;
 
 
-
     public CreateProjectView(CreateProjectController createProjectController,
                              CreateProjectViewModel createProjectViewModel) {
 
