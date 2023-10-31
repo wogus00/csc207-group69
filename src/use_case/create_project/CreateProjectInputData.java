@@ -18,7 +18,7 @@ public class CreateProjectInputData {
         return this.projectName;
     }
     public ArrayList<String> getMemberEmails() {
-        return this.getMemberEmails();
+        return this.memberEmails;
     }
     public String getLeaderEmail() {
         return this.leaderEmail;
