@@ -15,7 +15,7 @@ import java.awt.*;
 import java.io.IOException;
 
 public class Main {
-    public static void Main(String[] args) {
+    public static void main(String[] args) {
 
         // main application window
         JFrame application = new JFrame("Create Project");

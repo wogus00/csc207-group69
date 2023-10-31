@@ -8,9 +8,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class FileProjectDataAccessObject implements CreateProjectDataAccessInterface {
     private final File csvFile;
@@ -34,13 +32,12 @@ public class FileProjectDataAccessObject implements CreateProjectDataAccessInter
         } else {
             try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
                 String header = reader.readLine();
-
                 String row;
                 while ((row = reader.readLine()) != null) {
                     String[] col = row.split(",");
                     String projectName = String.valueOf(col[headers.get("projectName")]);
                     String leaderEmail = String.valueOf(col[headers.get("leaderEmail")]);
-                    String memberEmails = String.valueOf(col[headers.get("memberEmails")]);
+                    ArrayList<String> memberEmails = new ArrayList<>(Arrays.asList(col[headers.get("memberEmails")]));
                     Project project = projectFactory.create(projectName, leaderEmail, memberEmails);
                     projects.put(projectName, project);
                 }
@@ -51,14 +48,14 @@ public class FileProjectDataAccessObject implements CreateProjectDataAccessInter
     }
 
     private void save() {
-        ;
     }
+    public void save(Project project) {}
 
-    public boolean checkProjectName(String newProjectName) {
+    public boolean existsByName(String newProjectName) {
         return projects.containsKey(newProjectName);
     }
 
     public Project get(String projectName) {
         return projects.get(projectName);
     }
-}
+    }

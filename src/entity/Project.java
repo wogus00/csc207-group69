@@ -1,11 +1,9 @@
 package entity;
 
-public class Project {
-    private String id;
-    private String name;
+import java.util.ArrayList;
 
-    public Project(String id, String name, String date) {
-        this.id = id;
-        this.name = name;
-    }
+public interface Project {
+    String getProjectName();
+    String getLeaderEmail();
+    ArrayList<String> getMemberEmails();
 }
