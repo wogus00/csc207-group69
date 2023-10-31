@@ -1,28 +1,30 @@
-package use_case.create_project;
+package entity;
 
 import java.util.ArrayList;
 
-public class CreateProjectOutputData {
-
+public class CommonProject implements Project {
     private final String projectName;
     private final String leaderEmail;
     private final ArrayList<String> memberEmails;
-    private boolean useCaseFailed;
 
-    public CreateProjectOutputData(String projectName, String leaderEmail, ArrayList<String> memberEmails, boolean useCaseFailed) {
+    public CommonProject(String projectName, String leaderEmail, ArrayList<String> memberEmails) {
         this.projectName = projectName;
         this.leaderEmail = leaderEmail;
         this.memberEmails = memberEmails;
-        this.useCaseFailed = useCaseFailed;
     }
 
-    public String getProjectName() {
+    @Override
+    public String getProjectName(){
         return projectName;
     }
+
+    @Override
     public String getLeaderEmail() {
         return leaderEmail;
     }
-    public ArrayList<String> getMemberEmails(){
+
+    @Override
+    public ArrayList<String> getMemberEmails() {
         return memberEmails;
     }
 }

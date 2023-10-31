@@ -4,16 +4,19 @@ import entity.Project;
 import entity.ProjectFactory;
 import entity.Project;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class CreateProjectInteractor implements CreateProjectInputBoundary {
     final CreateProjectDataAccessInterface createProjectDataAccessObject;
     final CreateProjectOutputBoundary createProjectPresenter;
     final ProjectFactory projectFactory;
 
     public CreateProjectInteractor(CreateProjectDataAccessInterface projectDataAccessInterface,
-                                   CreateProjectOutputBoundary create_projectOutputBoundary,
+                                   CreateProjectOutputBoundary createProjectOutputBoundary,
                                    ProjectFactory projectFactory) {
         this.createProjectDataAccessObject = projectDataAccessInterface;
-        this.createProjectPresenter = create_projectOutputBoundary;
+        this.createProjectPresenter = createProjectOutputBoundary;
         this.projectFactory = projectFactory;
     }
 
@@ -21,23 +24,17 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
     @Override
     public void execute(CreateProjectInputData createProjectInputData) {
         String projectName = createProjectInputData.getProjectName();
+        String leaderEmail = createProjectInputData.getLeaderEmail();
+        ArrayList<String> memberEmails = createProjectInputData.getMemberEmails();
 
         if (!createProjectDataAccessObject.existsByName(projectName)) {
-            createProjectPresenter.prepareFailView(projectName + ": this project does not exist.");
+            createProjectPresenter.prepareFailView("Project already exists.");
         } else {
-            CreateProjectOutputData outputData = new CreateProjectOutputData() {
-                @Override
-                public void prepareSuccessView(CreateProjectOutputData project) {
-                    System.out.println("Project creation was successful!");
-                }
+            Project project = projectFactory.create(projectName, leaderEmail, memberEmails);
+            createProjectDataAccessObject.save(project);
 
-                @Override
-                public void prepareFailView(String error) {
-                    System.out.println("Error: " + error);
-                }
-            };
-            createProjectPresenter.prepareSuccessView(outputData);
-
+            CreateProjectOutputData createProjectOutputData = new CreateProjectOutputData(project.getProjectName(), project.getLeaderEmail(), project.getMemberEmails(), true);
+            createProjectPresenter.prepareSuccessView(createProjectOutputData);
+            }
         }
-    }
 }

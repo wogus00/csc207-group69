@@ -1,11 +1,9 @@
 package app;
 
+import data_access.FirebaseAccessObject;
 import entity.CommonProjectFactory;
-import entity.ProjectFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.create_project.CreateProjectViewModel;
-
-import data_access.FileProjectDataAccessObject;
 
 import view.CreateProjectView;
 import view.ViewManager;
@@ -15,7 +13,7 @@ import java.awt.*;
 import java.io.IOException;
 
 public class Main {
-    public static void Main(String[] args) {
+    public static void main(String[] args) {
 
         // main application window
         JFrame application = new JFrame("Create Project");
@@ -33,14 +31,10 @@ public class Main {
         // ViewModels
         CreateProjectViewModel createProjectViewModel = new CreateProjectViewModel();
 
-        FileProjectDataAccessObject projectDataAccessObject;
+        FirebaseAccessObject firebaseAccessObject;
+        firebaseAccessObject = new FirebaseAccessObject();
 
-        try {
-            projectDataAccessObject = new FileProjectDataAccessObject("./projects.csv", new CommonProjectFactory());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        CreateProjectView createProjectView = CreateProjectUseCaseFactory.createProjectView(viewManagerModel, createProjectViewModel, projectDataAccessObject);
+        CreateProjectView createProjectView = CreateProjectUseCaseFactory.createProjectView(viewManagerModel, createProjectViewModel, firebaseAccessObject);
         views.add(createProjectView, createProjectView.viewName);
 
         viewManagerModel.setActiveView(createProjectView.viewName);
