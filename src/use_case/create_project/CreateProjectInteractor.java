@@ -13,10 +13,10 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
     final ProjectFactory projectFactory;
 
     public CreateProjectInteractor(CreateProjectDataAccessInterface projectDataAccessInterface,
-                                   CreateProjectOutputBoundary create_projectOutputBoundary,
+                                   CreateProjectOutputBoundary createProjectOutputBoundary,
                                    ProjectFactory projectFactory) {
         this.createProjectDataAccessObject = projectDataAccessInterface;
-        this.createProjectPresenter = create_projectOutputBoundary;
+        this.createProjectPresenter = createProjectOutputBoundary;
         this.projectFactory = projectFactory;
     }
 
