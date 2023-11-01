@@ -60,6 +60,10 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
                                     currentState.getLeaderEmail(),
                                     currentState.getMemberEmail()
                             );
+                            currentState = createProjectViewModel.getState();
+                            if (currentState.getProjectNameError() == null) {
+                                JOptionPane.showMessageDialog(CreateProjectView.this, "create project successfully");
+                            }
                         }
                     }
                 }
