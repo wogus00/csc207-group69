@@ -72,6 +72,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(create)) {
                             viewManagerModel.setActiveView("create project");
+                            viewManagerModel.firePropertyChanged();
                         }
                     }
                 }

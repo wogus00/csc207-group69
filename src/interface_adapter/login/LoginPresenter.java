@@ -5,6 +5,8 @@ import interface_adapter.main_page.MainPageViewModel;
 import interface_adapter.ViewManagerModel;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
+import interface_adapter.login.LoginState;
+import interface_adapter.login.LoginViewModel;
 import view.MainPageView;
 
 
@@ -38,7 +40,7 @@ public class LoginPresenter implements LoginOutputBoundary {
     @Override
     public void prepareFailView(String error) {
         LoginState loginState = loginViewModel.getState();
-        loginState.setNotMatchError(error);
+        loginState.setNoMatchError(error);
         loginViewModel.firePropertyChanged();
     }
 }
