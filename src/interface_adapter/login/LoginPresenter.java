@@ -29,8 +29,8 @@ public class LoginPresenter implements LoginOutputBoundary {
         // On success, switch to the main page view.
 
         MainPageState mainPageState = mainPageViewModel.getState();
-        MainPageState.setProjectName(response.getProjectName());
-        MainPageState.setUserEmail(response.getUserEmail());
+        mainPageState.setProjectName(response.getProjectName());
+        mainPageState.setUserEmail(response.getUserEmail());
         this.mainPageViewModel.setState(mainPageState);
         this.mainPageViewModel.firePropertyChanged();
         this.viewManagerModel.setActiveView(mainPageViewModel.getViewName());
