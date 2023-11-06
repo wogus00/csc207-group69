@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 
 public class CreateProjectView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "create project";
@@ -55,11 +56,15 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
                         if (evt.getSource().equals(create)) {
                             CreateProjectState currentState = createProjectViewModel.getState();
 
-                            createProjectController.execute(
-                                    currentState.getProjectName(),
-                                    currentState.getLeaderEmail(),
-                                    currentState.getMemberEmail()
-                            );
+                            try {
+                                createProjectController.execute(
+                                        currentState.getProjectName(),
+                                        currentState.getLeaderEmail(),
+                                        currentState.getMemberEmail()
+                                );
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                             currentState = createProjectViewModel.getState();
                             if (currentState.getProjectNameError() == null) {
                                 JOptionPane.showMessageDialog(CreateProjectView.this, "create project successfully");
