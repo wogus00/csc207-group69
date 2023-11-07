@@ -1,7 +1,10 @@
 package use_case.create_project;
 
+import com.google.api.services.gmail.model.Message;
+
+import javax.mail.MessagingException;
 import java.io.IOException;
 
 public interface CreateProjectGmailDataAccessInterface {
-    void sendProjectCreationEmail(String leaderEmail, String email, String projectName) throws IOException;
+    Message sendProjectCreationEmail(String fromEmail, String toEmail, String projectName) throws IOException, MessagingException;
 }

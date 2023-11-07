@@ -4,6 +4,8 @@ import entity.Project;
 import entity.ProjectFactory;
 import entity.Project;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +29,7 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
 
 
     @Override
-    public void execute(CreateProjectInputData createProjectInputData) throws IOException {
+    public void execute(CreateProjectInputData createProjectInputData) throws IOException, AddressException {
         String projectName = createProjectInputData.getProjectName();
         String leaderEmail = createProjectInputData.getLeaderEmail();
         ArrayList<String> memberEmails = createProjectInputData.getMemberEmails();
@@ -40,7 +42,11 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
 
 
             for (String email: memberEmails) {
-                gmailDataAccessObject.sendProjectCreationEmail(leaderEmail, email, projectName);
+                try {
+                    gmailDataAccessObject.sendProjectCreationEmail(leaderEmail, email, projectName);
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             CreateProjectOutputData createProjectOutputData = new CreateProjectOutputData(project.getProjectName(), project.getLeaderEmail(), project.getMemberEmails(), true);
