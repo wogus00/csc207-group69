@@ -37,7 +37,7 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
 
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
 
-    private static final List<String> SCOPES = Collections.singletonList(GmailScopes.GMAIL_LABELS);
+    private static final List<String> SCOPES = Collections.singletonList(GmailScopes.GMAIL_SEND);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
     private final Gmail service;
@@ -46,6 +46,7 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
     public GmailDataAccessObject() throws IOException, GeneralSecurityException {
     // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
         Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
             .setApplicationName(APPLICATION_NAME)
             .build();
@@ -98,8 +99,6 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
         try {
             // Create send message
             message = service.users().messages().send("me", message).execute();
-            System.out.println("Message id: " + message.getId());
-            System.out.println(message.toPrettyString());
             return message;
         } catch (GoogleJsonResponseException e) {
             GoogleJsonError error = e.getDetails();
