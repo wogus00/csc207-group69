@@ -1,11 +1,29 @@
 package entity;
 
-public class Project {
-    private String id;
-    private String name;
+import java.util.List;
 
-    public Project(String id, String name, String date) {
-        this.id = id;
-        this.name = name;
-    }
+public interface Project {
+    String getName();
+
+    void setName(String name);
+
+    User getLeader();
+
+    void setLeader(User leader);
+
+    String getDetail();
+
+    void setDetail(String detail);
+
+    List<User> getMembers();
+
+    void addMember(User member);
+
+    void removeMember(User member);
+
+    String getTimeSlot();
+
+    void setTimeSlot(String timeSlot);
+
+    void checkUserAssignment(List<CommonProject> commonProjects) throws Exception;
 }
