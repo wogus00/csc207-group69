@@ -34,9 +34,8 @@ public class Main {
         CreateProjectViewModel createProjectViewModel = new CreateProjectViewModel();
 
         FirebaseAccessObject firebaseAccessObject;
-        GmailDataAccessObject gmailDataAccessObject;
+        GmailDataAccessObject gmailDataAccessObject = new GmailDataAccessObject();
         firebaseAccessObject = new FirebaseAccessObject();
-        gmailDataAccessObject = new GmailDataAccessObject();
 
         CreateProjectView createProjectView = CreateProjectUseCaseFactory.createProjectView(viewManagerModel, createProjectViewModel, firebaseAccessObject, gmailDataAccessObject);
         views.add(createProjectView, createProjectView.viewName);

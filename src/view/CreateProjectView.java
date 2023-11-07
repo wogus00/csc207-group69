@@ -5,7 +5,7 @@ import interface_adapter.create_project.CreateProjectState;
 import interface_adapter.create_project.CreateProjectViewModel;
 
 
-
+import javax.mail.internet.AddressException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -62,7 +62,7 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
                                         currentState.getLeaderEmail(),
                                         currentState.getMemberEmail()
                                 );
-                            } catch (IOException e) {
+                            } catch (IOException | AddressException e) {
                                 throw new RuntimeException(e);
                             }
                             currentState = createProjectViewModel.getState();
