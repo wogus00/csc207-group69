@@ -1,9 +1,11 @@
 package entity;
 
-public class Announcement {
-    private Integer id;
+import java.time.LocalDateTime;
 
-    private String title;
+public interface Announcement {
+    String getAnnouncementTitle();
 
-    private String detail;
+    String getMessage();
+
+    LocalDateTime getCreationTime();
 }

@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class CreateProjectView extends JPanel implements ActionListener, PropertyChangeListener {
@@ -24,7 +25,6 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
     private final CreateProjectController createProjectController;
 
     private final JButton create;
-
 
 
     public CreateProjectView(CreateProjectController createProjectController,
@@ -49,8 +49,6 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
         buttons.add(create);
 
 
-
-
         create.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
@@ -62,6 +60,10 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
                                     currentState.getLeaderEmail(),
                                     currentState.getMemberEmail()
                             );
+                            currentState = createProjectViewModel.getState();
+                            if (currentState.getProjectNameError() == null) {
+                                JOptionPane.showMessageDialog(CreateProjectView.this, "create project successfully");
+                            }
                         }
                     }
                 }
@@ -139,3 +141,17 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
         this.add(memberEmailInfo);
         this.add(buttons);
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        CreateProjectState state = (CreateProjectState) evt.getNewValue();
+        if (state.getProjectNameError() != null) {
+            JOptionPane.showMessageDialog(this, state.getProjectNameError());
+        }
+    }
+}
