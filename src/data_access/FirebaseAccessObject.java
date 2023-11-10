@@ -7,6 +7,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import entity.Project;
 import entity.ProjectFactory;
+import use_case.add_email.AddEmailDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
 
 import java.io.FileInputStream;
@@ -17,7 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface {
     Firestore db;
     ProjectFactory projectFactory;
 
@@ -47,6 +48,18 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface {
             data.put("leaderEmail", leaderEmail);
             data.put("memberEmails", memberEmails);
             ApiFuture<WriteResult> result = docRef.set(data);
+    }
+
+    Project getProject(String projectName) {
+        return projects.get(projectName);
+    }
+
+    public void addMemberToProject(String projectName, String email) {
+        // TODO: add member to project
+    }
+
+    public void removeMemberFromProject(String projectName, String email) {
+        // TODO: remove member from project
     }
 
     public boolean existsByName(String newProjectName) {
