@@ -32,6 +32,11 @@ public class RemoveEmailViewModel extends ViewModel {
         support.firePropertyChange("state", null, this.state);
     }
 
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+
+    }
+
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         support.removePropertyChangeListener(listener);
     }
