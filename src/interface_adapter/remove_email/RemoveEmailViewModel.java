@@ -1,11 +1,11 @@
-package interface_adapter.add_email;
+package interface_adapter.remove_email;
 
 import interface_adapter.ViewModel;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class AddEmailViewModel extends ViewModel {
+public class RemoveEmailViewModel extends ViewModel {
 
     public static final String CREATE_BUTTON_LABEL = "Create Project";
     public static final String TITLE_LABEL = "Create Project View";
@@ -15,13 +15,13 @@ public class AddEmailViewModel extends ViewModel {
 
 
 
-    private AddEmailState state = new AddEmailState();
+    private RemoveEmailState state = new RemoveEmailState();
 
-    public AddEmailViewModel() {
-        super("add email");
+    public RemoveEmailViewModel() {
+        super("remove email");
     }
 
-    public void setState(AddEmailState state) {
+    public void setState(RemoveEmailState state) {
         this.state = state;
     }
 
@@ -32,11 +32,11 @@ public class AddEmailViewModel extends ViewModel {
         support.firePropertyChange("state", null, this.state);
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        support.addPropertyChangeListener(listener);
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
     }
 
-    public AddEmailState getState() {
+    public RemoveEmailState getState() {
         return state;
     }
 }
