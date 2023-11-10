@@ -1,2 +1,4 @@
-package view;public class UpdateProjectView {
+package view;
+
+public class UpdateProjectView {
 }
