@@ -4,7 +4,7 @@ import interface_adapter.ViewManagerModel;
 import use_case.create_meeting.CreateMeetingOutputBoundary;
 import use_case.create_meeting.CreateMeetingOutputData;
 
-public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
+public class CreateMeetingPresenter extends CreateMeetingOutputBoundary {
 
     private final CreateMeetingViewModel createMeetingViewModel;
 
