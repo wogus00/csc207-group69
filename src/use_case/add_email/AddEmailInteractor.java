@@ -16,20 +16,10 @@ public class AddEmailInteractor implements AddEmailInputBoundary {
 
 
     @Override
-    public void updateProjectDetails(AddEmailInputData createProjectInputData) {
-        //I don't understand this part.
-        String leaderEmail = createProjectInputData.setLeaderEmail();
-        ArrayList<String> memberEmails = addEmailInputData.addMemberEmails();
-        ArrayList<String> memberEmails = addEmailInputData.removeMemberEmails();
-        //How should I fix this?
-        if (!addEmailDataAccessObject.existsByName(projectName)) {
-            createProjectPresenter.prepareFailView("Project already exists.");
-        } else {
-            Project project = projectFactory.create(projectName, leaderEmail, memberEmails);
-            createProjectDataAccessObject.save(project);
-
-            CreateProjectOutputData createProjectOutputData = new CreateProjectOutputData(project.getProjectName(), project.getLeaderEmail(), project.getMemberEmails(), true);
-            createProjectPresenter.prepareSuccessView(createProjectOutputData);
-        }
+    public void updateProjectDetails(AddEmailInputData addEmailInputData) {
+        String projectName = addEmailInputData.getProjectName();
+        String email = addEmailInputData.getEmail();
+        addEmailDataAccessObject.addMemberToProject(projectName, email);
+        addEmailPresenter.prepareSuccessView();
     }
 }
