@@ -10,8 +10,8 @@ public class CreateAnnouncementController {
         this.createAnnouncementUseCaseInteractor = createAnnouncementUseCaseInteractor;
     }
 
-    public void execute(String announcementTitle, String message) {
-        CreateAnnouncementInputData createAnnouncementInputData = new CreateAnnouncementInputData(announcementTitle, message);
+    public void execute(String announcementTitle, String message, String author) {
+        CreateAnnouncementInputData createAnnouncementInputData = new CreateAnnouncementInputData(announcementTitle, message, author);
 
         createAnnouncementUseCaseInteractor.execute(createAnnouncementInputData);
     }
