@@ -1,5 +1,6 @@
 package use_case.create_project;
 
+import entity.Project;
 import entity.ProjectFactory;
 
 import javax.mail.MessagingException;
