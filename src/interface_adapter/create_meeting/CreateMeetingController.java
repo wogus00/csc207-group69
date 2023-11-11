@@ -14,7 +14,7 @@ public class CreateMeetingController {
 
     public void execute(String meetingName, String participantEmail, Date meetingDate, Time startTime, Time endTime) {
         CreateMeetingInputData createMeetingInputData = new CreateMeetingInputData(
-                meetingName, participantEmail, meetingDate, startTime, endTime);
+                meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
 
         userCreateMeetingUseCaseInteractor.execute(createMeetingInputData);
     }
