@@ -1,7 +1,6 @@
 package use_case.create_project;
 
-public interface Create_ProjectOutputBoundary {
-    void prepareSuccessView(Create_ProjectOutputData project);
-
+public interface CreateProjectOutputBoundary {
+    void prepareSuccessView(CreateProjectOutputData project);
     void prepareFailView(String error);
 }

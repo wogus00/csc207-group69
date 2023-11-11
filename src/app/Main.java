@@ -1,14 +1,21 @@
 package app;
 
+import data_access.FirebaseAccessObject;
+import data_access.GmailDataAccessObject;
+import entity.CommonProjectFactory;
+import interface_adapter.ViewManagerModel;
+import interface_adapter.create_project.CreateProjectViewModel;
+
 import view.CreateProjectView;
-import data_access.FileProjectDataAccessObject;
+import view.ViewManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 public class Main {
-    public static void Main(String[] args) {
+    public static void main(String[] args) throws GeneralSecurityException, IOException {
 
         // main application window
         JFrame application = new JFrame("Create Project");
@@ -20,20 +27,17 @@ public class Main {
         application.add(views);
 
         // ViewMangerModel keeps track of which view is currently showing
-        ViewManagerModel viewManagerModel = new ViewMangerModel();
+        ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
         // ViewModels
         CreateProjectViewModel createProjectViewModel = new CreateProjectViewModel();
 
-        FileProjectDataAccessObject projectDataAcessObject;
+        FirebaseAccessObject firebaseAccessObject;
+        GmailDataAccessObject gmailDataAccessObject = new GmailDataAccessObject();
+        firebaseAccessObject = new FirebaseAccessObject();
 
-        try {
-            projectDataAcessObject = new FileUserDataAccessObject("./projects.csv", new ProjectFactory());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        CreateProjectView createProjectView = createProjectUseCaseFactory.create(viewManagerModel, createProjectViewModel, projectDataAcessObject);
+        CreateProjectView createProjectView = CreateProjectUseCaseFactory.createProjectView(viewManagerModel, createProjectViewModel, firebaseAccessObject, gmailDataAccessObject);
         views.add(createProjectView, createProjectView.viewName);
 
         viewManagerModel.setActiveView(createProjectView.viewName);

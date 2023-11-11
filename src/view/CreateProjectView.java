@@ -4,13 +4,18 @@ import interface_adapter.create_project.CreateProjectController;
 import interface_adapter.create_project.CreateProjectState;
 import interface_adapter.create_project.CreateProjectViewModel;
 
+
+
+import javax.mail.internet.AddressException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 
 public class CreateProjectView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "create project";
@@ -22,7 +27,6 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
     private final CreateProjectController createProjectController;
 
     private final JButton create;
-
 
 
     public CreateProjectView(CreateProjectController createProjectController,
@@ -47,19 +51,25 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
         buttons.add(create);
 
 
-
-
         create.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(create)) {
                             CreateProjectState currentState = createProjectViewModel.getState();
 
-                            createProjectController.execute(
-                                    currentState.getProjectName(),
-                                    currentState.getLeaderEmail(),
-                                    currentState.getMemberEmail()
-                            );
+                            try {
+                                createProjectController.execute(
+                                        currentState.getProjectName(),
+                                        currentState.getLeaderEmail(),
+                                        currentState.getMemberEmail()
+                                );
+                            } catch (IOException | AddressException e) {
+                                throw new RuntimeException(e);
+                            }
+                            currentState = createProjectViewModel.getState();
+                            if (currentState.getProjectNameError() == null) {
+                                JOptionPane.showMessageDialog(CreateProjectView.this, "create project successfully");
+                            }
                         }
                     }
                 }
@@ -137,3 +147,17 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
         this.add(memberEmailInfo);
         this.add(buttons);
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        CreateProjectState state = (CreateProjectState) evt.getNewValue();
+        if (state.getProjectNameError() != null) {
+            JOptionPane.showMessageDialog(this, state.getProjectNameError());
+        }
+    }
+}

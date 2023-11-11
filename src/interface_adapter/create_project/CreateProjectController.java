@@ -2,17 +2,22 @@ package interface_adapter.create_project;
 
 import use_case.create_project.CreateProjectInputBoundary;
 import use_case.create_project.CreateProjectInputData;
+import javax.mail.internet.AddressException;
+import java.io.IOException;
+import java.util.ArrayList;
+
 
 public class CreateProjectController {
 
-    final CreateProjectInputBoundary userCreateProjectUseCaseInteractor;
-    public CreateProjectController(CreateProjectInputBoundary userCreateProjectUseCaseInteractor) {
-        this.userCreateProjectUseCaseInteractor = userCreateProjectUseCaseInteractor;
+    final CreateProjectInputBoundary createProjectUseCaseInteractor;
+    public CreateProjectController(CreateProjectInputBoundary CreateProjectUseCaseInteractor) {
+        this.createProjectUseCaseInteractor = CreateProjectUseCaseInteractor;
     }
 
-    public void execute(String projectName, String leaderEmail, String memberEmail) {
-        CreateProjectInputData createProjectInputData = new CreateProjectInputData(projectName, leaderEmail, memberEmail);
+    public void execute(String projectName, String leaderEmail, ArrayList<String> memberEmails) throws IOException, AddressException {
+        CreateProjectInputData createProjectInputData = new CreateProjectInputData(projectName, leaderEmail, memberEmails);
 
-        userCreateProjectUseCaseInteractor.execute(createProjectInputData);
+
+        createProjectUseCaseInteractor.execute(createProjectInputData);
     }
 }
