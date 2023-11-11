@@ -1,8 +1,9 @@
 package use_case.create_meeting;
 
+import entity.MeetingFactory;
 import entity.MeetingName;
 
-public class CreateMeetingInteractor implements CreateMeetingBoundary {
+public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
     final CreateMeetingDataAccessInterface createMeetingDataAccessObject;
     final CreateMeetingGmailDataAccessInterface createMeetingGmailAccessObject;
     final CreateMeetingOutputBoundary createMeetingPresenter;
@@ -18,6 +19,9 @@ public class CreateMeetingInteractor implements CreateMeetingBoundary {
         this.createMeetingGmailAccessObject = createMeetingGmailAccessObject;
         this.meetingPresenter = createMeetingOutputBoundary;
         this.meetingFactory = meetingFactory;
+    }
+
+    public CreateMeetingInteractor(CreateMeetingDataAccessInterface createMeetingDataAccessObject, CreateMeetingGmailDataAccessInterface gmailDataAccessObject, CreateMeetingOutputBoundary createMeetingOutputBoundary, MeetingFactory meetingFactory) {
     }
 
     @Override
