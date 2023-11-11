@@ -1,10 +1,9 @@
 package use_case.create_announcement;
 
 
-import entity.Announcement;
+import entity.CommonAnnouncement;
 
 public interface CreateAnnouncementDataAccessInterface {
-    boolean existsByName(String announcementTitle);
 
-    void save(Announcement announcement);
+    void addAnnouncement(CommonAnnouncement announcement);
 }

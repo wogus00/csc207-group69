@@ -11,7 +11,7 @@ public class CommonAnnouncement implements Announcement {
 
     private final String author;
 
-    CommonAnnouncement(String announcementTitle, String message, LocalDateTime creationTime, String author) {
+    public CommonAnnouncement(String announcementTitle, String message, LocalDateTime creationTime, String author) {
         this.announcementTitle = announcementTitle;
         this.message = message;
         this.creationTime = creationTime;
