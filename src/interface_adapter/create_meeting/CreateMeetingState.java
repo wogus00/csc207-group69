@@ -10,6 +10,7 @@ public class CreateMeetingState {
     private Date meetingDate = new Date();
     private Time startTime = new Time();
     private Time endTime = new Time();
+    private String projectName = "";
 
     public CreateProjectState(CreateMeetingState copy) {
         meetingName = copy.meetingName;
@@ -18,6 +19,7 @@ public class CreateMeetingState {
         meetingDate = copy.meetingDate;
         startTime = copy.startTime;
         endTime = copy.endTime;
+        projectName = copy.projectName;
     }
 
     public CreateMeetingState() {}
@@ -40,12 +42,14 @@ public class CreateMeetingState {
 
     public Time getEndTime() {return endTime;}
 
+    public String getProjectName() {return projectName;}
+
     public void setMeetingName(String meetingName) {
         this.meetingName = meetingName;
     }
 
     public void setMeetingNameError(String meetingNameError) {
-        this.meetingNameError = meetingtNameError;
+        this.meetingNameError = meetingNameError;
     }
 
     public void setParticipantEmail(String participantEmailString) {
@@ -68,6 +72,8 @@ public class CreateMeetingState {
         this.endTime = endTime;
     }
 
+    public void setProjectName(String projectName) { this.projectName = projectName;}
+
     @Override
     public String toString() {
         return "CreateMeetingState{" +
@@ -76,6 +82,7 @@ public class CreateMeetingState {
                 ", meeting date" + meetingDate + '\'' +
                 ", start time" + startTime + '\'' +
                 ", end time" + endTime + '\'' +
+                ", project name" + projectName + '\'' +
                 '}';
     }
 }
