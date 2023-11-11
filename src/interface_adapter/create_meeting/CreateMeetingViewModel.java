@@ -14,6 +14,7 @@ public class CreateMeetingViewModel extends ViewModel {
     public static final String MEETING_DATE_LABEL = "Enter meeting date";
     public static final String START_TIME_LABEL = "Enter start time";
     public static final String END_TIME_LABEL = "Enter end time";
+    public static final String PROJECT_NAME_LABEL = "Enter project name";
 
 
 
