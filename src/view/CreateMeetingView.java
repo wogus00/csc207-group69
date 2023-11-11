@@ -24,6 +24,7 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
     private final Scanner meetingDateInputField = new Scanner(System.in);
     private final Time startTimeInputField = new Time(15);
     private final Time endTimeInputField = new Time(15);
+    private final JTextField projectNameInputField = new JTextField(15);
     private final CreateMeetingController createMeetingController;
 
     private final JButton create;
@@ -49,6 +50,8 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
                 new JLabel(CreateMeetingViewModel.START_TIME_LABEL), startTimeInputField);
         LabelTextPanel endTimeInfo = new LabelTextPanel(
                 new JLabel(CreateMeetingViewModel.END_TIME_LABEL), endTimeInputField);
+        LabelTextPanel projectNameInfo = new LabelTextPanel(
+                new JLabel(CreateMeetingViewModel.PROJECT_NAME_LABEL), projectNameInputField);
 
         JPanel buttons = new JPanel();
         create = new JButton(CreateMeetingViewModel.CREATE_BUTTON_LABEL);
@@ -66,7 +69,8 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
                                     currentState.getParticipantEmail(),
                                     currentState.getMeetingDate(),
                                     currentState.getStartTime(),
-                                    currentState.getEndTime()
+                                    currentState.getEndTime(),
+                                    currentState.getProjectName()
                             );
                         }
                     }
@@ -180,7 +184,27 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
 
                     }
                 }
+
         );
+
+        projectNameInputField.addKeyListener(
+                new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        CreateMeetingState currentState = createMeetingViewModel.getState();
+                        String text = projectNameInputField.getText() + e.getKeyChar();
+                        currentState.setProjectName(text);
+                        createMeetingViewModel.setState(currentState);
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                    }
+                });
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
