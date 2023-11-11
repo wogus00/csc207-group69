@@ -109,4 +109,26 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         //TODO: add ways to check if newProjectName exists in db collection
         return true;
     }
+
+    public void addAnnouncement(CommonAnnouncement announcement) {
+        // Should I initialize firestore, or just treat firestore is defined as a precondition?
+        if (db == null) {
+            // Initialize Firestore
+        }
+
+        // Convert LocalDateTime to a Firebase compatible format
+        String formattedCreationTime = announcement.getCreationTime()
+                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+        // Create a Map to hold announcement data
+        Map<String, Object> announcementData = new HashMap<>();
+        announcementData.put("title", announcement.getAnnouncementTitle());
+        announcementData.put("message", announcement.getMessage());
+        announcementData.put("creationTime", formattedCreationTime);
+        announcementData.put("author", announcement.getAuthor());
+
+        // Add data to Firebase
+        ApiFuture<DocumentReference> addedDocRef = db.collection("announcements").add(announcementData);
+        // Handle completion of the future
+    }
 }
