@@ -16,7 +16,7 @@ public class LoginInteractor implements LoginInputBoundary {
     public void execute(LoginInputData loginInputData) {
         String projectName = loginInputData.getProjectName();
         String userEmail = loginInputData.getUserEmail();
-        if (!userDataAccessObject.projectExist(projectName)) {
+        if (!userDataAccessObject.existsByName(projectName)) {
             loginPresenter.prepareFailView(projectName + ": Project does not exist.");
         } else {
             ArrayList<String> memberEmails = userDataAccessObject.getProject(projectName).getMemberEmails();
