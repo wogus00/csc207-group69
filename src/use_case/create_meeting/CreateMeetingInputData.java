@@ -1,5 +1,6 @@
 package use_case.create_meeting;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class CreateMeetingInputData {
     private final Time endTime;
     private final String projectName;
 
-    public CreateMeetingInputData(String meetingName, String participantEmail, String meetingDate, Time startTime, Time endTime){
+    public CreateMeetingInputData(String meetingName, String participantEmail, String meetingDate, Time startTime, Time endTime, String projectName){
                 this.meetingName = meetingName;
                 this.participantEmail = stringToArrayListConverter(participantEmail);
                 this.meetingDate = stringToDateConverter(meetingDate);
