@@ -3,6 +3,8 @@ package use_case.create_meeting;
 import entity.MeetingFactory;
 import entity.MeetingName;
 
+import java.util.ArrayList;
+
 public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
     final CreateMeetingDataAccessInterface createMeetingDataAccessObject;
     final CreateMeetingGmailDataAccessInterface createMeetingGmailAccessObject;
@@ -43,7 +45,7 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
 
             for (String email: participantEmail) {
                 try {
-                    createMeetingGmailAccessObject.sendMeetingCreationEmail(//TODO);
+                    createMeetingGmailAccessObject.sendMeetingCreationEmail(participantEmail);
                 } catch (MessagingException | IOException e) {
                     throw new RuntimeException(e);
                 }
