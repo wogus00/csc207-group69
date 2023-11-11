@@ -10,11 +10,14 @@ public class CreateAnnouncementOutputData {
 
     private boolean useCaseFailed;
 
-    public CreateAnnouncementOutputData(String announcementTitle, String message, String creationTime, boolean useCaseFailed) {
+    private String author;
+
+    public CreateAnnouncementOutputData(String announcementTitle, String message, String creationTime, boolean useCaseFailed, String author) {
         this.announcementTitle = announcementTitle;
         this.message = message;
         this.creationTime = creationTime;
         this.useCaseFailed = useCaseFailed;
+        this.author = author;
     }
 
     public String getAnnouncementTitle(){return announcementTitle;}
@@ -24,5 +27,7 @@ public class CreateAnnouncementOutputData {
     public String getCreationTime(){return creationTime;}
 
     public void setCreationTime(String creationTime){this.creationTime = creationTime;}
+
+    public String getAuthor(){return author;}
 
 }

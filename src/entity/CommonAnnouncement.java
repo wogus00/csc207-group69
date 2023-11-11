@@ -9,11 +9,13 @@ public class CommonAnnouncement implements Announcement {
 
     private final LocalDateTime creationTime;
 
-    CommonAnnouncement(String announcementTitle, String message, LocalDateTime creationTime) {
+    private final String author;
+
+    CommonAnnouncement(String announcementTitle, String message, LocalDateTime creationTime, String author) {
         this.announcementTitle = announcementTitle;
         this.message = message;
         this.creationTime = creationTime;
-
+        this.author = author;
     }
 
     @Override
@@ -24,4 +26,7 @@ public class CommonAnnouncement implements Announcement {
 
     @Override
     public LocalDateTime getCreationTime(){return creationTime;}
+
+    @Override
+    public String getAuthor(){return author;}
 }

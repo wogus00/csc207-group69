@@ -23,9 +23,9 @@ public class CreateAnnouncementInteractor implements CreateAnnouncementInputBoun
     @Override
     public void execute(CreateAnnouncementInputData createAnnouncementInputData) {
         LocalDateTime now = LocalDateTime.now();
-        Announcement announcement = announcementFactory.create(createAnnouncementInputData.getAnnouncementTitle(), createAnnouncementInputData.getMessage(), now);
+        Announcement announcement = announcementFactory.create(createAnnouncementInputData.getAnnouncementTitle(), createAnnouncementInputData.getMessage(), now, createAnnouncementInputData.getAuthor());
 
-        CreateAnnouncementOutputData createAnnouncementOutputData = new CreateAnnouncementOutputData(announcement.getAnnouncementTitle(), announcement.getMessage(), now.toString(), false);
+        CreateAnnouncementOutputData createAnnouncementOutputData = new CreateAnnouncementOutputData(announcement.getAnnouncementTitle(), announcement.getMessage(), now.toString(), false, announcement.getAuthor());
         createAnnouncementPresenter.prepareSuccessView(createAnnouncementOutputData);
     }
 
