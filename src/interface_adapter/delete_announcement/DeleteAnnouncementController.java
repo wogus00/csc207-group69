@@ -9,5 +9,6 @@ public class DeleteAnnouncementController {
         this.deleteAnnouncementInteractor = deleteAnnouncementInteractor;
     }
 
-    public void execute(){deleteAnnouncementInteractor.execute();}
+    public void execute(String announcementTitle){
+        deleteAnnouncementInteractor.execute(announcementTitle);}
 }
