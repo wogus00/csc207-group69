@@ -24,36 +24,10 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
 
     final MainPageViewModel mainPageViewModel;
 
-    final CreateTaskViewModel createTaskViewModel;
-
-    final ModifyTaskViewModel modifyTaskViewModel;
-
-    final CompleteTaskViewModel completeTaskViewModel;
-
-    final CreateMeetingViewModel createMeetingViewModel;
-
-    final CreateAnnouncementViewModel createAnnouncementViewModel;
-
-    final AddMemberViewModel addMemberViewModel;
-
-    final RemoveMemberViewModel removeMemberViewModel;
-
-    final ChangeSupervisorViewModel changeSupervisorViewModel;
-
-    final
-
-    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel, CreateTaskViewModel createTaskViewModel, ModifyTaskViewModel modifyTaskViewModel, CompleteTaskViewModel completeTaskViewModel, CreateMeetingViewModel createMeetingViewModel, CreateAnnouncementViewModel createAnnouncementViewModel, AddMemberViewModel addMemberViewModel, RemoveMemberViewModel removeMemberViewModel, ChangeSupervisorViewModel changeSupervisorViewModel) {
+    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel) {
         super("Main Page");
         this.viewManagerModel = viewManagerModel;
         this.mainPageViewModel = mainPageViewModel;
-        this.createTaskViewModel = createTaskViewModel;
-        this.modifyTaskViewModel = modifyTaskViewModel;
-        this.completeTaskViewModel = completeTaskViewModel;
-        this.createMeetingViewModel = createMeetingViewModel;
-        this.createAnnouncementViewModel = createAnnouncementViewModel;
-        this.addMemberViewModel = addMemberViewModel;
-        this.removeMemberViewModel = removeMemberViewModel;
-        this.changeSupervisorViewModel = changeSupervisorViewModel;
 
         MainPageState mainPageState = mainPageViewModel.getState();
 
@@ -415,16 +389,9 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
 
         buttonT1.addActionListener(     // create task
                 new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(buttonT1)) {
-                            CreateTaskState state = createTaskViewModel.getState();
-                            state.setUserEmail(userEmail);
-                            state.setProjectName(projectName);
-                            createTaskViewModel.setState(state);
-                            createTaskViewModel.firePropertyChanged();
-                            viewManagerModel.setActiveView("create task");
-                            viewManagerModel.firePropertyChanged();
-                        }
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
                     }
                 }
         );
@@ -432,15 +399,6 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
         buttonT2.addActionListener(                // This creates an anonymous subclass of ActionListener and instantiates it.
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(buttonT2)) {
-                            ModifyTaskState state = modifyTaskViewModel.getState();
-                            state.setUserEmail(userEmail);
-                            state.setProjectName(projectName);
-                            modifyTaskViewModel.setState(state);
-                            modifyTaskViewModel.firePropertyChanged();
-                            viewManagerModel.setActiveView("modify project");
-                            viewManagerModel.firePropertyChanged();
-                        }
                     }
                 }
         );
@@ -448,15 +406,6 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
         buttonT3.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(buttonT3)) {
-                            CompleteTaskState state = completeTaskViewModel.getState();
-                            state.setUserEmail(userEmail);
-                            state.setProjectName(projectName);
-                            completeTaskViewModel.setState(state);
-                            completeTaskViewModel.firePropertyChanged();
-                            viewManagerModel.setActiveView("complete project");
-                            viewManagerModel.firePropertyChanged();
-                        }
                     }
                 }
         );
@@ -464,15 +413,6 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
         buttonM1.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(buttonM1)) {
-                            CreateMeetingState state = createMeetingViewModel.getState();
-                            state.setUserEmail(userEmail);
-                            state.setProjectName(projectName);
-                            createMeetingViewModel.setState(state);
-                            createMeetingViewModel.firePropertyChanged();
-                            viewManagerModel.setActiveView("create meeting");
-                            viewManagerModel.firePropertyChanged();
-                        }
                     }
                 }
         );
@@ -480,15 +420,6 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
         buttonA1.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(buttonA1)) {
-                            CreateAnnouncementState state = createAnnouncementViewModel.getState();
-                            state.setUserEmail(userEmail);
-                            state.setProjectName(projectName);
-                            createAnnouncementViewModel.setState(state);
-                            createAnnouncementViewModel.firePropertyChanged();
-                            viewManagerModel.setActiveView("Make an announcement");
-                            viewManagerModel.firePropertyChanged();
-                        }
                     }
                 }
         );
@@ -496,15 +427,6 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
         buttonP1.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(buttonP1)) {
-                            AddMemberState state = addMemberViewModel.getState();
-                            state.setUserEmail(userEmail);
-                            state.setProjectName(projectName);
-                            addMemberViewModel.setState(state);
-                            addMemberViewModel.firePropertyChanged();
-                            viewManagerModel.setActiveView("add member");
-                            viewManagerModel.firePropertyChanged();
-                        }
                     }
                 }
         );
@@ -512,15 +434,6 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
         buttonP2.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(buttonP2)) {
-                            RemoveMemberState state = removeMemberViewModel.getState();
-                            state.setUserEmail(userEmail);
-                            state.setProjectName(projectName);
-                            removeMemberViewModel.setState(state);
-                            removeMemberViewModel.firePropertyChanged();
-                            viewManagerModel.setActiveView("remove member");
-                            viewManagerModel.firePropertyChanged();
-                        }
                     }
                 }
         );
@@ -528,15 +441,6 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
         buttonP3.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(buttonP3)) {
-                            ChangeSupervisorState state = changeSupervisorViewModel.getState();
-                            state.setUserEmail(userEmail);
-                            state.setProjectName(projectName);
-                            changeSupervisorViewModel.setState(state);
-                            changeSupervisorViewModel.firePropertyChanged();
-                            viewManagerModel.setActiveView("change supervisor");
-                            viewManagerModel.firePropertyChanged();
-                        }
                     }
                 }
         );
