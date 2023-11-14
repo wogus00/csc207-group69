@@ -5,10 +5,12 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import entity.Meeting;
 import entity.Project;
 import entity.ProjectFactory;
 import use_case.add_email.AddEmailDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
+import use_case.login.LoginDataAccessInterface;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,7 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, LoginDataAccessInterface {
     Firestore db;
     ProjectFactory projectFactory;
 
@@ -50,7 +52,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             ApiFuture<WriteResult> result = docRef.set(data);
     }
 
-    Project getProject(String projectName) {
+    public Project getProject(String projectName) {
         return projects.get(projectName);
     }
 

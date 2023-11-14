@@ -1,12 +1,12 @@
 package use_case.create_project;
 
+import entity.Project;
 import entity.ProjectFactory;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class CreateProjectInteractor implements CreateProjectInputBoundary {
     final CreateProjectDataAccessInterface createProjectDataAccessObject;
