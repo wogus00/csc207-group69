@@ -6,6 +6,7 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.create_project.CreateProjectController;
 import interface_adapter.create_project.CreateProjectPresenter;
 import interface_adapter.create_project.CreateProjectViewModel;
+import interface_adapter.main_page.MainPageViewModel;
 import use_case.create_project.*;
 import view.CreateProjectView;
 
@@ -18,9 +19,10 @@ public class CreateProjectUseCaseFactory {
     public static CreateProjectView createProjectView(ViewManagerModel viewManagerModel,
                                                       CreateProjectViewModel createProjectViewModel,
                                                       CreateProjectDataAccessInterface userDataAccessObject,
-                                                      CreateProjectGmailDataAccessInterface gmailDataAccessObject) {
+                                                      CreateProjectGmailDataAccessInterface gmailDataAccessObject,
+                                                      MainPageViewModel mainPageViewModel) {
         try {
-            CreateProjectController createProjectController = createProjectUseCase(viewManagerModel, createProjectViewModel, userDataAccessObject, gmailDataAccessObject);
+            CreateProjectController createProjectController = createProjectUseCase(viewManagerModel, createProjectViewModel, userDataAccessObject, gmailDataAccessObject, mainPageViewModel);
             return new CreateProjectView(createProjectController, createProjectViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Invalid File");
@@ -32,9 +34,10 @@ public class CreateProjectUseCaseFactory {
     private static CreateProjectController createProjectUseCase(ViewManagerModel viewManagerModel,
                                                                 CreateProjectViewModel createProjectViewModel,
                                                                 CreateProjectDataAccessInterface userDataAccessObject,
-                                                                CreateProjectGmailDataAccessInterface gmailDataAccessObject) throws IOException {
+                                                                CreateProjectGmailDataAccessInterface gmailDataAccessObject,
+                                                                MainPageViewModel mainPageViewModel) throws IOException {
 
-        CreateProjectOutputBoundary createProjectOutputBoundary = new CreateProjectPresenter(viewManagerModel, createProjectViewModel);
+        CreateProjectOutputBoundary createProjectOutputBoundary = new CreateProjectPresenter(viewManagerModel, createProjectViewModel, mainPageViewModel);
 
         ProjectFactory projectFactory = new CommonProjectFactory();
 

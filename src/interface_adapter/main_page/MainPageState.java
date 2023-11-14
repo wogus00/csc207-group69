@@ -1,6 +1,7 @@
 package interface_adapter.main_page;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainPageState {
@@ -12,10 +13,10 @@ public class MainPageState {
 
     private ArrayList<String> memberEmail = new ArrayList<>();
 
-    private ArrayList<String> taskList = new ArrayList<>();
-    private ArrayList<String> meetingList = new ArrayList<>();
+    private ArrayList<String> taskList = new ArrayList<>(Arrays.asList(""));
+    private ArrayList<String> meetingList = new ArrayList<>(Arrays.asList(""));
 
-    private ArrayList<String> announcements = new ArrayList<>();
+    private ArrayList<String> announcements = new ArrayList<>(Arrays.asList("No announcements","",""));
     public MainPageState(MainPageState copy) {
         projectName = copy.projectName;;
         userEmail = copy.userEmail;
