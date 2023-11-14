@@ -17,11 +17,13 @@ import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
 import use_case.create_project.CreateProjectGmailDataAccessInterface;
+import use_case.create_task.CreateTaskGmailDataAccessInterface;
 
 import java.io.*;
 import java.util.Properties;
 import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -29,7 +31,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
-public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface {
+public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface {
 
     private static final String APPLICATION_NAME = "group-project";
 
@@ -44,12 +46,12 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
 
 
     public GmailDataAccessObject() throws IOException, GeneralSecurityException {
-    // Build a new authorized API client service.
+        // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-            .setApplicationName(APPLICATION_NAME)
-            .build();
+                .setApplicationName(APPLICATION_NAME)
+                .build();
         this.service = service;
     }
 
@@ -78,8 +80,43 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
     public Message sendProjectCreationEmail(String fromEmail, String toEmail, String projectName) throws IOException, MessagingException {
         String messageSubject = "You are invited to project: " + projectName;
         String bodyText = fromEmail + " has invited you to join his project: " + projectName + ".\nIf you have any questions, please email " + fromEmail;
+        Message message = mimeEncoder(fromEmail, toEmail, messageSubject, bodyText);
+        try {
+            // Create send message
+            message = service.users().messages().send("me", message).execute();
+            return message;
+        } catch (GoogleJsonResponseException e) {
+            GoogleJsonError error = e.getDetails();
+            if (error.getCode() == 403) {
+                System.err.println("Unable to send message: " + e.getDetails());
+            } else {
+                throw e;
+            }
+        }
+        return null;
+    }
 
-        // Encode as MIME message
+    @Override
+    public Message sendTaskCreationEmail(String fromEmail, String toEmail, String taskName) throws MessagingException, IOException {
+        String messageSubject = fromEmail + " Assigned a Task";
+        String bodyText = "You are assigned with task: " + taskName + "\nPlease check your task list.";
+        Message message = mimeEncoder(fromEmail, toEmail, messageSubject, bodyText);
+        try {
+            message = service.users().messages().send("me", message).execute();
+            return message;
+        } catch (GoogleJsonResponseException e) {
+            GoogleJsonError error = e.getDetails();
+            if (error.getCode() == 403) {
+                System.err.println("Unable to send message: " + e.getDetails());
+            } else {
+                throw e;
+            }
+        }
+        return null;
+    }
+
+    private Message mimeEncoder(String fromEmail, String toEmail, String messageSubject, String bodyText) throws MessagingException, IOException {
+
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
         MimeMessage email = new MimeMessage(session);
@@ -96,18 +133,6 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
         Message message = new Message();
         message.setRaw(encodedEmail);
 
-        try {
-            // Create send message
-            message = service.users().messages().send("me", message).execute();
-            return message;
-        } catch (GoogleJsonResponseException e) {
-            GoogleJsonError error = e.getDetails();
-            if (error.getCode() == 403) {
-                System.err.println("Unable to send message: " + e.getDetails());
-            } else {
-                throw e;
-            }
-        }
-        return null;
+        return message;
     }
 }
