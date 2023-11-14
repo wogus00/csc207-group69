@@ -10,6 +10,7 @@ import entity.Project;
 import entity.ProjectFactory;
 import use_case.add_email.AddEmailDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
+import use_case.create_task.CreateTaskDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 
 import java.io.FileInputStream;
@@ -20,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, LoginDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface {
     Firestore db;
     ProjectFactory projectFactory;
 
@@ -67,5 +68,20 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     public boolean existsByName(String newProjectName) {
         //TODO: add ways to check if newProjectName exists in db collection
         return true;
+    }
+
+    @Override
+    public void saveTask(String projectName, Task newTask) {
+        ;
+    }
+
+    @Override
+    public boolean taskNameExists(String projectName, String taskName) {
+        return false;
+    }
+
+    @Override
+    public boolean memberExists(String projectName, ArrayList<String> workingMembersList) {
+        return false;
     }
 }
