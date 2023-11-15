@@ -50,7 +50,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
 
-        this.setPreferredSize(new Dimension(500, 300));
+        this.setPreferredSize(new Dimension(500, 310));
 
 
         // Title label for project name
