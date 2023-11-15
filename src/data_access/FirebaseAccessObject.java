@@ -16,6 +16,8 @@ import use_case.create_project.CreateProjectDataAccessInterface;
 import use_case.create_task.CreateTaskDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 
+import java.time.LocalDate;
+import java.sql.Time;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
@@ -125,6 +127,33 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         }
         return false;
 
+    }
+
+    public boolean projectNameExists(String projectName, String meetingName){
+        return true;
+    }
+
+    public void saveMeeting(String projectName, String meetingName){
+        if (!projectNameExists(projectName, meetingName)){
+            ArrayList<String> participantEmail = meeting.getParticipantEmail();
+            LocalDate meetingDate = meeting.getMeetingDate();
+            Time startTime = meeting.getStartTime();
+            Time endTime = meeting.getEndTime();
+
+            DocumentReference docRef = db.collection(projectName).document("meetingInfo");
+            Map<String, Object> data = new HashMap<>();
+            data.put("meetingName", meetingName);
+            data.put("participantEmail", participantEmail);
+            data.put("meetingDate", meetingDate);
+            data.put("startTime", startTime);
+            data.put("endTime", endTime);
+            ApiFuture<WriteResult> result = docRef.set(data);
+        }
+    }
+
+
+    public boolean memberExists(String projectName, String email){
+        return true;
     }
 
     @Override
