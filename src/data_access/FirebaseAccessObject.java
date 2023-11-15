@@ -9,6 +9,7 @@ import entity.CommonProject;
 import entity.Meeting;
 import entity.Project;
 import entity.ProjectFactory;
+import entity.Task;
 import use_case.add_email.AddEmailDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
 import use_case.create_task.CreateTaskDataAccessInterface;
