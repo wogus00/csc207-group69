@@ -6,6 +6,8 @@ import interface_adapter.main_page.MainPageViewModel;
 import use_case.create_project.CreateProjectOutputBoundary;
 import use_case.create_project.CreateProjectOutputData;
 
+import java.awt.*;
+
 public class CreateProjectPresenter implements CreateProjectOutputBoundary {
 
     private final CreateProjectViewModel createProjectViewModel;
@@ -30,10 +32,12 @@ public class CreateProjectPresenter implements CreateProjectOutputBoundary {
         mainPageState.setProjectName(response.getProjectName());
         mainPageState.setLeaderEmail(response.getLeaderEmail());
         mainPageState.setMemberEmail(response.getMemberEmails());
-        mainPageState.setUserEmail(response.getLeaderEmail()); // Logs the leader in
-        mainPageViewModel.setState(mainPageState);
-        viewManagerModel.setActiveView(mainPageViewModel.getViewName());
-        viewManagerModel.firePropertyChanged();
+        mainPageState.setUserEmail(response.getLeaderEmail());// Logs the leader in
+        this.mainPageViewModel.setState(mainPageState);
+        this.mainPageViewModel.firePropertyChanged();
+        this.viewManagerModel.setActiveView(this.mainPageViewModel.getViewName());
+        this.viewManagerModel.firePropertyChanged();
+
     }
 
     @Override

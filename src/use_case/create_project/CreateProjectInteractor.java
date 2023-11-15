@@ -48,7 +48,6 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
             }
 
             CreateProjectOutputData createProjectOutputData = new CreateProjectOutputData(project.getProjectName(), project.getLeaderEmail(), project.getMemberEmails(), true);
-
             createProjectPresenter.prepareSuccessView(createProjectOutputData);
             }
         }

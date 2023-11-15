@@ -18,229 +18,117 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class MainPageView extends JFrame implements ActionListener, PropertyChangeListener {
+public class MainPageView extends JPanel implements ActionListener, PropertyChangeListener {
+
+    public final String viewName = "Main Page";
 
     final ViewManagerModel viewManagerModel;
 
     final MainPageViewModel mainPageViewModel;
 
+    JLabel titleLabel;
+    JLabel leaderEmailInfo = new JLabel();
+    JLabel userEmailInfo = new JLabel();
+    JLabel userLabel;
+    JLabel memberLabel;
+    JLabel taskLabel;
+    JLabel meetingLabel;
+    JButton showAllButton;
+    JLabel showAllInfo = new JLabel();
+    JLabel announcementLabel;
+    JButton recentAnnouncement;
+    JLabel recentAnnouncementInfo = new JLabel();
+
     public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel) {
-        super("Main Page");
         this.viewManagerModel = viewManagerModel;
         this.mainPageViewModel = mainPageViewModel;
+        this.mainPageViewModel.addPropertyChangeListener(this);
 
-        MainPageState mainPageState = mainPageViewModel.getState();
+        this.setLayout(new BorderLayout());
 
-        // Setting up the main window (JFrame)
-        setSize(500, 320);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Main panel with BorderLayout to contain everything
-        JPanel panel = new JPanel(new BorderLayout());
-
-        // Label Panel at the top
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
 
-        String projectName = mainPageState.getProjectName();
+        this.setPreferredSize(new Dimension(500, 300));
+
 
         // Title label for project name
-        JLabel titleLabel = new JLabel("Project Name: " + projectName);
+        titleLabel = new JLabel("Project Name: ");
         titleLabel.setFont(new Font("Serif", Font.BOLD, 18));
-        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        titleLabel.setLayout(new FlowLayout(FlowLayout.LEFT));
         labelPanel.add(titleLabel);
 
-        String userEmail = mainPageState.getUserEmail();
 
         // User label for user email
-        JLabel userLabel = new JLabel("User Email: " + userEmail);
+        userLabel = new JLabel("User Email: ");
         userLabel.setFont(new Font("Serif", Font.PLAIN, 16));
-        userLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        userLabel.setLayout(new FlowLayout(FlowLayout.LEFT));
         labelPanel.add(userLabel);
-
-        String leaderEmail = mainPageState.getLeaderEmail();
-
-        // List of email addresses
-        List<String> memberOnlyList = new ArrayList<>(mainPageState.getMemberEmail());
-
-        List<String> memberList = new ArrayList<>();
-        memberList.add(leaderEmail);
-        memberList.addAll(memberOnlyList);
 
 
         // Member email list label
-        JLabel memberListLabel = new JLabel();
-        StringBuilder memberListBuilder = new StringBuilder("<html>"); // Use HTML to allow for text wrapping if needed
-
-        memberListBuilder.append("Member List: <font color='blue'>");
-
-        final int maxChars = 80; // Set a maximum character limit for the JLabel
-        int charsCount = 0; // initialize count
-
-        for (String item : memberList) {
-            if (charsCount + item.length() > maxChars) {
-                memberListBuilder.delete(memberListBuilder.length() - 9, memberListBuilder.length());
-                memberListBuilder.append("...");
-                break;
-            } else {
-                memberListBuilder.append(item).append(", ");
-                memberListBuilder.append("</font>");
-                charsCount += item.length() + 2; // Add 2 for the comma and space
-            }
-        }
-
-        // Remove the following ", </font>" if the text length does not exceed the limit
-        if (!memberListBuilder.isEmpty()) {
-            char lastChar = memberListBuilder.charAt(memberListBuilder.length() - 1);
-            if ('.' != lastChar) {
-                memberListBuilder.delete(memberListBuilder.length() - 9, memberListBuilder.length());
-            }
-        }
-
-        memberListBuilder.append("</html>");
-        memberListLabel.setText(memberListBuilder.toString());
-        memberListLabel.setFont(new Font("Serif", Font.PLAIN, 16));
-        labelPanel.add(memberListLabel);
+        memberLabel = new JLabel();
+        memberLabel.setFont(new Font("Serif", Font.PLAIN, 16));
+        memberLabel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        labelPanel.add(memberLabel);
 
         // Task list label
-        JLabel taskListLabel = new JLabel();
-        StringBuilder taskListBuilder = new StringBuilder("<html>"); // Use HTML to allow for text wrapping if needed
-
-        taskListBuilder.append("Task List: ");
-
-        // Tasks to show
-        List<String> taskList = mainPageState.getTaskList();
-
-        charsCount = 0; // reset count
-
-        for (String item : taskList) {
-            if (charsCount + item.length() > maxChars) {
-                taskListBuilder.delete(taskListBuilder.length() - 9, taskListBuilder.length());
-                taskListBuilder.append("...");
-                break;
-            } else {
-                taskListBuilder.append(item).append(", ");
-                taskListBuilder.append("</font>");
-                charsCount += item.length() + 2;
-            }
-        }
-
-
-        if (!taskListBuilder.isEmpty()) {
-            char lastChar = taskListBuilder.charAt(taskListBuilder.length() - 1);
-            if ('.' != lastChar) {
-                taskListBuilder.delete(taskListBuilder.length() - 9, taskListBuilder.length());
-            }
-        }
-
-        taskListBuilder.append("</html>");
-        taskListLabel.setText(taskListBuilder.toString());
-        taskListLabel.setFont(new Font("Serif", Font.PLAIN, 16));
-        labelPanel.add(taskListLabel);
+        taskLabel = new JLabel();
+        taskLabel.setFont(new Font("Serif", Font.PLAIN, 16));
+        taskLabel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        labelPanel.add(taskLabel);
 
         // Meeting list label
-        JLabel meetingListLabel = new JLabel();
-        StringBuilder meetingListBuilder = new StringBuilder("<html>"); // Use HTML to allow for text wrapping if needed
+        meetingLabel = new JLabel();
+        meetingLabel.setFont(new Font("Serif", Font.PLAIN, 16));
+        meetingLabel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        labelPanel.add(meetingLabel);
 
-        meetingListBuilder.append("Meeting List");
+        showAllButton = new JButton("show all");
 
-        // Meetings to show
-        List<String> meetingList = mainPageState.getMeetingList();
+        showAllButton.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        JOptionPane.showConfirmDialog(MainPageView.this, showAllInfo.getText(), "More information", JOptionPane.INFORMATION_MESSAGE);
 
-        charsCount = 0;
+                    }
+                }
+        );
 
-        for (String item : meetingList) {
-            if (charsCount + item.length() > maxChars) {
-                meetingListBuilder.delete(meetingListBuilder.length() - 9, meetingListBuilder.length());
-                meetingListBuilder.append("...");
-                break;
-            } else {
-                meetingListBuilder.append(item).append(", ");
-                meetingListBuilder.append("</font>");
-                charsCount += item.length() + 2;
-            }
-        }
-
-        if (!meetingListBuilder.isEmpty()) {
-            char lastChar = meetingListBuilder.charAt(meetingListBuilder.length() - 1);
-            if ('.' != lastChar) {
-                meetingListBuilder.delete(meetingListBuilder.length() - 9, meetingListBuilder.length());
-            }
-        }
-
-        meetingListBuilder.append("</html>");
-        meetingListLabel.setText(meetingListBuilder.toString());
-        meetingListLabel.setFont(new Font("Serif", Font.PLAIN, 16));
-        labelPanel.add(meetingListLabel);
-
-        JButton showAllButton = new JButton("show all");
         labelPanel.add(showAllButton);
-
-        showAllButton.addActionListener(e -> {
-            StringBuilder messageBuilder = new StringBuilder("<html>");
-            List<List<String>> labelList = Arrays.asList(memberList,taskList,meetingList);
-            for (List<String> list: labelList){
-                if (list == memberList){
-                    messageBuilder.append("Members:");
-                }
-                if (list == taskList){
-                    messageBuilder.append("Tasks:");
-                }
-                if (list == meetingList){
-                    messageBuilder.append("Meetings:");
-                }
-                for (String item : list) {
-                    messageBuilder.append("<li>").append(item).append("</li>");
-                }
-                messageBuilder.append("<br/>");
-            }
-            messageBuilder.append("</html>");
-            JOptionPane.showConfirmDialog(this, messageBuilder.toString(), "More information",JOptionPane.INFORMATION_MESSAGE);
-        });
 
         labelPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 
-        // Add the label panel to the main panel at the top
-        panel.add(labelPanel, BorderLayout.NORTH);
 
 
-        // This creates a new panel for announcement and its buttons
-        JPanel labelPanelA = new JPanel();
-        labelPanelA.setLayout(new BoxLayout(labelPanelA, BoxLayout.Y_AXIS));
+        JPanel announcementPanel = new JPanel();
+        announcementPanel.setLayout(new BoxLayout(announcementPanel, BoxLayout.Y_AXIS));
 
-        // Creating the announcement label with HTML to allow multi-line text
-
-        List<String> announcements = mainPageState.getAnnouncements();
-        String recent1 = announcements.get(0);
-        String recent2 = announcements.get(1);
-        String recent3 = announcements.get(2);
-
-        String text = recent1;
-        final int maxLength = 146; // maximum length for two line, different from one for label due to font difference
-        if(text.length() > maxLength) {
-            text = text.substring(0, maxLength) + "...";
-        }
-        // Replace the first space after the 50th character with <br/> to create a new line
-        int lineBreakIndex = text.indexOf(" ", maxLength / 2);
-        if (lineBreakIndex != -1 && lineBreakIndex < maxLength) {
-            text = text.substring(0, lineBreakIndex) + "<br/>" + text.substring(lineBreakIndex + 1);
-        }
-        String announcementText = "<html>Announcement:<br/>" + text + "</html>";
-        JLabel announcementLabel = new JLabel(announcementText);
-
+        announcementLabel = new JLabel();
         announcementLabel.setFont(new Font("Serif", Font.PLAIN, 15));
 
-        JButton recentAnnouncement = new JButton("Recent Announcements");
+        recentAnnouncement = new JButton("Recent Announcements");
 
-        recentAnnouncement.addActionListener(e -> {
-            String message = String.format("<html>%s<br/>%s<br/>%s</html>", "- " + recent1, "- " + recent2, "- " + recent3);
-            JOptionPane.showConfirmDialog(this, message, "Recent Announcements", JOptionPane.INFORMATION_MESSAGE);
-        });
+        recentAnnouncement.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        JOptionPane.showConfirmDialog(MainPageView.this, recentAnnouncementInfo.getText(), "Recent Announcements", JOptionPane.INFORMATION_MESSAGE);
 
-        labelPanelA.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 5));
-        labelPanelA.add(announcementLabel);
-        labelPanelA.add(recentAnnouncement);
-        panel.add(labelPanelA);
+                    }
+                }
+
+        );
+
+
+        announcementPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 5));
+
+        announcementPanel.add(announcementLabel);
+        announcementPanel.add(recentAnnouncement);
+
+
+
+
 
         // Main Button Panel that lies on the bottom of the frame
         JPanel buttonPanel = new JPanel();
@@ -263,7 +151,7 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
         typeButtonPanel.add(announcementButton);
         typeButtonPanel.add(projectButton);
 
-        buttonPanel.add(typeButtonPanel);
+
 
         // Additional button panels for extension, initially not visible
         JPanel taskPanelExtension = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -287,7 +175,6 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
 
         JButton buttonM1 = new JButton("create meeting");
         meetingPanelExtension.add(buttonM1);
-
         buttonPanel.add(meetingPanelExtension);
         buttonList.add(meetingPanelExtension);
 
@@ -297,7 +184,6 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
 
         JButton buttonA1 = new JButton("create announcement");
         announcementPanelExtension.add(buttonA1);
-
         buttonPanel.add(announcementPanelExtension);
         buttonList.add(announcementPanelExtension);
 
@@ -315,13 +201,15 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
         buttonPanel.add(projectPanelExtension);
         buttonList.add(projectPanelExtension);
 
+        buttonPanel.add(typeButtonPanel);
+
         // Add the main button panel to the main panel at the bottom
-        panel.add(buttonPanel, BorderLayout.SOUTH);
+
 
         // ActionListeners
         taskButton.addActionListener(e -> {
             // Hide every panel except the one we want to show
-            for (JPanel extension: buttonList){
+            for (JPanel extension : buttonList) {
                 if (!Objects.equals(extension.getName(), "Task Extension")) {
                     extension.setVisible(false);
                 }
@@ -335,11 +223,12 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
             buttonPanel.repaint();
 
             // Adjust the frame size if necessary
-            MainPageView.this.pack();  // This will resize the frame to fit the content
+            this.repaint();
+            this.revalidate();  // This will resize the frame to fit the content
         });
 
         meetingButton.addActionListener(e -> {
-            for (JPanel extension: buttonList){
+            for (JPanel extension : buttonList) {
                 if (!Objects.equals(extension.getName(), "Meeting Extension")) {
                     extension.setVisible(false);
                 }
@@ -350,11 +239,12 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
             buttonPanel.revalidate();
             buttonPanel.repaint();
 
-            MainPageView.this.pack();
+            this.revalidate();
+            this.repaint();
         });
 
         announcementButton.addActionListener(e -> {
-            for (JPanel extension: buttonList){
+            for (JPanel extension : buttonList) {
                 if (!Objects.equals(extension.getName(), "Announcement Extension")) {
                     extension.setVisible(false);
                 }
@@ -365,26 +255,32 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
             buttonPanel.revalidate();
             buttonPanel.repaint();
 
-            MainPageView.this.pack();
+            this.revalidate();
+            this.repaint();
         });
 
         projectButton.addActionListener(e -> {
-            for (JPanel extension: buttonList){
+            for (JPanel extension : buttonList) {
                 if (!Objects.equals(extension.getName(), "Project Extension")) {
                     extension.setVisible(false);
                 }
             }
-            if (userEmail.equals(leaderEmail)) {
+            buttonPanel.revalidate();
+            buttonPanel.repaint();
+
+            if (userEmailInfo.getText().equals(leaderEmailInfo.getText())) {
                 boolean isVisible = projectPanelExtension.isVisible();
                 projectPanelExtension.setVisible(!isVisible);
-            } if (!(userEmail.equals(leaderEmail))) {
-                JOptionPane.showMessageDialog(this, "You are not the leader","Not authorized", JOptionPane.INFORMATION_MESSAGE);
+            }
+            if (!(userEmailInfo.getText().equals(leaderEmailInfo.getText()))) {
+                JOptionPane.showMessageDialog(this, "You are not the leader", "Not authorized", JOptionPane.INFORMATION_MESSAGE);
             }
 
             buttonPanel.revalidate();
             buttonPanel.repaint();
 
-            MainPageView.this.pack();
+            this.revalidate();
+            this.repaint();
         });
 
         buttonT1.addActionListener(     // create task
@@ -445,16 +341,13 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
                 }
         );
 
-
-
-
+        this.add(labelPanel, BorderLayout.NORTH);
+        this.add(announcementPanel, BorderLayout.CENTER);
+        this.add(buttonPanel, BorderLayout.SOUTH);
 
         // Add the main panel to the frame
-        add(panel);
 
         // Center the window and make it visible
-        setLocationRelativeTo(null);
-        setVisible(true);
     }
 
 
@@ -465,6 +358,19 @@ public class MainPageView extends JFrame implements ActionListener, PropertyChan
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        MainPageState state = (MainPageState) evt.getNewValue();
+        titleLabel.setText("Project Name: " + state.getProjectName());
+        userLabel.setText("User Email: " + state.getUserEmail());
+        userEmailInfo.setText(state.getLeaderEmail());
+        leaderEmailInfo.setText(state.getLeaderEmail());
+        memberLabel.setText(state.getLabel("member"));
+        taskLabel.setText(state.getLabel("task") );
+        meetingLabel.setText(state.getLabel("meeting"));
+        showAllInfo.setText(state.getShowAllMessage());
+        announcementLabel.setText(state.getAnnouncementLabel());
+        recentAnnouncementInfo.setText(state.getRecentAnnouncements());
+
+
 
     }
 }
