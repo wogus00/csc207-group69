@@ -1,6 +1,5 @@
 package interface_adapter.create_task;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -73,8 +72,7 @@ public class CreateTaskState {
     private ArrayList<String> strToArrayList(String text) {
         String[] array = text.split(",");
         // Create an ArrayList from the array
-        ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(array));
-        return arrayList;
+        return new ArrayList<>(Arrays.asList(array));
     }
 
     public String getProjectName() {
