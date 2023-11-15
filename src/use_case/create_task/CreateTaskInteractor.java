@@ -1,13 +1,9 @@
 package use_case.create_task;
 
-import entity.Project;
 import entity.Task;
 import entity.TaskFactory;
-import entity.TaskFactory;
-import use_case.create_project.CreateProjectOutputBoundary;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -72,7 +68,6 @@ public class CreateTaskInteractor implements CreateTaskInputBoundary {
         String[] array = text.split(",");
 
         // Create an ArrayList from the array
-        ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(array));
-        return arrayList;
+        return new ArrayList<>(Arrays.asList(array));
     }
 }

@@ -1,19 +1,12 @@
 package app;
 
-import entity.CommonProjectFactory;
 import entity.CommonTaskFactory;
-import entity.ProjectFactory;
 import entity.TaskFactory;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.create_project.CreateProjectController;
-import interface_adapter.create_project.CreateProjectPresenter;
-import interface_adapter.create_project.CreateProjectViewModel;
 import interface_adapter.create_task.CreateTaskController;
 import interface_adapter.create_task.CreateTaskPresenter;
 import interface_adapter.create_task.CreateTaskViewModel;
-import use_case.create_project.*;
 import use_case.create_task.*;
-import view.CreateProjectView;
 import view.CreateTaskView;
 
 import javax.swing.*;

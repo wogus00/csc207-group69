@@ -1,9 +1,6 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.create_project.CreateProjectController;
-import interface_adapter.create_project.CreateProjectState;
-import interface_adapter.create_project.CreateProjectViewModel;
 import interface_adapter.create_task.CreateTaskController;
 import interface_adapter.create_task.CreateTaskState;
 import interface_adapter.create_task.CreateTaskViewModel;
@@ -16,9 +13,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class CreateTaskView extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -133,7 +127,7 @@ public class CreateTaskView extends JPanel implements ActionListener, PropertyCh
                     public void keyTyped(KeyEvent e) {
                         CreateTaskState currentState = createTaskViewModel.getState();
                         String text = memberEmailsInputField.getText() + e.getKeyChar();
-                        currentState.setWorkingMembersList(text); ;
+                        currentState.setWorkingMembersList(text);
                         createTaskViewModel.setState(currentState);
                     }
 
