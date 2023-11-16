@@ -33,10 +33,8 @@ public class LoginPresenter implements LoginOutputBoundary {
         MainPageState mainPageState = mainPageViewModel.getState();
         mainPageState.setProjectName(response.getProjectName());
         mainPageState.setUserEmail(response.getUserEmail());
-        FirebaseAccessObject firebaseAccessObject = new FirebaseAccessObject();
-        Project project = firebaseAccessObject.getProject(response.getProjectName());
-        mainPageState.setLeaderEmail(project.getLeaderEmail());
-        mainPageState.setMemberEmail(project.getMemberEmails());
+        mainPageState.setLeaderEmail(response.getLeaderEmail());
+        mainPageState.setMemberEmail(response.getMemberEmails());
         // the main page state will need more information
         this.mainPageViewModel.setState(mainPageState);
         this.mainPageViewModel.firePropertyChanged();

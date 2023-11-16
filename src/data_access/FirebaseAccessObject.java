@@ -5,7 +5,7 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
-import entity.Meeting;
+import entity.CommonProject;
 import entity.Project;
 import entity.ProjectFactory;
 import use_case.add_email.AddEmailDataAccessInterface;
@@ -14,10 +14,8 @@ import use_case.login.LoginDataAccessInterface;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 
 public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, LoginDataAccessInterface {
@@ -53,8 +51,22 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     }
 
     public Project getProject(String projectName) {
-        return projects.get(projectName);
+        DocumentReference docRef = db.collection(projectName).document("projectInfo");
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot projectInfo = null;
+        try {
+            projectInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        };
+        String leaderEmail = projectInfo.getString("leaderEmail");
+        ArrayList<String> memberEmails = (ArrayList<String>) projectInfo.get("memberEmails");
+        Project project = new CommonProject(projectName, leaderEmail, memberEmails);
+        return project;
     }
+
 
     public void addMemberToProject(String projectName, String email) {
         // TODO: add member to project
