@@ -20,13 +20,40 @@ public class CreateAnnouncementInteractor implements CreateAnnouncementInputBoun
         this.announcementFactory = announcementFactory;
     }
 
+
     @Override
     public void execute(CreateAnnouncementInputData createAnnouncementInputData) {
         LocalDateTime now = LocalDateTime.now();
-        Announcement announcement = announcementFactory.create(createAnnouncementInputData.getAnnouncementTitle(), createAnnouncementInputData.getMessage(), now, createAnnouncementInputData.getAuthor());
+        Announcement announcement = announcementFactory.create(
+                createAnnouncementInputData.getAnnouncementTitle(),
+                createAnnouncementInputData.getMessage(),
+                now,
+                createAnnouncementInputData.getAuthor(),
+                createAnnouncementInputData.getAnnouncementId());
 
-        CreateAnnouncementOutputData createAnnouncementOutputData = new CreateAnnouncementOutputData(announcement.getAnnouncementTitle(), announcement.getMessage(), now.toString(), false, announcement.getAuthor());
-        createAnnouncementPresenter.prepareSuccessView(createAnnouncementOutputData);
+        // Save the announcement to Firebase
+        try {
+            createAnnouncementDataAccessObject.save(announcement);
+            CreateAnnouncementOutputData createAnnouncementOutputData = new CreateAnnouncementOutputData(
+                    announcement.getAnnouncementTitle(),
+                    announcement.getMessage(),
+                    now.toString(),
+                    true,  // Assuming the save operation is successful
+                    announcement.getAuthor(),
+                    announcement.getId());
+            createAnnouncementPresenter.prepareSuccessView(createAnnouncementOutputData);
+        } catch (Exception e) {
+            // Handle any exceptions, e.g., database connection failure
+            CreateAnnouncementOutputData createAnnouncementOutputData = new CreateAnnouncementOutputData(
+                    announcement.getAnnouncementTitle(),
+                    announcement.getMessage(),
+                    now.toString(),
+                    false,  // Indicating that the save operation failed
+                    announcement.getAuthor(),
+                    announcement.getId());
+            createAnnouncementPresenter.prepareFailView(createAnnouncementOutputData, e.getMessage());
+        }
     }
+
 
 }

@@ -31,6 +31,11 @@ public class CreateAnnouncementPresenter implements CreateAnnouncementOutputBoun
     }
 
     @Override
+    public void prepareFailView(CreateAnnouncementOutputData createAnnouncementOutputData, String error) {
+
+    }
+
+    @Override
     public void prepareFailView(String error) {
         CreateAnnouncementState createAnnouncementState = createAnnouncementViewModel.getState();
         createAnnouncementState.setAnnouncementTitleError(error);

@@ -11,11 +11,14 @@ public class CommonAnnouncement implements Announcement {
 
     private final String author;
 
-    public CommonAnnouncement(String announcementTitle, String message, LocalDateTime creationTime, String author) {
+    private final String id;
+
+    public CommonAnnouncement(String announcementTitle, String message, LocalDateTime creationTime, String author, String id) {
         this.announcementTitle = announcementTitle;
         this.message = message;
         this.creationTime = creationTime;
         this.author = author;
+        this.id = id;
     }
 
     @Override
@@ -29,4 +32,7 @@ public class CommonAnnouncement implements Announcement {
 
     @Override
     public String getAuthor(){return author;}
+
+    @Override
+    public String getId(){return id;}
 }

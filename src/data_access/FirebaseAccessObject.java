@@ -7,6 +7,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import entity.CommonProject;
 import entity.Meeting;
+import entity.Announcement;
 import entity.CommonAnnouncement;
 import entity.Project;
 import entity.ProjectFactory;
@@ -14,6 +15,7 @@ import use_case.add_email.AddEmailDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 import use_case.delete_announcement.DeleteAnnouncementDataAccessInterface;
+import use_case.create_announcement.CreateAnnouncementDataAccessInterface;
 import use_case.create_announcement.CreateAnnouncementDataAccessInterface;
 
 
@@ -118,14 +120,15 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         return true;
     }
 
-    public void addAnnouncement(CommonAnnouncement announcement) {
+    @Override
+    public void save(Announcement announcement) {
         // Initialize Firestore if not already done
         if (db == null) {
             // Initialize Firestore
         }
 
         // Generate a unique ID for the announcement
-        String announcementId = UUID.randomUUID().toString();
+//        String announcementId = UUID.randomUUID().toString();
 
         // Convert LocalDateTime to a Firebase compatible format
         String formattedCreationTime = announcement.getCreationTime()
@@ -133,14 +136,14 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
 
         // Create a Map to hold announcement data
         Map<String, Object> announcementData = new HashMap<>();
-        announcementData.put("id", announcementId); // Add the generated ID
+        announcementData.put("id", announcement.getId()); // Add the generated ID
         announcementData.put("title", announcement.getAnnouncementTitle());
         announcementData.put("message", announcement.getMessage());
         announcementData.put("creationTime", formattedCreationTime);
         announcementData.put("author", announcement.getAuthor());
 
         // Use the generated ID as the document ID in Firestore
-        ApiFuture<WriteResult> addedDocRef = db.collection("announcements").document(announcementId).set(announcementData);
+        ApiFuture<WriteResult> addedDocRef = db.collection("announcements").document(announcement.getId()).set(announcementData);
         // Handle completion of the future
     }
 
@@ -170,11 +173,12 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
                 String message = document.getString("message");
                 String author = document.getString("author");
                 String creationTimeString = document.getString("creationTime");
+                String id = document.getId();
 
                 // Assuming creationTime is stored in ISO_LOCAL_DATE_TIME format
                 LocalDateTime creationTime = LocalDateTime.parse(creationTimeString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
-                return new CommonAnnouncement(title, message, creationTime, author);
+                return new CommonAnnouncement(title, message, creationTime, author, id);
             } else {
                 // Handle the case where the announcement doesn't exist
                 return null;
@@ -188,3 +192,4 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
 
 
 }
+

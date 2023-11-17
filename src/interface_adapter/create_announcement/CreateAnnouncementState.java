@@ -7,10 +7,13 @@ public class CreateAnnouncementState {
 
     private String announcementTitleError = null;
 
+    private String author = "";
+
     public CreateAnnouncementState(CreateAnnouncementState copy) {
         announcementTitle = copy.announcementTitle;
         message = copy.message;
         announcementTitleError = copy.announcementTitleError;
+        author = copy.author;
     }
 
     public CreateAnnouncementState(){}
@@ -21,9 +24,17 @@ public class CreateAnnouncementState {
 
     public String getAnnouncementTitleError(){return announcementTitleError;}
 
+    public String getAuthor() {
+        return author;
+    }
+
     public void setAnnouncementTitle(String announcementTitle){this.announcementTitle = announcementTitle;}
 
     public void setMessage(String message){this.message = message;}
 
     public void setAnnouncementTitleError(String announcementTitleError){this.announcementTitleError = announcementTitleError;}
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 }

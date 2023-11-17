@@ -10,4 +10,7 @@ public interface Announcement {
     String getAuthor();
 
     LocalDateTime getCreationTime();
+
+
+    String getId();
 }

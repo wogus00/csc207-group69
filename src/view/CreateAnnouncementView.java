@@ -55,8 +55,9 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
 
                             String currentTitle = currentState.getAnnouncementTitle();
                             String currentMessage = currentState.getMessage();
+                            String author = currentState.getAuthor();
 
-                            createAnnouncementController.execute(currentTitle, currentMessage);
+                            createAnnouncementController.execute(currentTitle, currentMessage, author);
                         }
                     }
                 }
@@ -117,7 +118,8 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
         this.add(buttons);
     }
 
-    public void actionPerfomed(ActionEvent evt) {
+    @Override
+    public void actionPerformed(ActionEvent e) {
         System.out.println("Cancel not implemented yet.");
     }
 
@@ -127,10 +129,5 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
         if (state.getAnnouncementTitleError() != null) {
             JOptionPane.showMessageDialog(this, state.getAnnouncementTitleError());
         }
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JOptionPane.showConfirmDialog(this, "Cancel not implemented yet.");
     }
 }

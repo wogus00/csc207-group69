@@ -1,9 +1,10 @@
 package use_case.create_announcement;
 
 
+import entity.Announcement;
 import entity.CommonAnnouncement;
 
 public interface CreateAnnouncementDataAccessInterface {
 
-    void addAnnouncement(CommonAnnouncement announcement);
+    void save(Announcement announcement);
 }
