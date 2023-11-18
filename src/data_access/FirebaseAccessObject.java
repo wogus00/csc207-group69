@@ -11,6 +11,7 @@ import entity.Project;
 import entity.ProjectFactory;
 import entity.Task;
 import use_case.add_email.AddEmailDataAccessInterface;
+import use_case.complete_task.CompleteTaskDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
 import use_case.create_task.CreateTaskDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
@@ -21,7 +22,7 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface {
     Firestore db;
     ProjectFactory projectFactory;
 
@@ -120,6 +121,11 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     @Override
     public boolean taskNameExists(String projectName, String taskName) {
         return false;
+    }
+
+    @Override
+    public void completeTask(String projectName, String taskName) {
+        // TODO: add methods
     }
 
     @Override
