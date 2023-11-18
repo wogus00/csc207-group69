@@ -30,13 +30,10 @@ public class CreateAnnouncementPresenter implements CreateAnnouncementOutputBoun
     public void prepareSuccessView(CreateAnnouncementOutputData response) {
         // on Success, switch to the dashboard
         MainPageState mainPageState = new MainPageState();
+        mainPageState.addAnnouncement(response.getAnnouncementTitle());
+        mainPageViewModel.setState(mainPageState);
         viewManagerModel.setActiveView(createAnnouncementViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
-    }
-
-    @Override
-    public void prepareFailView(CreateAnnouncementOutputData createAnnouncementOutputData, String error) {
-
     }
 
     @Override
