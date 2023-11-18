@@ -1,6 +1,8 @@
 package use_case.login;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class LoginInteractor implements LoginInputBoundary {
     final LoginDataAccessInterface userDataAccessObject;
@@ -17,14 +19,17 @@ public class LoginInteractor implements LoginInputBoundary {
         String projectName = loginInputData.getProjectName();
         String userEmail = loginInputData.getUserEmail();
         if (!userDataAccessObject.existsByName(projectName) ) {
-            loginPresenter.prepareFailView(projectName + ": Project does not exist.");
+            loginPresenter.prepareFailView("Project does not exist.");
         } else {
-            ArrayList<String> memberEmails = userDataAccessObject.getProject(projectName).getMemberEmails();
-            String leaderEmail = userDataAccessObject.getProject(projectName).getLeaderEmail();
+            ArrayList<String> memberEmails = userDataAccessObject.getProjectInfo(projectName).getMemberEmails();
+            String leaderEmail = userDataAccessObject.getProjectInfo(projectName).getLeaderEmail();
             if (!userEmail.equals(leaderEmail) && !memberEmails.contains(userEmail)) {
-                loginPresenter.prepareFailView("User email" + userEmail + " does not exist for the project" + projectName + ".");
+                loginPresenter.prepareFailView("User email " + userEmail + " does not exist for the project " + projectName + ".");
             } else {
-                LoginOutputData loginOutputData = new LoginOutputData(projectName, userEmail, leaderEmail, memberEmails, false);
+                ArrayList<String> taskList = userDataAccessObject.getInfoList(projectName, "taskInfo");
+                ArrayList<String> meetingList = userDataAccessObject.getInfoList(projectName, "meetingInfo");
+                ArrayList<String> announcements = userDataAccessObject.getInfoList(projectName, "announcementInfo");
+                LoginOutputData loginOutputData = new LoginOutputData(projectName, userEmail, leaderEmail, memberEmails, taskList, meetingList, announcements, false);
                 loginPresenter.prepareSuccessView(loginOutputData);
             }
         }

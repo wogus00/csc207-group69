@@ -361,7 +361,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         MainPageState state = (MainPageState) evt.getNewValue();
         titleLabel.setText("Project Name: " + state.getProjectName());
         userLabel.setText("User Email: " + state.getUserEmail());
-        userEmailInfo.setText(state.getLeaderEmail());
+        userEmailInfo.setText(state.getUserEmail());
         leaderEmailInfo.setText(state.getLeaderEmail());
         memberLabel.setText(state.getLabel("member"));
         taskLabel.setText(state.getLabel("task") );

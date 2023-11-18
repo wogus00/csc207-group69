@@ -2,13 +2,13 @@ package interface_adapter.login;
 
 public class LoginState {
     private String projectName = "";
-    private String NoMatchError = null;
+    private String loginError = null;
     private String userEmail = "";
 
 
     public LoginState(LoginState copy) {
         projectName = copy.projectName;
-        NoMatchError = copy.NoMatchError;
+        loginError = copy.loginError;
         userEmail = copy.userEmail;
     }
 
@@ -20,8 +20,8 @@ public class LoginState {
         return projectName;
     }
 
-    public String getNoMatchError() {
-        return NoMatchError;
+    public String getLoginError() {
+        return loginError;
     }
 
     public String getUserEmail() {
@@ -33,8 +33,8 @@ public class LoginState {
         this.projectName = projectName;
     }
 
-    public void setNoMatchError(String NoMatchError) {
-        this.NoMatchError = NoMatchError;
+    public void setLoginError(String NoMatchError) {
+        this.loginError = NoMatchError;
     }
 
     public void setUserEmail(String userEmail) {

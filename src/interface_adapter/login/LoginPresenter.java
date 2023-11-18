@@ -35,7 +35,9 @@ public class LoginPresenter implements LoginOutputBoundary {
         mainPageState.setUserEmail(response.getUserEmail());
         mainPageState.setLeaderEmail(response.getLeaderEmail());
         mainPageState.setMemberEmail(response.getMemberEmails());
-        // the main page state will need more information
+        mainPageState.setTaskList(response.getTaskList());
+        mainPageState.setMeetingList(response.getMeetingList());
+        mainPageState.setAnnouncements(response.getAnnouncements());
         this.mainPageViewModel.setState(mainPageState);
         this.mainPageViewModel.firePropertyChanged();
         this.viewManagerModel.setActiveView(mainPageViewModel.getViewName());
@@ -45,7 +47,7 @@ public class LoginPresenter implements LoginOutputBoundary {
     @Override
     public void prepareFailView(String error) {
         LoginState loginState = loginViewModel.getState();
-        loginState.setNoMatchError(error);
+        loginState.setLoginError(error);
         loginViewModel.firePropertyChanged();
     }
 }

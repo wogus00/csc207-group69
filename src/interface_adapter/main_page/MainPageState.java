@@ -16,7 +16,7 @@ public class MainPageState {
     private ArrayList<String> taskList = new ArrayList<>(Arrays.asList(""));
     private ArrayList<String> meetingList = new ArrayList<>(Arrays.asList(""));
 
-    private ArrayList<String> announcements = new ArrayList<>(Arrays.asList("No announcements","",""));
+    private ArrayList<String> announcements = new ArrayList<>(Arrays.asList("No Announcements"));
     public MainPageState(MainPageState copy) {
         projectName = copy.projectName;;
         userEmail = copy.userEmail;
@@ -69,26 +69,32 @@ public class MainPageState {
     public String getLabel(String type) {
         List<String> list = new ArrayList<>();
         StringBuilder labelBuilder = new StringBuilder("<html>"); // Use HTML to allow for text wrapping if needed
+        int charsCount = 3;
 
         if (type.equals("member")) {
             list.add(this.leaderEmail);
             list.addAll(this.memberEmail);
             labelBuilder.append("Member List: <font color='blue'>");
+            charsCount += "Member List: ".length();
         } if (type.equals("task")) {
             list.addAll(this.taskList);
             labelBuilder.append("Task List: ");
+            charsCount += "Task List: ".length();
         } if (type.equals("meeting")) {
             list.addAll(this.meetingList);
             labelBuilder.append("Meeting List: ");
+            charsCount += "Meeting List: ".length();
         }
 
+        final int initialCount = charsCount;
+        final int maxChars = 75; // Set a maximum character limit for the JLabel
 
-        final int maxChars = 80; // Set a maximum character limit for the JLabel
-        int charsCount = 0; // initialize count
 
         for (String item : list) {
             if (charsCount + item.length() > maxChars) {
-                labelBuilder.delete(labelBuilder.length() - 9, labelBuilder.length());
+                if (charsCount > initialCount) {
+                    labelBuilder.delete(labelBuilder.length() - 9, labelBuilder.length());
+                }
                 labelBuilder.append("...");
                 break;
             } else {
@@ -105,6 +111,8 @@ public class MainPageState {
                 labelBuilder.delete(labelBuilder.length() - 9, labelBuilder.length());
             }
         }
+        // Consider with a long name for the first task/meeting or leader email
+
 
         labelBuilder.append("</html>");
         return labelBuilder.toString();
@@ -112,7 +120,7 @@ public class MainPageState {
 
     public String getShowAllMessage() {
         List<String> memberList = new ArrayList<>();
-        memberList.add(this.leaderEmail);
+        memberList.add(this.leaderEmail + "(leader)");
         memberList.addAll(this.memberEmail);
 
         StringBuilder messageBuilder = new StringBuilder("<html>");
@@ -137,7 +145,7 @@ public class MainPageState {
     }
 
     public String getAnnouncementLabel(){
-        String text = this.announcements.get(0);
+        String text = this.announcements.get(this.announcements.size() - 1);
 
         final int maxLength = 146; // maximum length for two lines
 
@@ -154,10 +162,19 @@ public class MainPageState {
     }
 
     public String getRecentAnnouncements(){
-        String recent1 = this.announcements.get(0);
-        String recent2 = this.announcements.get(1);
-        String recent3 = this.announcements.get(2);
-        return String.format("<html>%s<br/>%s<br/>%s</html>", "- " + recent1, "- " + recent2, "- " + recent3);
+        ArrayList<String> recents = new ArrayList<>();
+        int length = this.announcements.size() - 1;
+        if (length > 2) {
+            length = 2;
+        }
+        for (int i = 0; i <= length; i++) {
+            recents.add(this.announcements.get(length - i));
+        }
+        while (recents.size() < 3) {
+            recents.add("");
+        }
+
+        return String.format("<html>%s<br/>%s<br/>%s</html>", "- " + recents.get(0), "- " + recents.get(1), "- " + recents.get(2));
 
     }
 
