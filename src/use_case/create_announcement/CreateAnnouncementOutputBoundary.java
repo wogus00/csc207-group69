@@ -4,4 +4,6 @@ public interface CreateAnnouncementOutputBoundary {
     void prepareSuccessView(CreateAnnouncementOutputData announcement);
 
     void prepareFailView(CreateAnnouncementOutputData createAnnouncementOutputData, String error);
+
+    void prepareFailView(String error);
 }

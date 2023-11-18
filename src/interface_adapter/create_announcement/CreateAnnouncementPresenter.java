@@ -2,6 +2,8 @@ package interface_adapter.create_announcement;
 
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.main_page.MainPageState;
+import interface_adapter.main_page.MainPageViewModel;
 import use_case.create_announcement.CreateAnnouncementOutputBoundary;
 import use_case.create_announcement.CreateAnnouncementOutputData;
 
@@ -14,18 +16,20 @@ public class CreateAnnouncementPresenter implements CreateAnnouncementOutputBoun
 
     private ViewManagerModel viewManagerModel;
 
+    private MainPageViewModel mainPageViewModel;
+
     public CreateAnnouncementPresenter(ViewManagerModel viewManagerModel,
-                                       CreateAnnouncementViewModel createAnnouncementViewModel) {
+                                       CreateAnnouncementViewModel createAnnouncementViewModel,
+                                       MainPageViewModel mainPageViewModel) {
         this.createAnnouncementViewModel = createAnnouncementViewModel;
         this.viewManagerModel = viewManagerModel;
+        this.mainPageViewModel = mainPageViewModel;
     }
 
     @Override
     public void prepareSuccessView(CreateAnnouncementOutputData response) {
         // on Success, switch to the dashboard
-        LocalDateTime responseTime = LocalDateTime.parse(response.getCreationTime());
-        response.setCreationTime(responseTime.format(DateTimeFormatter.ofPattern("hh:mm:ss")));
-        CreateAnnouncementState createAnnouncementState = createAnnouncementViewModel.getState();
+        MainPageState mainPageState = new MainPageState();
         viewManagerModel.setActiveView(createAnnouncementViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }

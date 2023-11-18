@@ -9,11 +9,14 @@ public class CreateAnnouncementState {
 
     private String author = "";
 
+    private String id = "";
+
     public CreateAnnouncementState(CreateAnnouncementState copy) {
         announcementTitle = copy.announcementTitle;
         message = copy.message;
         announcementTitleError = copy.announcementTitleError;
         author = copy.author;
+        id = copy.id;
     }
 
     public CreateAnnouncementState(){}
@@ -36,5 +39,13 @@ public class CreateAnnouncementState {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
