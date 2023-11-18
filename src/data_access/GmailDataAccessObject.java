@@ -16,6 +16,8 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
+import use_case.complete_task.CompleteTaskDataAccessInterface;
+import use_case.complete_task.CompleteTaskGmailDataAccessInterface;
 import use_case.create_project.CreateProjectGmailDataAccessInterface;
 import use_case.create_task.CreateTaskGmailDataAccessInterface;
 
@@ -31,7 +33,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
-public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface {
+public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, CompleteTaskGmailDataAccessInterface {
 
     private static final String APPLICATION_NAME = "group-project";
 
