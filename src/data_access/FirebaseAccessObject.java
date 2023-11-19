@@ -9,6 +9,7 @@ import entity.Project;
 import entity.ProjectFactory;
 import use_case.add_email.AddEmailDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
+import use_case.login.LoginDataAccessInterface;
 import use_case.remove_email.RemoveEmailDataAccessInterface;
 import use_case.set_leader.SetLeaderDataAccessInterface;
 
@@ -20,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, RemoveEmailDataAccessInterface, SetLeaderDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, RemoveEmailDataAccessInterface, SetLeaderDataAccessInterface, LoginDataAccessInterface {
     Firestore db;
     ProjectFactory projectFactory;
 

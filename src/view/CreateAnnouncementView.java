@@ -128,4 +128,9 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
             JOptionPane.showMessageDialog(this, state.getAnnouncementTitleError());
         }
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JOptionPane.showConfirmDialog(this, "Cancel not implemented yet.");
+    }
 }
