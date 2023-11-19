@@ -61,8 +61,8 @@ public class CompleteTaskView extends JPanel implements ActionListener, Property
                     @Override
                     public void keyTyped(KeyEvent e) {
                         CompleteTaskState currentState = completeTaskViewModel.getState();
-                        String text = taskNameInputField.getText() + e.getKeyChar();
-                        currentState.setTaskName(text);
+                        String taskNameInfo = taskNameInputField.getText() + e.getKeyChar();
+                        currentState.setTaskName(taskNameInfo);
                         completeTaskViewModel.setState(currentState);
                     }
 
@@ -93,6 +93,12 @@ public class CompleteTaskView extends JPanel implements ActionListener, Property
                         }
                     }
                 });
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        this.add(title);
+        this.add(taskNameInfo);
+        this.add(buttons);
+
     }
 
 
