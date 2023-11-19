@@ -9,6 +9,8 @@ import entity.Project;
 import entity.ProjectFactory;
 import use_case.add_email.AddEmailDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
+import use_case.remove_email.RemoveEmailDataAccessInterface;
+import use_case.set_leader.SetLeaderDataAccessInterface;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,7 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, RemoveEmailDataAccessInterface, SetLeaderDataAccessInterface {
     Firestore db;
     ProjectFactory projectFactory;
 
@@ -50,7 +52,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             ApiFuture<WriteResult> result = docRef.set(data);
     }
 
-    Project getProject(String projectName) {
+    public Project getProject(String projectName) {
         return projects.get(projectName);
     }
 
@@ -65,5 +67,15 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     public boolean existsByName(String newProjectName) {
         //TODO: add ways to check if newProjectName exists in db collection
         return true;
+    }
+
+    @Override
+    public void removeMemberToProject(String projectName, String email) {
+        // TODO
+    }
+
+    @Override
+    public void SetLeaderToNewLeader(String projectName, String leader_name) {
+        // TODO
     }
 }
