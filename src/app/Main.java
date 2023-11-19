@@ -10,6 +10,7 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageViewModel;
 import view.CreateProjectView;
 import view.LoginView;
+import view.MainPageView;
 import view.ViewManager;
 
 import javax.swing.*;
@@ -48,9 +49,11 @@ public class Main {
         LoginView loginView = LoginUseCaseFactory.createLoginView(viewManagerModel,loginViewModel,mainPageViewModel, firebaseAccessObject);
         views.add(loginView, loginView.viewName);
 
+        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel);
+        views.add(mainPageView, mainPageView.viewName);
+
         viewManagerModel.setActiveView(loginView.viewName);
         viewManagerModel.firePropertyChanged();
-
         application.pack();
         application.setVisible(true);
 

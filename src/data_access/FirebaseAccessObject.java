@@ -5,6 +5,7 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import entity.CommonProject;
 import entity.Meeting;
 import entity.Project;
 import entity.ProjectFactory;
@@ -14,10 +15,8 @@ import use_case.login.LoginDataAccessInterface;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 
 public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, LoginDataAccessInterface {
@@ -52,9 +51,51 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             ApiFuture<WriteResult> result = docRef.set(data);
     }
 
-    public Project getProject(String projectName) {
-        return projects.get(projectName);
+    public Project getProjectInfo(String projectName) {
+        DocumentReference docRef = db.collection(projectName).document("projectInfo");
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot projectInfo = null;
+        try {
+            projectInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        };
+        String leaderEmail = projectInfo.getString("leaderEmail");
+        ArrayList<String> memberEmails = (ArrayList<String>) projectInfo.get("memberEmails");
+        Project project = new CommonProject(projectName, leaderEmail, memberEmails);
+        return project;
     }
+
+    public ArrayList<String> getInfoList(String projectName, String listType) {
+        ArrayList<String> list = new ArrayList<>();
+
+        DocumentReference docRef = db.collection(projectName).document(listType);
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot typeInfo = null;
+        try {
+            typeInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        };
+        Map<String, Object> fields = typeInfo.getData();
+        list.addAll(fields.keySet());
+        if (listType.equals("announcementInfo")) {
+            List<String> messageList = new ArrayList<>();
+            for (String key: list) {
+                Map<String, Object> entry = (Map<String, Object>) fields.get(key);
+                messageList.add((String) entry.get("message"));
+            }
+            list = new ArrayList<>();
+            list.addAll(messageList);
+        }
+        return list;
+    }
+
+
 
     public void addMemberToProject(String projectName, String email) {
         // TODO: add member to project
