@@ -88,6 +88,11 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     }
 
     @Override
+    public boolean userHasAccessToTask(String projectName, String taskName, String userEmail) {
+        return false;
+    }
+
+    @Override
     public boolean memberExists(String projectName, ArrayList<String> workingMembersList) {
         return false;
     }

@@ -18,10 +18,14 @@ public class CompleteTaskInteractor implements CompleteTaskInputBoundary {
     public void execute(CompleteTaskInputData completeTaskInputData) {
         String projectName = completeTaskInputData.getProjectName();
         String taskName = completeTaskInputData.getTaskName();
+        String userEmail = completeTaskInputData.getUserEmail();
 
         // go look into firebase and check for the taskName
         if (!completeTaskDataAccessObject.taskNameExists(projectName, taskName)) {
             completeTaskPresenter.prepareFailView("Task name does not exist");
+        } else if (!completeTaskDataAccessObject.userHasAccessToTask(projectName, taskName, userEmail)) {
+            completeTaskPresenter.prepareFailView("User does not have access");
+
         } else {
             completeTaskDataAccessObject.completeTask(projectName, taskName);
         }
