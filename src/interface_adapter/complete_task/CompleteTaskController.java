@@ -11,8 +11,8 @@ public class CompleteTaskController {
         this.completeTaskUseCaseInteractor = completeTaskUseCaseInteractor;
     }
 
-    public void execute(String projectName, String taskName) {
-        CompleteTaskInputData completeTaskInputData = new CompleteTaskInputData(projectName, taskName);
+    public void execute(String projectName, String taskName, String userEmail) {
+        CompleteTaskInputData completeTaskInputData = new CompleteTaskInputData(projectName, taskName, userEmail);
         completeTaskUseCaseInteractor.execute(completeTaskInputData);
     }
 }
