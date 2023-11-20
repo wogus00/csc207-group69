@@ -2,6 +2,9 @@ package use_case.create_meeting;
 
 import entity.MeetingFactory;
 
+import java.io.IOException;
+import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
@@ -14,24 +17,22 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
     public CreateMeetingInteractor(CreateMeetingDataAccessInterface createMeetingDataAccessObject,
                                    CreateMeetingGmailDataAccessInterface createMeetingGmailAccessObject,
                                    CreateMeetingOutputBoundary createMeetingPresenter,
-                                   CreateMeetingOutputBoundary createMeetingPresenter1, MeetingFactory meetingFactory) {
+                                   MeetingFactory meetingFactory) {
         this.createMeetingPresenter = createMeetingPresenter1;
-        this.meetingDataAccessObject = meetingDataAccessInterface;
+        this.createMeetingDataAccessObject = meetingDataAccessInterface;
         this.createMeetingGmailAccessObject = createMeetingGmailAccessObject;
-        this.meetingPresenter = createMeetingOutputBoundary;
+        this.createMeetingPresenter = createMeetingOutputBoundary;
         this.meetingFactory = meetingFactory;
     }
 
-    public CreateMeetingInteractor(CreateMeetingDataAccessInterface createMeetingDataAccessObject, CreateMeetingGmailDataAccessInterface gmailDataAccessObject, CreateMeetingOutputBoundary createMeetingOutputBoundary, MeetingFactory meetingFactory) {
-    }
-
     @Override
-    public void execute(CreateMeetingInputData CreateMeetingInputData) {
+    public void execute(CreateMeetingInputData createMeetingInputData) {
         String meetingName = CreateMeetingInputData.getMeetingName();
         ArrayList<String> participantEmail = CreateMeetingInputData.getParticipantEmail();
-        LocalDate meetingDate = CreateMeetingInputData.getMeetingDate();
-        Time startTime = CreateMeetingInputData.getStartTime();
-        Time endTime = CreateMeetingInputData.getEndTime();
+        String fromEmail = createMeetingInputData.getParticipantEmail().get(0);
+        String meetingDate = CreateMeetingInputData.getMeetingDate();
+        String startTime = CreateMeetingInputData.getStartTime();
+        String endTime = CreateMeetingInputData.getEndTime();
         String projectName = CreateMeetingInputData.getProjectName();
 
         if (!createMeetingDataAccessObject.meetingNameTaken(projectName, taskName)) {
@@ -39,12 +40,12 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
         } else if (!createMeetingDataAccessObject.participantsExist(projectName, participantEmail)) {
             createMeetingPresenter.prepareFailView("Member does not exist");
         } else {
-            Meeting newMeeting = MeetingFactory.create(projectName, meetingName, meetingDate, startTime, endTime);
+            Meeting newMeeting = MeetingFactory.create(meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
             createMeetingDataAccessObject.saveMeeting(projectName, newMeeting);
 
-            for (String email: participantEmail) {
+            for (String toEmail: participantEmail) {
                 try {
-                    createMeetingGmailAccessObject.sendMeetingCreationEmail(participantEmail);
+                    createMeetingGmailAccessObject.sendMeetingCreationEmail(toEmail, fromEmail, meetingName);
                 } catch (MessagingException | IOException e) {
                     throw new RuntimeException(e);
                 }
