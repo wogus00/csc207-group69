@@ -6,6 +6,6 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 
 public interface CreateMeetingGmailDataAccessInterface {
-    Message sendMeetingCreationEmail(String email, String meetingName) throws MessagingException, IOException;
+    Message sendMeetingCreationEmail(String toEmail, String fromEmail, String meetingName) throws MessagingException, IOException;
 }
 
