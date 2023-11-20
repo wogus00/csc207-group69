@@ -9,10 +9,10 @@ public class CreateMeetingController {
 
     final CreateMeetingInputBoundary userCreateMeetingUseCaseInteractor;
     public CreateMeetingController(CreateMeetingInputBoundary userCreateMeetingUseCaseInteractor) {
-        this.userCreateMeetingseCaseInteractor = userCreateMeetingUseCaseInteractor;
+        this.userCreateMeetingUseCaseInteractor = userCreateMeetingUseCaseInteractor;
     }
 
-    public void execute(String meetingName, String participantEmail, Date meetingDate, Time startTime, Time endTime) {
+    public void execute(String meetingName, ArrayList<String> participantEmail, String meetingDate, String startTime, String endTime, String projectName) {
         CreateMeetingInputData createMeetingInputData = new CreateMeetingInputData(
                 meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
 
