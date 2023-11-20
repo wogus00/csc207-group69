@@ -1,5 +1,6 @@
 package use_case.create_meeting;
 
+import entity.Meeting;
 import entity.MeetingFactory;
 
 import java.io.IOException;
@@ -18,7 +19,6 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
                                    CreateMeetingGmailDataAccessInterface createMeetingGmailAccessObject,
                                    CreateMeetingOutputBoundary createMeetingPresenter,
                                    MeetingFactory meetingFactory) {
-        this.createMeetingPresenter = createMeetingPresenter1;
         this.createMeetingDataAccessObject = meetingDataAccessInterface;
         this.createMeetingGmailAccessObject = createMeetingGmailAccessObject;
         this.createMeetingPresenter = createMeetingOutputBoundary;
