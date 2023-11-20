@@ -58,25 +58,130 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     }
 
     public void addMemberToProject(String projectName, String email) {
-        // TODO: add member to project
+        DocumentReference docRef = db.collection(projectName).document("projectInfo");
+
+        // Run a transaction to ensure the email is not already in the list
+        ApiFuture<Void> transaction = db.runTransaction(t -> {
+            // Retrieve the current projectInfo document
+            DocumentSnapshot snapshot = t.get(docRef).get();
+            if (!snapshot.exists()) {
+                throw new IllegalStateException("Project with name " + projectName + " does not exist!");
+            }
+
+            // Check if the memberEmails list already contains the email
+            ArrayList<String> memberEmails = (ArrayList<String>) snapshot.get("memberEmails");
+            if (memberEmails != null && memberEmails.contains(email)) {
+                // If it does, throw an exception or handle accordingly
+                throw new IllegalArgumentException("Email " + email + " already exists in the project.");
+            } else {
+                // If not, add the email to the memberEmails list
+                if (memberEmails == null) memberEmails = new ArrayList<>();
+                memberEmails.add(email);
+                t.update(docRef, "memberEmails", memberEmails);
+            }
+
+            // Return successfully completing the transaction
+            return null;
+        });
+
+        // When the transaction is complete, you can handle if it was successful or if it failed
+        try {
+            transaction.get(); // This will throw if the transaction failed
+            System.out.println("Member added successfully.");
+        } catch (Exception e) {
+            e.printStackTrace(); // Log or handle any errors thrown during the transaction
+        }
     }
 
-    public void removeMemberFromProject(String projectName, String email) {
-        // TODO: remove member from project
-    }
 
     public boolean existsByName(String newProjectName) {
         //TODO: add ways to check if newProjectName exists in db collection
-        return true;
+        try {
+            DocumentReference docRef = db.collection(newProjectName).document("projectInfo");
+            ApiFuture<DocumentSnapshot> future = docRef.get();
+            DocumentSnapshot document = future.get();
+            return document.exists();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    public void removeMemberToProject(String projectName, String email) {
-        // TODO
+    public void removeMemberFromProject(String projectName, String email) {
+        DocumentReference docRef = db.collection(projectName).document("projectInfo");
+
+        // Run a transaction to ensure the email list is not empty
+        ApiFuture<Void> transaction = db.runTransaction(t -> {
+            // Retrieve the current projectInfo document
+            DocumentSnapshot snapshot = t.get(docRef).get();
+            if (!snapshot.exists()) {
+                throw new IllegalStateException("Project with name " + projectName + " does not exist!");
+            }
+
+            // Retrieve the memberEmails list
+            ArrayList<String> memberEmails = (ArrayList<String>) snapshot.get("memberEmails");
+            if (memberEmails == null || memberEmails.isEmpty()) {
+                // If the list is empty or null, throw an exception or handle accordingly
+                throw new IllegalStateException("The member email list is empty. No members to remove.");
+            }
+
+            // If the email exists in the list, remove it
+            if (memberEmails.contains(email)) {
+                memberEmails.remove(email);
+                t.update(docRef, "memberEmails", memberEmails);
+            } else {
+                // If the email does not exist in the list, handle this case, possibly with an exception or a warning
+                throw new IllegalArgumentException("Email " + email + " does not exist in the project.");
+            }
+
+            // Return successfully completing the transaction
+            return null;
+        });
+
+        // When the transaction is complete, handle if it was successful or if it failed
+        try {
+            transaction.get(); // This will throw if the transaction failed
+            System.out.println("Member removed successfully.");
+        } catch (Exception e) {
+            e.printStackTrace(); // Log or handle any errors thrown during the transaction
+        }
     }
 
+
     @Override
-    public void SetLeaderToNewLeader(String projectName, String leader_name) {
-        // TODO
+    public void SetLeaderToNewLeader(String projectName, String newLeaderEmail) {
+        DocumentReference docRef = db.collection(projectName).document("projectInfo");
+
+        // Run a transaction to ensure the new leader is different from the current leader
+        ApiFuture<Void> transaction = db.runTransaction(t -> {
+            // Retrieve the current projectInfo document
+            DocumentSnapshot snapshot = t.get(docRef).get();
+            if (!snapshot.exists()) {
+                throw new IllegalStateException("Project with name " + projectName + " does not exist!");
+            }
+
+            // Check the current leader email
+            String currentLeaderEmail = snapshot.getString("leaderEmail");
+            if (newLeaderEmail.equals(currentLeaderEmail)) {
+                // If the new leader is the same as the current leader, throw an exception
+                throw new IllegalArgumentException("New leader email is the same as the current leader email.");
+            } else {
+                // If the new leader is different, update the document
+                t.update(docRef, "leaderEmail", newLeaderEmail);
+            }
+
+            // Return successfully completing the transaction
+            return null;
+        });
+
+        // When the transaction is complete, handle if it was successful or if it failed
+        try {
+            transaction.get(); // This will throw if the transaction failed
+            System.out.println("Leader updated successfully.");
+        } catch (Exception e) {
+            e.printStackTrace(); // Log or handle any errors thrown during the transaction
+        }
     }
+
 }
