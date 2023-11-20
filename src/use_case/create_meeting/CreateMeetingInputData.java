@@ -8,15 +8,15 @@ import java.util.Arrays;
 public class CreateMeetingInputData {
     private final String meetingName;
     private final ArrayList<String> participantEmail;
-    private final LocalDate meetingDate;
-    private final Time startTime;
-    private final Time endTime;
+    private final String meetingDate;
+    private final String startTime;
+    private final String endTime;
     private final String projectName;
 
-    public CreateMeetingInputData(String meetingName, String participantEmail, String meetingDate, Time startTime, Time endTime, String projectName){
+    public CreateMeetingInputData(String meetingName, ArrayList<String> participantEmail, String meetingDate, String startTime, String endTime, String projectName){
                 this.meetingName = meetingName;
-                this.participantEmail = stringToArrayListConverter(participantEmail);
-                this.meetingDate = stringToDateConverter(meetingDate);
+                this.participantEmail = participantEmail;
+                this.meetingDate = meetingDate;
                 this.startTime = startTime;
                 this.endTime = endTime;
                 this.projectName = projectName;
@@ -35,13 +35,12 @@ public class CreateMeetingInputData {
     public ArrayList<String> getParticipantEmail() {
         return participantEmail;
     }
-    public LocalDate getMeetingDate() {
+    public String getMeetingDate() {
         return meetingDate;
     }
-    public Time getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
-    public Time getEndTime() {return endTime;}
-
+    public String getEndTime() {return endTime;}
     public String getProjectName(){return projectName;}
 }
