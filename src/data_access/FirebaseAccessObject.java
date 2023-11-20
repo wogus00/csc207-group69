@@ -49,6 +49,13 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             data.put("leaderEmail", leaderEmail);
             data.put("memberEmails", memberEmails);
             ApiFuture<WriteResult> result = docRef.set(data);
+            Map<String, Object> data1 = new HashMap<>();
+            DocumentReference docRefTask = db.collection(projectName).document("taskInfo");
+            DocumentReference docRefMeeting = db.collection(projectName).document("meetingInfo");
+            DocumentReference docRefAnnounce = db.collection(projectName).document("announcementInfo");
+            docRefTask.set(data1);
+            docRefMeeting.set(data1);
+            docRefAnnounce.set(data1);
     }
 
     public Project getProjectInfo(String projectName) {

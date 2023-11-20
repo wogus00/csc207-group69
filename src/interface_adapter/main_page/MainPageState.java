@@ -70,6 +70,7 @@ public class MainPageState {
         List<String> list = new ArrayList<>();
         StringBuilder labelBuilder = new StringBuilder("<html>"); // Use HTML to allow for text wrapping if needed
         int charsCount = 3;
+        boolean empty = false;
 
         if (type.equals("member")) {
             list.add(this.leaderEmail);
@@ -115,6 +116,15 @@ public class MainPageState {
 
 
         labelBuilder.append("</html>");
+        if (list.isEmpty()) {
+            if (type.equals("member")) {
+                labelBuilder = new StringBuilder("<html>Member List: No members</html>");
+            } if (type.equals("task")) {
+                labelBuilder = new StringBuilder("<html>Task List: No Tasks</html>");
+            } if (type.equals("meeting")) {
+                labelBuilder = new StringBuilder("<html>Meeting List: No Meetings</html>");
+            }
+        }
         return labelBuilder.toString();
     }
 
@@ -145,7 +155,13 @@ public class MainPageState {
     }
 
     public String getAnnouncementLabel(){
-        String text = this.announcements.get(this.announcements.size() - 1);
+        String text;
+        if (this.announcements.isEmpty()) {
+            text = "No announcement";
+        } else {
+            text = this.announcements.get(this.announcements.size() - 1);
+        }
+
 
         final int maxLength = 146; // maximum length for two lines
 
