@@ -7,15 +7,17 @@ public class CreateMeetingState {
     private String meetingName = "";
     private String meetingNameError = null;
     private ArrayList<String> participantEmail =new ArrayList<>();
-    private Date meetingDate = new Date();
-    private Time startTime = new Time();
-    private Time endTime = new Time();
+    private String participantEmailError = null;
+    private String meetingDate = new String();
+    private String startTime = new String();
+    private String endTime = new String();
     private String projectName = "";
 
-    public CreateProjectState(CreateMeetingState copy) {
+    public CreateMeetingState(CreateMeetingState copy) {
         meetingName = copy.meetingName;
         meetingNameError = copy.meetingNameError;
         participantEmail = copy.participantEmail;
+        participantEmailError = copy.participantEmailError;
         meetingDate = copy.meetingDate;
         startTime = copy.startTime;
         endTime = copy.endTime;
@@ -35,12 +37,13 @@ public class CreateMeetingState {
     public ArrayList<String> getParticipantEmail() {
         return participantEmail;
     }
+    public String getParticipantEmailError() { return participantEmailError; }
 
-    public Date getMeetingDate() {return meetingDate;}
+    public String getMeetingDate() {return meetingDate;}
 
-    public Time getStartTime() {return startTime;}
+    public String getStartTime() {return startTime;}
 
-    public Time getEndTime() {return endTime;}
+    public String getEndTime() {return endTime;}
 
     public String getProjectName() {return projectName;}
 
@@ -60,15 +63,17 @@ public class CreateMeetingState {
         this.participantEmail = new ArrayList<>(Arrays.asList(parts));
     }
 
-    public void setMeetingDate(Date meetingDate){
+    public void setParticipantEmailError(String participantEmailError) {this.participantEmailError = participantEmailError; }
+
+    public void setMeetingDate(String meetingDate){
         this.meetingDate = meetingDate;
     }
 
-    public void setStartTime(Time startTime){
+    public void setStartTime(String startTime){
         this.startTime = startTime;
     }
 
-    public void setEndTime(Time endTime){
+    public void setEndTime(String endTime){
         this.endTime = endTime;
     }
 
