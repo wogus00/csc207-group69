@@ -5,5 +5,5 @@ import java.sql.Time;
 import java.util.ArrayList;
 
 public interface MeetingFactory {
-    Meeting create(String meetingName, ArrayList<String> participantEmail, LocalDate meetingDate, Time startTime, Time endTime, String projectName);
+    static Meeting create(String meetingName, ArrayList<String> participantEmail, String meetingDate, String startTime, String endTime, String projectName);
 }
