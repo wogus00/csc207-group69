@@ -1,13 +1,13 @@
 package use_case.create_meeting;
 
 import java.sql.Time;
+import entity.Meeting;
 
-public class CreateMeetingDataAccessInterface {
-    public CreateMeetingDataAccessInterface() {
+public interface CreateMeetingDataAccessInterface {
         void saveMeeting(String projectName, Meeting newMeeting);
 
         boolean projectNameExists(String projectName, String meetingName);
 
-        boolean memberExists(String projectName, ArrayList<String> ParticipantEmail);
-    }
+        boolean memberExists(String projectName, ArrayList<String> participantEmail);
 }
+
