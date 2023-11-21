@@ -10,12 +10,26 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Public interactor class for "Create Task" use case.
+ * It is responsible for executing the  business logic associated with creating the task.
+ * Interacts with FirebaseDataAccessObject to create the task and save it to the database, GmailDataAccessObject to send emails, and communicates with the presenter
+ * to update the view based on completion of the use case.
+ */
 public class CreateTaskInteractor implements CreateTaskInputBoundary {
     final CreateTaskDataAccessInterface createTaskDataAccessObject;
     final CreateTaskGmailDataAccessInterface createTaskGmailAccessObject;
     final CreateTaskOutputBoundary createTaskPresenter;
     final TaskFactory taskFactory;
 
+    /**
+     * Constructor class that creates new CreateTaskInteractor class with specified data access objects and output boundary.
+     *
+     * @param createTaskDataAccessInterface Interface implemented by FirebaseDataAccessObject responsible for communicating with Google Firebase.
+     * @param createTaskGmailDataAccessInterface Interface implemented by GmailDataAccessObject responsible for communicating with Gmail API
+     * @param createTaskOutputBoundary Output Boundary to present the result of the creating task
+     * @param taskFactory TaskFactory entity responsible for creating the task.
+     */
     public CreateTaskInteractor(CreateTaskDataAccessInterface createTaskDataAccessInterface,
                                 CreateTaskGmailDataAccessInterface createTaskGmailDataAccessInterface,
                                 CreateTaskOutputBoundary createTaskOutputBoundary,
@@ -26,6 +40,13 @@ public class CreateTaskInteractor implements CreateTaskInputBoundary {
         this.taskFactory = taskFactory;
     }
 
+    /**
+     * Execution method that creates the task.
+     * Determines if task can be created by check if taskName already exists and responsible member is part of the project.
+     * If all requirements are made, it creates the new task and saves it to the firebase and send emails to the users.
+     *
+     * @param createTaskInputData required information from CreateTaskInputData class that will be used to determine if task can be created and create task by the CreateTaskInteractor class
+     */
     @Override
     public void execute(CreateTaskInputData createTaskInputData) {
         String projectName = createTaskInputData.getProjectName();

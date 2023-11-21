@@ -78,6 +78,14 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
         return credential;
     }
 
+    /**
+     * @param fromEmail email of the user that is sending the email
+     * @param toEmail email of the invited users who will recieve the email
+     * @param projectName name of the project that the invited users will be joining
+     * @return Message class for Gmail API.
+     * @throws IOException
+     * @throws MessagingException
+     */
     @Override
     public Message sendProjectCreationEmail(String fromEmail, String toEmail, String projectName) throws IOException, MessagingException {
         String messageSubject = "You are invited to project: " + projectName;
@@ -136,5 +144,10 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
         message.setRaw(encodedEmail);
 
         return message;
+    }
+
+    @Override
+    public Message sendTaskCompletionEmail(String fromEmail, String toEmail, String taskName) {
+        return null;
     }
 }

@@ -3,6 +3,10 @@ package interface_adapter.create_task;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * ViewModel for Create Task Use Case.
+ * It contains the current state of the task creation process and manages property change listeners.
+ */
 public class CreateTaskViewModel {
 
     public static final String CREATE_BUTTON_LABEL = "Create Task";
@@ -15,6 +19,10 @@ public class CreateTaskViewModel {
     public static final String CANCEL_BUTTON_LABEL = "Cancel";
     private CreateTaskState state = new CreateTaskState();
 
+    /**
+     * Setter method that updates the current state of the creation task process.
+     * @param state state that represents the new updated state for creation task process.
+     */
     public void setState(CreateTaskState state) {
         this.state = state;
     }
@@ -22,15 +30,26 @@ public class CreateTaskViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 
+    /**
+     * Getter method that returns the current state of the creating task process.
+     * @return state that represents current state of the creating task process.
+     */
     public CreateTaskState getState() {
         return state;
     }
 
 
+    /**
+     * Notifies all listeners that the property has changed.
+     */
     public void firePropertyChanged() {
         support.firePropertyChange("state", null, this.state);
     }
 
+    /**
+     * Adds a PropertyChange Listener to the listener list.
+     * @param listener the PropertyChangeListener that will be added.
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
