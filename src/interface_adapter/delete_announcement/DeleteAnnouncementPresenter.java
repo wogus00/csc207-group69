@@ -6,6 +6,11 @@ import interface_adapter.create_announcement.CreateAnnouncementViewModel;
 import use_case.delete_announcement.DeleteAnnouncementOutputBoundary;
 import use_case.delete_announcement.DeleteAnnouncementOutputData;
 
+/**
+ * Presenter for the Delete Announcement feature.
+ * This class handles the presentation logic for the response from the delete announcement use case,
+ * updating the view model based on the success or failure of the deletion process.
+ */
 public class DeleteAnnouncementPresenter implements DeleteAnnouncementOutputBoundary {
     private final DeleteAnnouncementViewModel deleteAnnouncementViewModel;
 
@@ -13,6 +18,13 @@ public class DeleteAnnouncementPresenter implements DeleteAnnouncementOutputBoun
 
     private final CreateAnnouncementViewModel createAnnouncementViewModel;
 
+    /**
+     * Constructs a DeleteAnnouncementPresenter with the necessary view models and manager.
+     *
+     * @param deleteAnnouncementViewModel     The view model for deleting announcements.
+     * @param createAnnouncementViewModel     The view model for creating announcements.
+     * @param viewManagerModel                The model managing the views.
+     */
     public DeleteAnnouncementPresenter(DeleteAnnouncementViewModel deleteAnnouncementViewModel,
                                        CreateAnnouncementViewModel createAnnouncementViewModel,
                                        ViewManagerModel viewManagerModel){
@@ -21,6 +33,11 @@ public class DeleteAnnouncementPresenter implements DeleteAnnouncementOutputBoun
         this.createAnnouncementViewModel = createAnnouncementViewModel;
     }
 
+    /**
+     * Prepares the view in case the announcement to be deleted is not found.
+     *
+     * @param announcementId The ID of the announcement that was not found.
+     */
     @Override
     public void prepareNotFoundView(String announcementId) {
         DeleteAnnouncementState deleteAnnouncementState = deleteAnnouncementViewModel.getState();
@@ -28,6 +45,11 @@ public class DeleteAnnouncementPresenter implements DeleteAnnouncementOutputBoun
         deleteAnnouncementViewModel.firePropertyChanged();
     }
 
+    /**
+     * Prepares the view in case deleting announcement is not authorized.
+     *
+     * @param announcementId The ID of the announcement that is not authorized.
+     */
     // Implementation for when the user is unauthorized to delete the announcement
     @Override
     public void prepareUnauthorizedView(String announcementId) {
@@ -36,6 +58,11 @@ public class DeleteAnnouncementPresenter implements DeleteAnnouncementOutputBoun
         deleteAnnouncementViewModel.firePropertyChanged();
     }
 
+    /**
+     * Prepares the view in case that we get errors during delete announcement.
+     *
+     * @param announcementId The ID of the announcement that is not deleted due to some error.
+     */
     // Implementation for handling generic errors
     @Override
     public void prepareErrorView(String announcementId, String errorMessage) {
@@ -44,6 +71,11 @@ public class DeleteAnnouncementPresenter implements DeleteAnnouncementOutputBoun
         deleteAnnouncementViewModel.firePropertyChanged();
     }
 
+    /**
+     * Prepares the view in case deleting announcement fails.
+     *
+     * @param deleteAnnouncementOutputData The ID of the announcement with which delete fails.
+     */
     // Modified implementation for handling failures
     @Override
     public void prepareFailureView(DeleteAnnouncementOutputData deleteAnnouncementOutputData) {
@@ -56,6 +88,11 @@ public class DeleteAnnouncementPresenter implements DeleteAnnouncementOutputBoun
         deleteAnnouncementViewModel.firePropertyChanged();
     }
 
+    /**
+     * Prepares the view in case the announcement to be deleted successfully.
+     *
+     * @param deleteAnnouncementOutputData The ID of the announcement that was successfully deleted
+     */
     @Override
     public void prepareSuccessView(DeleteAnnouncementOutputData deleteAnnouncementOutputData){
         CreateAnnouncementState createAnnouncementState = createAnnouncementViewModel.getState();
@@ -70,6 +107,11 @@ public class DeleteAnnouncementPresenter implements DeleteAnnouncementOutputBoun
         deleteAnnouncementViewModel.firePropertyChanged();
     }
 
+    /**
+     * Prepares the view in case the delete announcement fails in any other factor.
+     *
+     * @param error The ID of the announcement that was failed in any other factor.
+     */
     @Override
     public void prepareFailView(String error){
         DeleteAnnouncementState deleteAnnouncementState = deleteAnnouncementViewModel.getState();
