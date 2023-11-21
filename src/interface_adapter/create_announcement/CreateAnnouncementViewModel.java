@@ -19,23 +19,45 @@ public class CreateAnnouncementViewModel extends ViewModel {
 
     private CreateAnnouncementState state = new CreateAnnouncementState();
 
+    /**
+     * Constructs a CreateAnnouncementViewModel and sets the view name.
+     */
     public CreateAnnouncementViewModel(){
         super("Announcement Form");
     }
 
     public final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
+    /**
+     * Notifies all listeners that the property has changed.
+     */
     public void firePropertyChanged() {
         support.firePropertyChange("state", null, this.state);
     }
 
+
+    /**
+     * Adds a PropertyChangeListener to the listener list.
+     *
+     * @param listener The PropertyChangeListener to be added.
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Retrieves the current state of the announcement creation form.
+     *
+     * @return The current CreateAnnouncementState.
+     */
     public CreateAnnouncementState getState() {
         return state;
     }
 
+    /**
+     * Updates the current state of the announcement creation form.
+     *
+     * @param state The new state to be set.
+     */
     public void setState(CreateAnnouncementState state) {this.state = state;}
 }

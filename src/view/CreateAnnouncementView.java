@@ -14,6 +14,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
+/**
+ * The view component for creating announcements in the application.
+ * It provides user interface elements for users to input announcement details and send them.
+ */
 public class CreateAnnouncementView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "Create announcement";
 
@@ -28,6 +32,13 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
     private final JButton announcementSent;
 
     private final JButton cancel;
+
+    /**
+     * Constructs a CreateAnnouncementView with the specified controller and view model.
+     *
+     * @param controller                   The controller handling the announcement creation logic.
+     * @param createAnnouncementViewModel  The view model providing the state and properties for the view.
+     */
 
     public CreateAnnouncementView(CreateAnnouncementController controller,
                                   CreateAnnouncementViewModel createAnnouncementViewModel) {
@@ -132,11 +143,22 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
         this.add(buttons);
     }
 
+
+    /**
+     * Handles action events triggered within the view.
+     *
+     * @param e The ActionEvent object.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println("Cancel not implemented yet.");
     }
 
+    /**
+     * Responds to property changes in the view model.
+     *
+     * @param evt The PropertyChangeEvent object.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         CreateAnnouncementState state = (CreateAnnouncementState) evt.getNewValue();
