@@ -15,10 +15,7 @@ import use_case.set_leader.SetLeaderDataAccessInterface;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 
 public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, RemoveEmailDataAccessInterface, SetLeaderDataAccessInterface, LoginDataAccessInterface {
@@ -33,7 +30,16 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         try {
             serviceAccount = new FileInputStream("Google_Firebase_SDK.json");
             FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
-            FirebaseApp.initializeApp(options);
+            boolean hasBeenInitialized = false;
+            List<FirebaseApp> firebaseApps = FirebaseApp.getApps();
+            for (FirebaseApp app : firebaseApps) {
+                if (app.getName().equals(FirebaseApp.DEFAULT_APP_NAME)) {
+                    hasBeenInitialized = true;
+                }
+            }
+            if (!hasBeenInitialized) {
+                FirebaseApp.initializeApp(options);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
