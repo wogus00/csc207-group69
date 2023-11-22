@@ -27,4 +27,7 @@ class RemoveEmailInteractorTest {
         RemoveEmailInputBoundary interactor = new RemoveEmailInteractor(firebaseAccessObject, successPresenter);
         interactor.updateProjectDetails(inputData);
     }
+    // test not removing similar emails Abc@gmail.com, abc@gmail.com
+    // test rise an error if the email to remove doesn't exists
+    // test rise an error if we are trying to remove from empty array list
 }
