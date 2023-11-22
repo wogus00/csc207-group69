@@ -36,11 +36,15 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     private final Map<String, Project> projects = new HashMap<>();
     // Load Firebase Admin SDK credentials
     public FirebaseAccessObject() {
-    FileInputStream serviceAccount;
         try {
-            serviceAccount = new FileInputStream("Google_Firebase_SDK.json");
-            FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
-            FirebaseApp.initializeApp(options);
+            // Check if FirebaseApp has already been initialized
+            if (FirebaseApp.getApps().isEmpty()) {
+                FileInputStream serviceAccount = new FileInputStream("Google_Firebase_SDK.json");
+                FirebaseOptions options = new FirebaseOptions.Builder()
+                        .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                        .build();
+                FirebaseApp.initializeApp(options);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -142,7 +146,9 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         announcementData.put("author", announcement.getAuthor());
 
         // Use the generated ID as the document ID in Firestore
-        ApiFuture<WriteResult> addedDocRef = db.collection("announcements").document(announcement.getId()).set(announcementData);
+        ApiFuture<WriteResult> addedDocRef = db.collection("announcements")
+                .document(announcement.getId())
+                .set(announcementData);
         // Handle completion of the future
     }
 
