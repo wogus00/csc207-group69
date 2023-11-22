@@ -10,7 +10,7 @@ public class MainPageViewModel extends ViewModel {
     private MainPageState state = new MainPageState();
 
     public MainPageViewModel() {
-        super("main page");
+        super("Main Page");
     }
 
     public void setState(MainPageState state) {

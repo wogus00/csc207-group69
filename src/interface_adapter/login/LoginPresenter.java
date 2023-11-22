@@ -33,11 +33,11 @@ public class LoginPresenter implements LoginOutputBoundary {
         MainPageState mainPageState = mainPageViewModel.getState();
         mainPageState.setProjectName(response.getProjectName());
         mainPageState.setUserEmail(response.getUserEmail());
-        FirebaseAccessObject firebaseAccessObject = new FirebaseAccessObject();
-        Project project = firebaseAccessObject.getProject(response.getProjectName());
-        mainPageState.setLeaderEmail(project.getLeaderEmail());
-        mainPageState.setMemberEmail(project.getMemberEmails());
-        // the main page state will need more information
+        mainPageState.setLeaderEmail(response.getLeaderEmail());
+        mainPageState.setMemberEmail(response.getMemberEmails());
+        mainPageState.setTaskList(response.getTaskList());
+        mainPageState.setMeetingList(response.getMeetingList());
+        mainPageState.setAnnouncements(response.getAnnouncements());
         this.mainPageViewModel.setState(mainPageState);
         this.mainPageViewModel.firePropertyChanged();
         this.viewManagerModel.setActiveView(mainPageViewModel.getViewName());
@@ -47,7 +47,7 @@ public class LoginPresenter implements LoginOutputBoundary {
     @Override
     public void prepareFailView(String error) {
         LoginState loginState = loginViewModel.getState();
-        loginState.setNoMatchError(error);
+        loginState.setLoginError(error);
         loginViewModel.firePropertyChanged();
     }
 }

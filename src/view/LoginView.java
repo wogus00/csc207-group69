@@ -23,7 +23,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
 
     final JTextField projectNameInputField = new JTextField(15);
 
-    final JTextField userEmailInputField = new JPasswordField(15);
+    final JTextField userEmailInputField = new JTextField(15);
     private final JLabel userEmailErrorField = new JLabel();
 
     final JButton logIn;
@@ -130,8 +130,8 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         LoginState state = (LoginState) evt.getNewValue();
-        if (state.getNoMatchError() != null) {
-            JOptionPane.showMessageDialog(this, state.getNoMatchError());
+        if (state.getLoginError() != null) {
+            JOptionPane.showMessageDialog(this, state.getLoginError());
         }
 
     }
