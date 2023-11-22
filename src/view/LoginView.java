@@ -132,6 +132,9 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         LoginState state = (LoginState) evt.getNewValue();
         if (state.getLoginError() != null) {
             JOptionPane.showMessageDialog(this, state.getLoginError());
+        } if (state.isLogout()) {
+            projectNameInputField.setText("");
+            userEmailInputField.setText("");
         }
 
     }

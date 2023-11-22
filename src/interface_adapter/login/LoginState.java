@@ -4,6 +4,7 @@ public class LoginState {
     private String projectName = "";
     private String loginError = null;
     private String userEmail = "";
+    private boolean logout = false;
 
 
     public LoginState(LoginState copy) {
@@ -39,5 +40,13 @@ public class LoginState {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public void setLogout(boolean logout) {
+        this.logout = logout;
+    }
+
+    public boolean isLogout() {
+        return this.logout;
     }
 }

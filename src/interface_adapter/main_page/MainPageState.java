@@ -162,7 +162,6 @@ public class MainPageState {
             text = this.announcements.get(this.announcements.size() - 1);
         }
 
-
         final int maxLength = 146; // maximum length for two lines
 
         if (text.length() > maxLength) {

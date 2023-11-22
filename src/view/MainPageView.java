@@ -1,6 +1,8 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.login.LoginState;
+import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageState;
 import interface_adapter.main_page.MainPageViewModel;
 
@@ -9,14 +11,10 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 public class MainPageView extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -25,6 +23,8 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
     final ViewManagerModel viewManagerModel;
 
     final MainPageViewModel mainPageViewModel;
+
+    final LoginViewModel loginViewModel;
 
     JLabel titleLabel;
     JLabel leaderEmailInfo = new JLabel();
@@ -39,9 +39,10 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
     JButton recentAnnouncement;
     JLabel recentAnnouncementInfo = new JLabel();
 
-    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel) {
+    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel, LoginViewModel loginViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.mainPageViewModel = mainPageViewModel;
+        this.loginViewModel = loginViewModel;
         this.mainPageViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BorderLayout());
@@ -144,13 +145,14 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         JButton meetingButton = new JButton("Meeting");
         JButton announcementButton = new JButton("Announcement");
         JButton projectButton = new JButton("Project");
+        JButton logoutButton = new JButton("Log out");
 
 
         typeButtonPanel.add(taskButton);
         typeButtonPanel.add(meetingButton);
         typeButtonPanel.add(announcementButton);
         typeButtonPanel.add(projectButton);
-
+        typeButtonPanel.add(logoutButton);
 
 
         // Additional button panels for extension, initially not visible
@@ -282,6 +284,23 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
             this.revalidate();
             this.repaint();
         });
+
+        logoutButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        LoginState loginState = new LoginState();
+                        loginState.setLogout(true);
+                        loginViewModel.setState(loginState);
+                        loginViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("log in");
+                        viewManagerModel.firePropertyChanged();
+                        MainPageState state = new MainPageState();
+                        mainPageViewModel.setState(state);
+                        mainPageViewModel.firePropertyChanged();
+                    }
+                }
+        );
 
         buttonT1.addActionListener(     // create task
                 new ActionListener() {
