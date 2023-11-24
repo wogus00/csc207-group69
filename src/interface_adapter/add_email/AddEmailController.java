@@ -15,7 +15,7 @@ public class AddEmailController {
     /**
      * Constructs an {@code AddEmailController} with the specified use case interactor.
      *
-     * @param addProjectUseCaseInteractor the use case interactor that this controller will delegate to
+     * @param addProjectUseCaseInteractor The use case interactor that this controller will delegate to
      *                                    when handling requests to add email details to a project
      */
     public AddEmailController(AddEmailInputBoundary addProjectUseCaseInteractor) {
@@ -26,8 +26,8 @@ public class AddEmailController {
      * Handles a request to add email details to a project. It creates an instance of {@code AddEmailInputData}
      * and passes it to the use case interactor for further processing.
      *
-     * @param projectName the name of the project to which the email will be added
-     * @param email the email address to be added to the project
+     * @param projectName The name of the project to which the email will be added
+     * @param email The email address to be added to the project
      */
     public void addProjectDetails(String projectName, String email) {
         AddEmailInputData addEmailInputData = new AddEmailInputData(projectName, email);

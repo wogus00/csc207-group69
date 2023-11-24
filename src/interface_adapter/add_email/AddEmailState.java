@@ -13,7 +13,7 @@ public class AddEmailState {
      * This constructor is useful for creating a new state based on the current state,
      * which is helpful in situations where an immutable state is desired.
      *
-     * @param copy the {@code AddEmailState} object to copy from
+     * @param copy The {@code AddEmailState} object to copy from
      */
     public AddEmailState(AddEmailState copy) {
         this.error = copy.error;
@@ -31,7 +31,7 @@ public class AddEmailState {
      * This method updates the state with an error message, which can be used to inform
      * the user of any issues that occurred during the process.
      *
-     * @param error the error message to be set in the state
+     * @param error The error message to be set in the state
      */
     public void setError(String error) {
         this.error = error;

@@ -13,7 +13,7 @@ public class AddEmailPresenter implements AddEmailOutputBoundary {
     /**
      * Constructs an {@code AddEmailPresenter} with the specified view model.
      *
-     * @param viewModel the view model that this presenter will update based on the outcome
+     * @param viewModel The view model that this presenter will update based on the outcome
      *                  of the add email use case
      */
     public AddEmailPresenter(AddEmailViewModel viewModel) {
@@ -36,7 +36,7 @@ public class AddEmailPresenter implements AddEmailOutputBoundary {
      * storing the error message in the view model and triggering any observers
      * that the view model state has changed.
      *
-     * @param error the error message to be displayed in the view
+     * @param error The error message to be displayed in the view
      */
     @Override
     public void prepareFailView(String error) {
