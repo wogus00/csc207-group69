@@ -97,31 +97,8 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         return project;
     }
 
-    public ArrayList<String> getInfoList(String projectName, String listType) {
-        ArrayList<String> list = new ArrayList<>();
-
-        DocumentReference docRef = db.collection(projectName).document(listType);
-        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
-        DocumentSnapshot typeInfo = null;
-        try {
-            typeInfo = snapShot.get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        };
-        Map<String, Object> fields = typeInfo.getData();
-        list.addAll(fields.keySet());
-        if (listType.equals("announcementInfo")) {
-            List<String> messageList = new ArrayList<>();
-            for (String key: list) {
-                Map<String, Object> entry = (Map<String, Object>) fields.get(key);
-                messageList.add((String) entry.get("message"));
-            }
-            list = new ArrayList<>();
-            list.addAll(messageList);
-        }
-        return list;
+    public ArrayList<String> getInfoList(String projectName, InfoListRetrieveStrategy infoListRetrieveStrategy) {
+        return (ArrayList<String>) infoListRetrieveStrategy.getInfoList(projectName, this);
     }
 
 

@@ -292,17 +292,20 @@ public class MainPageState {
      */
     public String getRecentAnnouncements(){
         ArrayList<String> recents = new ArrayList<>();
-        int length = this.announcements.size() - 1;
-        if (length > 2) {
-            length = 2;
-        }
-        for (int i = 0; i <= length; i++) {
-            recents.add(this.announcements.get(length - i));
-        }
-        while (recents.size() < 3) {
-            recents.add("");
-        }
+        if (this.announcements.isEmpty()) {
+            recents = new ArrayList<>(Arrays.asList("No announcements", "", ""));
+        } else {
 
+            int length = this.announcements.size() - 1;
+
+
+            for (int i = 0; i <= length; i++) {
+                recents.add(this.announcements.get(length - i));
+            }
+            while (recents.size() < 3) {
+                recents.add("");
+            }
+        }
         return String.format("<html>%s<br/>%s<br/>%s</html>", "- " + recents.get(0), "- " + recents.get(1), "- " + recents.get(2));
 
     }
