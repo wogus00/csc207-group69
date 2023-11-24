@@ -2,7 +2,6 @@ package app;
 
 import data_access.FirebaseAccessObject;
 import data_access.GmailDataAccessObject;
-import entity.CommonProjectFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.create_project.CreateProjectViewModel;
 
@@ -51,8 +50,9 @@ public class Main {
         LoginView loginView = LoginUseCaseFactory.createLoginView(viewManagerModel,loginViewModel,mainPageViewModel, firebaseAccessObject);
         views.add(loginView, loginView.viewName);
 
-        CreateTaskView createTaskView = CreateTaskUseCaseFactory.createTaskView(viewManagerModel, createTaskViewModel, firebaseAccessObject, gmailDataAccessObject);
-        views.add(createTaskView, createTaskView.viewName);
+
+        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel);
+        views.add(mainPageView, mainPageView.viewName);
 
         viewManagerModel.setActiveView(createTaskView.viewName);
         viewManagerModel.firePropertyChanged();

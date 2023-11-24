@@ -5,6 +5,10 @@ import interface_adapter.ViewModel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * ViewModel for Login Use Case.
+ * This class manages the state and behavior of the login view, providing a way to interact with the UI.
+ */
 public class LoginViewModel extends ViewModel {
 
     public final String TITLE_LABEL = "Log In Screen";
@@ -16,26 +20,46 @@ public class LoginViewModel extends ViewModel {
 
     private LoginState state = new LoginState();
 
+    /**
+     * Constructs a LoginViewModel with initial settings.
+     * Calls the superclass constructor of ViewModel to set its view name.
+     */
     public LoginViewModel() {
         super("log in");
     }
 
+    /**
+     * Sets the current state of the login view model.
+     *
+     * @param state The new login state to be set.
+     */
     public void setState(LoginState state) {
         this.state = state;
     }
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-    // This is what the Signup Presenter will call to let the ViewModel know
-    // to alert the View
+    /**
+     * Alerts the property change listeners with a change in state of the login view model
+     */
     public void firePropertyChanged() {
         support.firePropertyChange("state", null, this.state);
     }
 
+    /**
+     * Adds a PropertyChangeListener to the listener list.
+     *
+     * @param listener The PropertyChangeListener to be added.
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Retrieves the current state of the login view.
+     *
+     * @return The current LoginState instance.
+     */
     public LoginState getState() {
         return state;
     }
