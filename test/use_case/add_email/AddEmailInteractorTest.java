@@ -1,48 +1,93 @@
 package use_case.add_email;
 
 import data_access.FirebaseAccessObject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+/**
+ * The {@code AddEmailInteractorTest} class tests the functionality of {@code AddEmailInteractor}.
+ * It uses a mocked {@code FirebaseAccessObject} for data access and tests different scenarios including
+ * successful addition of an email, case sensitivity in email addition, and adding an email to an initially empty list.
+ * Mockito is used to mock the data access object to isolate the behavior of the interactor.
+ */
 class AddEmailInteractorTest {
 
-    FirebaseAccessObject firebaseAccessObject = new FirebaseAccessObject();
+    @Mock
+    private FirebaseAccessObject mockFirebaseAccessObject;
 
+    /**
+     * Sets up the test environment before each test.
+     * Initializes the mock objects required for testing the {@code AddEmailInteractor}.
+     */
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    /**
+     * Tests the successful addition of an email to a project.
+     * Verifies that the email is correctly added to the project's member emails list
+     * by asserting the interaction with the mocked {@code FirebaseAccessObject}.
+     */
     @Test
     void successTest() {
-        AddEmailInputData inputData = new AddEmailInputData("TestProject", "test@example.com");
+        // Arrange
+        String projectName = "TestProject";
+        String email = "test@example.com";
+        AddEmailInputData inputData = new AddEmailInputData(projectName, email);
+        // Assuming mockFirebaseAccessObject.getProject(projectName) returns a project with memberEmails list
+        when(mockFirebaseAccessObject.getProject(projectName)).thenReturn(new Project(projectName, new ArrayList<>()));
 
         AddEmailOutputBoundary successPresenter = new AddEmailOutputBoundary() {
             @Override
             public void prepareSuccessView() {
-                assertTrue(firebaseAccessObject.getProject("TestProject").getMemberEmails().contains("test@example.com"));
+                // Assert
+                assertTrue(mockFirebaseAccessObject.getProject(projectName).getMemberEmails().contains(email));
             }
 
             @Override
             public void prepareFailView(String error) {
-                ;
+                fail("Addition of email failed");
             }
         };
 
-        AddEmailInputBoundary interactor = new AddEmailInteractor(firebaseAccessObject, successPresenter);
+        AddEmailInteractor interactor = new AddEmailInteractor(mockFirebaseAccessObject, successPresenter);
+
+        // Act
         interactor.updateProjectDetails(inputData);
+
+        // Verify
+        verify(mockFirebaseAccessObject).getProject(projectName);
+        // Additional verifications as needed
     }
 
+    /**
+     * Tests the case sensitivity of the email addition process.
+     * Checks that emails differing only in case are treated as distinct and both are added,
+     * by asserting the interactions and states with the mocked {@code FirebaseAccessObject}.
+     */
     @Test
     void caseSensitivityTest() {
+        // Arrange
+        String projectName = "TestProject";
         String email1 = "Abc@gmail.com";
         String email2 = "abc@gmail.com";
 
-        AddEmailInputData inputData1 = new AddEmailInputData("TestProject", email1);
-        AddEmailInputData inputData2 = new AddEmailInputData("TestProject", email2);
+        AddEmailInputData inputData1 = new AddEmailInputData(projectName, email1);
+        AddEmailInputData inputData2 = new AddEmailInputData(projectName, email2);
+
+        Project project = new Project(projectName, new ArrayList<>());
+        when(mockFirebaseAccessObject.getProject(projectName)).thenReturn(project);
 
         AddEmailOutputBoundary successPresenter = new AddEmailOutputBoundary() {
             @Override
             public void prepareSuccessView() {
-                // Check both emails are considered distinct and added
-                assertTrue(firebaseAccessObject.getProject("TestProject").getMemberEmails().contains(email1));
-                assertTrue(firebaseAccessObject.getProject("TestProject").getMemberEmails().contains(email2));
+                assertTrue(project.getMemberEmails().contains(email1));
+                assertTrue(project.getMemberEmails().contains(email2));
             }
 
             @Override
@@ -51,24 +96,36 @@ class AddEmailInteractorTest {
             }
         };
 
-        AddEmailInteractor interactor = new AddEmailInteractor(firebaseAccessObject, successPresenter);
+        AddEmailInteractor interactor = new AddEmailInteractor(mockFirebaseAccessObject, successPresenter);
+
+        // Act
         interactor.updateProjectDetails(inputData1);
         interactor.updateProjectDetails(inputData2);
+
+        // Assert
+        verify(mockFirebaseAccessObject, times(2)).getProject(projectName);
     }
 
+
+    /**
+     * Tests the addition of an email to a project that initially has an empty members list.
+     * Verifies that the email is correctly added to the previously empty list
+     * by asserting the interactions and final state with the mocked {@code FirebaseAccessObject}.
+     */
     @Test
     void addEmailToEmptyListTest() {
+        // Arrange
+        String projectName = "NewProject";
         String email = "newmember@example.com";
-        AddEmailInputData inputData = new AddEmailInputData("NewProject", email);
+        AddEmailInputData inputData = new AddEmailInputData(projectName, email);
 
-        // Assuming the 'NewProject' initially has no members
-        assertTrue(firebaseAccessObject.getProject("NewProject").getMemberEmails().isEmpty());
+        Project project = new Project(projectName, new ArrayList<>());
+        when(mockFirebaseAccessObject.getProject(projectName)).thenReturn(project);
 
         AddEmailOutputBoundary successPresenter = new AddEmailOutputBoundary() {
             @Override
             public void prepareSuccessView() {
-                // Verify the email is added to the previously empty list
-                assertTrue(firebaseAccessObject.getProject("NewProject").getMemberEmails().contains(email));
+                assertTrue(project.getMemberEmails().contains(email));
             }
 
             @Override
@@ -77,8 +134,13 @@ class AddEmailInteractorTest {
             }
         };
 
-        AddEmailInteractor interactor = new AddEmailInteractor(firebaseAccessObject, successPresenter);
+        AddEmailInteractor interactor = new AddEmailInteractor(mockFirebaseAccessObject, successPresenter);
+
+        // Act
         interactor.updateProjectDetails(inputData);
+
+        // Assert
+        verify(mockFirebaseAccessObject).getProject(projectName);
     }
 
 }

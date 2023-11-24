@@ -13,9 +13,25 @@ import view.CreateProjectView;
 import javax.swing.*;
 import java.io.IOException;
 
+/**
+ * The {@code CreateProjectUseCaseFactory} class is a factory class responsible for constructing
+ * and wiring together the components required for the create project use case.
+ * It sets up the necessary controllers, presenters, view models, and data access objects.
+ */
 public class CreateProjectUseCaseFactory {
     private CreateProjectUseCaseFactory() {}
 
+    /**
+     * Creates and initializes the {@code CreateProjectView} with all necessary components.
+     * It builds and connects the controller, view model, and data access objects for the create project use case.
+     *
+     * @param viewManagerModel The view manager model for managing different views.
+     * @param createProjectViewModel The view model for the create project view.
+     * @param userDataAccessObject The data access object for user data.
+     * @param gmailDataAccessObject The data access object for Gmail services.
+     * @param mainPageViewModel The view model for the main page.
+     * @return An instance of {@code CreateProjectView} initialized with a controller and view model.
+     */
     public static CreateProjectView createProjectView(ViewManagerModel viewManagerModel,
                                                       CreateProjectViewModel createProjectViewModel,
                                                       CreateProjectDataAccessInterface userDataAccessObject,
@@ -31,6 +47,18 @@ public class CreateProjectUseCaseFactory {
 
     }
 
+    /**
+     * Private helper method to create a {@code CreateProjectController}.
+     * It sets up and connects the create project interactor, output boundary, and project factory.
+     *
+     * @param viewManagerModel The view manager model.
+     * @param createProjectViewModel The view model for the create project use case.
+     * @param userDataAccessObject The data access object for user data.
+     * @param gmailDataAccessObject The data access object for Gmail services.
+     * @param mainPageViewModel The view model for the main page.
+     * @return An instance of {@code CreateProjectController}.
+     * @throws IOException If there is an issue with file handling.
+     */
     private static CreateProjectController createProjectUseCase(ViewManagerModel viewManagerModel,
                                                                 CreateProjectViewModel createProjectViewModel,
                                                                 CreateProjectDataAccessInterface userDataAccessObject,
