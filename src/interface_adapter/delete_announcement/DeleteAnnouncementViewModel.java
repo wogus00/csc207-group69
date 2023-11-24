@@ -10,6 +10,16 @@ import java.beans.PropertyChangeSupport;
  * It contains the current state of the announcement deletion process and manages property change listeners.
  */
 public class DeleteAnnouncementViewModel extends ViewModel {
+
+    public final String TITLE_LABEL = "Delete Announcement Form";
+
+    public final String DELETE_ANNOUNCEMENT_ID = "Choose announcement deleted";
+
+//    public final String CURRENT_USER = "Type your user name";
+
+    public final String DELETE_ANNOUNCEMENT_BUTTON_LABEL = "Delete Announcement";
+
+    public final String CANCEL_BUTTON_LABEL = "Cansel";
     private DeleteAnnouncementState state = new DeleteAnnouncementState();
 
     /**

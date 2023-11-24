@@ -11,6 +11,9 @@ public class DeleteAnnouncementState {
 
     private String announcementError = null;
 
+    private String announcementID = "";
+
+
     /**
      * Constructs a new state by copying data from another state instance.
      *
@@ -19,6 +22,7 @@ public class DeleteAnnouncementState {
     public DeleteAnnouncementState(DeleteAnnouncementState copy){
         announcement = copy.announcement;
         announcementError = copy.announcementError;
+        announcementID = copy.announcementID;
     }
 
     /**
@@ -60,6 +64,24 @@ public class DeleteAnnouncementState {
      */
     public void setAnnouncementError(String announcementError) {
         this.announcementError = announcementError;
+    }
+
+    /**
+     * Gets the announcementID.
+     *
+     * @return announcementID.
+     */
+    public String getAnnouncementID() {
+        return announcementID;
+    }
+
+    /**
+     * Sets  announcement error.
+     *
+     * @param announcementID the announcementID to set.
+     */
+    public void setAnnouncementID(String announcementID) {
+        this.announcementID = announcementID;
     }
 
     /**

@@ -24,8 +24,8 @@ public class DeleteAnnouncementController {
      * Executes the deletion process for an announcement.
      *
      * @param id                The unique identifier of the announcement to be deleted.
-     * @param announcementTitle The title of the announcement to be deleted.
+     * @param currentUser The user who try to delete this announcement.
      */
-    public void execute(String id, String announcementTitle){
-        deleteAnnouncementInteractor.execute(id, announcementTitle);}
+    public void execute(String id, String currentUser){
+        deleteAnnouncementInteractor.execute(id, currentUser);}
 }

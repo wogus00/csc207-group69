@@ -41,6 +41,11 @@ public class CreateAnnouncementInteractor implements CreateAnnouncementInputBoun
      *
      * @param createAnnouncementInputData The input data for creating an announcement.
      */
+
+
+    // TODO send announcements to selected gmail users. Look at the CreateTask for the implementation
+    // TODO so, i also have to edit gmaildataaccess
+
     @Override
     public void execute(CreateAnnouncementInputData createAnnouncementInputData) {
         LocalDateTime now = LocalDateTime.now();
