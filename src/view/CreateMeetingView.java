@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.create_meeting.CreateMeetingController;
 import interface_adapter.create_meeting.CreateMeetingState;
 import interface_adapter.create_meeting.CreateMeetingViewModel;
@@ -18,7 +19,7 @@ import java.beans.PropertyChangeListener;
 
 public class CreateMeetingView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "create meeting";
-
+    private ViewManagerModel viewManagerModel;
     private final CreateMeetingViewModel createMeetingViewModel;
     private final JTextField meetingNameInputField = new JTextField(15);
     private final JTextField participantEmailInputField = new JTextField(15);
@@ -27,13 +28,15 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
     private final JTextField endTimeInputField = new JTextField(15);
     private final JTextField projectNameInputField = new JTextField(15);
     private final CreateMeetingController createMeetingController;
-
     private final JButton create;
+    private final JButton cancel;
 
 
-    public CreateMeetingView(CreateMeetingController createMeetingController,
+    public CreateMeetingView(ViewManagerModel viewManagerModel,
+                             CreateMeetingController createMeetingController,
                              CreateMeetingViewModel createMeetingViewModel) {
 
+        this.viewManagerModel = viewManagerModel;
         this.createMeetingController = createMeetingController;
         this.createMeetingViewModel = createMeetingViewModel;
         createMeetingViewModel.addPropertyChangeListener(this);
@@ -56,7 +59,19 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
 
         JPanel buttons = new JPanel();
         create = new JButton(CreateMeetingViewModel.CREATE_BUTTON_LABEL);
+        cancel = new JButton(CreateMeetingViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(create);
+        buttons.add(cancel);
+
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource().equals(cancel)) {
+                    viewManagerModel.setActiveView("Main Page");
+                    viewManagerModel.firePropertyChanged();
+                }
+            }
+        });
 
 
         create.addActionListener(
@@ -64,7 +79,12 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(create)) {
                             CreateMeetingState currentState = createMeetingViewModel.getState();
-
+                            String meetingName = currentState.getMeetingName();
+                            ArrayList<String> participantEmail = currentState.getParticipantEmail();
+                            String meetingDate = currentState.getMeetingDate();
+                            String startTime = currentState.getStartTime();
+                            String endTime = currentState.getEndTime();
+                            String projectName = currentState.getProjectName();
                             createMeetingController.execute(
                                     currentState.getMeetingName(),
                                     currentState.getParticipantEmail(),
@@ -73,10 +93,16 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
                                     currentState.getEndTime(),
                                     currentState.getProjectName()
                             );
+                            currentState = createMeetingViewModel.getState();
+                            if (currentState.getMeetingNameError() == null) {
+                                JOptionPane.showMessageDialog(CreateMeetingView.this,
+                                        "created meeting successfully");
+                                viewManagerModel.setActiveView("Main Page");
+                                viewManagerModel.firePropertyChanged();
+                            }
                         }
                     }
-                }
-        );
+                });
 
 
         meetingNameInputField.addKeyListener(

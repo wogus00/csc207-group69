@@ -11,6 +11,7 @@ import java.beans.PropertyChangeSupport;
 public class CreateMeetingViewModel extends ViewModel {
 
     public static final String CREATE_BUTTON_LABEL = "Create Meeting";
+    public static final String CANCEL_BUTTON_LABEL = "Cancel";
     public static final String TITLE_LABEL = "Create Meeting View";
     public static final String MEETING_NAME_LABEL = "Enter meeting name";
     public static final String PARTICIPANT_EMAIL_LABEL = "Enter all participants' email";

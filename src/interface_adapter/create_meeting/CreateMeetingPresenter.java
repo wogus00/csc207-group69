@@ -14,21 +14,17 @@ import use_case.create_meeting.CreateMeetingOutputData;
 public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
 
     private final CreateMeetingViewModel createMeetingViewModel;
-    private final MainPageViewModel mainPageViewModel;
     private ViewManagerModel viewManagerModel;
     /**
      * Constructor method that creates CreateMeetingPresenter class with the view manager model and view model.
      *
      * @param createMeetingViewModel View model for the Create Meeting use case.
-     * @param mainPageViewModel View model for the main page.
      * @param viewManagerModel View manager model that is responsible for managing the active view.
      */
     public CreateMeetingPresenter(ViewManagerModel viewManagerModel,
-                                  CreateMeetingViewModel createMeetingViewModel,
-                                  MainPageViewModel mainPageViewModel) {
+                                  CreateMeetingViewModel createMeetingViewModel,) {
         this.viewManagerModel = viewManagerModel;
         this.createMeetingViewModel = createMeetingViewModel;
-        this.mainPageViewModel = mainPageViewModel;
     }
 
     /**
@@ -38,16 +34,6 @@ public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
      */
     @Override
     public void prepareSuccessView(CreateMeetingOutputData response) {
-        MainPageState mainPageState = new MainPageState();
-        mainPageState.setMeetingName(response.getMeetingName());
-        mainPageState.setParticipantEmail(response.getParticipantEmail());
-        mainPageState.setMeetingDate(response.getMeetingDate());
-        mainPageState.setStartTime(response.getStartTime());
-        mainPageState.setEndTime(response.getEndTime());
-        mainPageState.setMeetingProjectName(response.getProjectName());
-        mainPageViewModel.setState(mainPageState);
-        viewManagerModel.setActiveView(mainPageViewModel.getViewName());
-        viewManagerModel.firePropertyChanged();
     }
     /**
      * Prepares a failure view when the creation of a meeting fails.

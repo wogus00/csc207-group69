@@ -23,7 +23,7 @@ public class CreateMeetingUseCaseFactory {
                                                       MainPageViewModel mainPageViewModel) {
         try {
             CreateMeetingController createMeetingController = createMeetingUseCase(viewManagerModel, createMeetingViewModel, userDataAccessObject, gmailDataAccessObject, mainPageViewModel);
-            return new CreateMeetingView(createMeetingController, createMeetingViewModel);
+            return new CreateMeetingView(viewManagerModel, createMeetingController, createMeetingViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Invalid File");
         }
@@ -36,7 +36,7 @@ public class CreateMeetingUseCaseFactory {
                                                                 CreateMeetingDataAccessInterface createMeetingDataAccessObject,
                                                                 CreateMeetingGmailDataAccessInterface gmailDataAccessObject, MainPageViewModel mainPageViewModel) throws IOException {
 
-        CreateMeetingOutputBoundary createMeetingOutputBoundary = new CreateMeetingPresenter(viewManagerModel, createMeetingViewModel, mainPageViewModel);
+        CreateMeetingOutputBoundary createMeetingOutputBoundary = new CreateMeetingPresenter(viewManagerModel, createMeetingViewModel);
 
         MeetingFactory meetingFactory = new CommonMeetingFactory();
 
