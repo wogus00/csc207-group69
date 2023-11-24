@@ -32,7 +32,7 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
         String leaderEmail = createProjectInputData.getLeaderEmail();
         ArrayList<String> memberEmails = createProjectInputData.getMemberEmails();
 
-        if (!createProjectDataAccessObject.existsByName(projectName)) {
+        if (createProjectDataAccessObject.existsByName(projectName)) {
             createProjectPresenter.prepareFailView("Project already exists.");
         } else {
             Project project = projectFactory.create(projectName, leaderEmail, memberEmails);
