@@ -12,8 +12,8 @@ public interface SetLeaderDataAccessInterface {
      * This method is responsible for finding the project by its name in the data source and then updating
      * its leader to the specified leader. This is a key part of managing project leadership within the system.
      *
-     * @param projectName the name of the project for which the leader is to be set
-     * @param leader_name the name of the new leader to be set for the project
+     * @param projectName The name of the project for which the leader is to be set
+     * @param leader_name The name of the new leader to be set for the project
      */
     void SetLeaderToNewLeader(String projectName, String leader_name);
 }

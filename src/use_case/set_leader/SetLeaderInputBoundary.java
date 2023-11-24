@@ -16,7 +16,7 @@ public interface SetLeaderInputBoundary {
      * and the new leader's name, and initiates the process of updating the project details
      * to reflect the change in leadership.
      *
-     * @param setLeaderInputData the data transfer object containing information about the project and the new leader to be set
+     * @param setLeaderInputData The data transfer object containing information about the project and the new leader to be set
      */
     void updateProjectDetails(SetLeaderInputData setLeaderInputData);
 }

@@ -20,8 +20,8 @@ public class SetLeaderInteractor implements SetLeaderInputBoundary {
      * and an output boundary object. These objects are used for setting a new leader for projects
      * and handling the presentation logic after the operation, respectively.
      *
-     * @param projectDataAccessInterface the data access object used for setting a new project leader
-     * @param setLeaderOutputBoundary the output boundary object used for presentation logic
+     * @param projectDataAccessInterface The data access object used for setting a new project leader
+     * @param setLeaderOutputBoundary The output boundary object used for presentation logic
      */
     public SetLeaderInteractor(SetLeaderDataAccessInterface projectDataAccessInterface,
                                  SetLeaderOutputBoundary setLeaderOutputBoundary) {
@@ -35,7 +35,7 @@ public class SetLeaderInteractor implements SetLeaderInputBoundary {
      * and the new leader's name, updates the project details using the data access object,
      * and then prepares the success view using the presenter.
      *
-     * @param setLeaderInputData the data transfer object containing information about the project and the new leader to be set
+     * @param setLeaderInputData The data transfer object containing information about the project and the new leader to be set
      */
     @Override
     public void updateProjectDetails(SetLeaderInputData removeEmailInputData) {
