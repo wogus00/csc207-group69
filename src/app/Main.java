@@ -70,7 +70,7 @@ public class Main {
         SetLeaderView setLeaderView = SetLeaderUseCaseFactory.setLeaderView(viewManagerModel,  setLeaderViewModel, firebaseAccessObject);
         views.add(setLeaderView, setLeaderView.viewName);
 
-        viewManagerModel.setActiveView(addEmailView.viewName);
+        viewManagerModel.setActiveView(removeEmailView.viewName);
         viewManagerModel.firePropertyChanged();
         application.pack();
         application.setVisible(true);
