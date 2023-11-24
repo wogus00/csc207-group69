@@ -1,7 +1,15 @@
+package use_case.create_project;
+
+import entity.CommonProject;
+import entity.ProjectFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import javax.mail.internet.AddressException;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 
@@ -45,7 +53,7 @@ class CreateProjectInteractorTest {
      * @throws IOException if an I/O error occurs
      */
     @Test
-    void testProjectAlreadyExists() throws IOException {
+    void testProjectAlreadyExists() throws IOException, AddressException {
         // Arrange
         String existingProjectName = "Existing Project";
         CreateProjectInputData inputData = new CreateProjectInputData(existingProjectName, "leader@example.com", new ArrayList<>());
@@ -72,13 +80,13 @@ class CreateProjectInteractorTest {
         CreateProjectInputData inputData = new CreateProjectInputData(newProjectName, "leader@example.com", new ArrayList<>());
         when(mockProjectDataAccessObject.existsByName(newProjectName)).thenReturn(true);
         when(mockProjectFactory.create(newProjectName, "leader@example.com", new ArrayList<>()))
-                .thenReturn(new Project(newProjectName, "leader@example.com", new ArrayList<>()));
+                .thenReturn(new CommonProject(newProjectName, "leader@example.com", new ArrayList<>()));
 
         // Act
         createProjectInteractor.execute(inputData);
 
         // Assert
-        verify(mockProjectDataAccessObject).save(any(Project.class));
+        verify(mockProjectDataAccessObject).save(any(CommonProject.class));
         verify(mockCreateProjectPresenter).prepareSuccessView(any(CreateProjectOutputData.class));
     }
 }

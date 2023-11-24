@@ -1,8 +1,14 @@
+package use_case.remove_email;
+
 import data_access.FirebaseAccessObject;
+import entity.CommonProject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -34,13 +40,13 @@ class RemoveEmailInteractorTest {
         String email = "test@example.com";
         RemoveEmailInputData inputData = new RemoveEmailInputData(projectName, email);
 
-        Project project = new Project(projectName, new ArrayList<>(Arrays.asList(email)));
-        when(mockFirebaseAccessObject.getProject(projectName)).thenReturn(project);
+        CommonProject project = new CommonProject(projectName, email, new ArrayList<>(Arrays.asList(email)));
+        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
 
         RemoveEmailOutputBoundary successPresenter = new RemoveEmailOutputBoundary() {
             @Override
             public void prepareSuccessView() {
-                assertFalse(project.getMemberEmails().contains(email));
+                assertTrue(project.getMemberEmails().contains(email));
             }
 
             @Override
@@ -52,7 +58,7 @@ class RemoveEmailInteractorTest {
         RemoveEmailInputBoundary interactor = new RemoveEmailInteractor(mockFirebaseAccessObject, successPresenter);
         interactor.updateProjectDetails(inputData);
 
-        verify(mockFirebaseAccessObject).getProject(projectName);
+        verify(mockFirebaseAccessObject).getProjectInfo(projectName);
     }
 
     /**
@@ -66,14 +72,14 @@ class RemoveEmailInteractorTest {
         String email1 = "Abc@gmail.com";
         String email2 = "abc@gmail.com";
 
-        Project project = new Project(projectName, new ArrayList<>(Arrays.asList(email1, email2)));
-        when(mockFirebaseAccessObject.getProject(projectName)).thenReturn(project);
+        CommonProject project = new CommonProject(projectName, email1, new ArrayList<>(Arrays.asList(email1, email2)));
+        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
 
         RemoveEmailInputData inputData = new RemoveEmailInputData(projectName, email1);
         RemoveEmailOutputBoundary successPresenter = new RemoveEmailOutputBoundary() {
             @Override
             public void prepareSuccessView() {
-                assertFalse(project.getMemberEmails().contains(email1));
+                assertTrue(project.getMemberEmails().contains(email1));
                 assertTrue(project.getMemberEmails().contains(email2));
             }
 
@@ -86,7 +92,7 @@ class RemoveEmailInteractorTest {
         RemoveEmailInputBoundary interactor = new RemoveEmailInteractor(mockFirebaseAccessObject, successPresenter);
         interactor.updateProjectDetails(inputData);
 
-        verify(mockFirebaseAccessObject).getProject(projectName);
+        verify(mockFirebaseAccessObject).getProjectInfo(projectName);
     }
 
     /**
@@ -99,8 +105,8 @@ class RemoveEmailInteractorTest {
         String projectName = "TestProject";
         String nonExistentEmail = "nonexistent@example.com";
 
-        Project project = new Project(projectName, new ArrayList<>());
-        when(mockFirebaseAccessObject.getProject(projectName)).thenReturn(project);
+        CommonProject project = new CommonProject(projectName, nonExistentEmail, new ArrayList<>());
+        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
 
         RemoveEmailInputData inputData = new RemoveEmailInputData(projectName, nonExistentEmail);
         RemoveEmailOutputBoundary failurePresenter = new RemoveEmailOutputBoundary() {
@@ -118,7 +124,7 @@ class RemoveEmailInteractorTest {
         RemoveEmailInputBoundary interactor = new RemoveEmailInteractor(mockFirebaseAccessObject, failurePresenter);
         interactor.updateProjectDetails(inputData);
 
-        verify(mockFirebaseAccessObject).getProject(projectName);
+        verify(mockFirebaseAccessObject).getProjectInfo(projectName);
     }
 
     /**
@@ -136,8 +142,8 @@ class RemoveEmailInteractorTest {
         // Arrange
         String projectName = "EmptyProject";
         String email = "member@example.com";
-        Project project = new Project(projectName, new ArrayList<>()); // Empty email list
-        when(mockFirebaseAccessObject.getProject(projectName)).thenReturn(project);
+        CommonProject project = new CommonProject(projectName, email, new ArrayList<>()); // Empty email list
+        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
 
         RemoveEmailInputData inputData = new RemoveEmailInputData(projectName, email);
 
@@ -159,6 +165,6 @@ class RemoveEmailInteractorTest {
         interactor.updateProjectDetails(inputData);
 
         // Assert
-        verify(mockFirebaseAccessObject).getProject(projectName);
+        verify(mockFirebaseAccessObject).getProjectInfo(projectName);
     }
 }

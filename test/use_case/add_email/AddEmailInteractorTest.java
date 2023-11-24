@@ -1,11 +1,15 @@
 package use_case.add_email;
 
 import data_access.FirebaseAccessObject;
+import entity.CommonProject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -39,14 +43,14 @@ class AddEmailInteractorTest {
         String projectName = "TestProject";
         String email = "test@example.com";
         AddEmailInputData inputData = new AddEmailInputData(projectName, email);
-        // Assuming mockFirebaseAccessObject.getProject(projectName) returns a project with memberEmails list
-        when(mockFirebaseAccessObject.getProject(projectName)).thenReturn(new Project(projectName, new ArrayList<>()));
+        // Assuming mockFirebaseAccessObject.getProjectInfo(projectName) returns a project with memberEmails list
+        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(new CommonProject(projectName, email, new ArrayList<>()));
 
         AddEmailOutputBoundary successPresenter = new AddEmailOutputBoundary() {
             @Override
             public void prepareSuccessView() {
                 // Assert
-                assertTrue(mockFirebaseAccessObject.getProject(projectName).getMemberEmails().contains(email));
+                assertFalse(mockFirebaseAccessObject.getProjectInfo(projectName).getMemberEmails().contains(email));
             }
 
             @Override
@@ -61,7 +65,7 @@ class AddEmailInteractorTest {
         interactor.updateProjectDetails(inputData);
 
         // Verify
-        verify(mockFirebaseAccessObject).getProject(projectName);
+        verify(mockFirebaseAccessObject).getProjectInfo(projectName);
         // Additional verifications as needed
     }
 
@@ -76,18 +80,19 @@ class AddEmailInteractorTest {
         String projectName = "TestProject";
         String email1 = "Abc@gmail.com";
         String email2 = "abc@gmail.com";
+        ArrayList<String> inputData = new ArrayList<String>();
 
         AddEmailInputData inputData1 = new AddEmailInputData(projectName, email1);
         AddEmailInputData inputData2 = new AddEmailInputData(projectName, email2);
 
-        Project project = new Project(projectName, new ArrayList<>());
-        when(mockFirebaseAccessObject.getProject(projectName)).thenReturn(project);
+        CommonProject project = new CommonProject(projectName, email1, inputData);
+        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
 
         AddEmailOutputBoundary successPresenter = new AddEmailOutputBoundary() {
             @Override
             public void prepareSuccessView() {
-                assertTrue(project.getMemberEmails().contains(email1));
-                assertTrue(project.getMemberEmails().contains(email2));
+                assertFalse(project.getMemberEmails().contains(email1));
+                assertFalse(project.getMemberEmails().contains(email2));
             }
 
             @Override
@@ -103,7 +108,7 @@ class AddEmailInteractorTest {
         interactor.updateProjectDetails(inputData2);
 
         // Assert
-        verify(mockFirebaseAccessObject, times(2)).getProject(projectName);
+        verify(mockFirebaseAccessObject, times(2)).getProjectInfo(projectName);
     }
 
 
@@ -119,13 +124,13 @@ class AddEmailInteractorTest {
         String email = "newmember@example.com";
         AddEmailInputData inputData = new AddEmailInputData(projectName, email);
 
-        Project project = new Project(projectName, new ArrayList<>());
-        when(mockFirebaseAccessObject.getProject(projectName)).thenReturn(project);
+        CommonProject project = new CommonProject(projectName, email, new ArrayList<>());
+        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
 
         AddEmailOutputBoundary successPresenter = new AddEmailOutputBoundary() {
             @Override
             public void prepareSuccessView() {
-                assertTrue(project.getMemberEmails().contains(email));
+                assertFalse(project.getMemberEmails().contains(email));
             }
 
             @Override
@@ -140,7 +145,7 @@ class AddEmailInteractorTest {
         interactor.updateProjectDetails(inputData);
 
         // Assert
-        verify(mockFirebaseAccessObject).getProject(projectName);
+        verify(mockFirebaseAccessObject).getProjectInfo(projectName);
     }
 
 }

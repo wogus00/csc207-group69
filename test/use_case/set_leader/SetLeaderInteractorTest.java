@@ -1,4 +1,7 @@
+package use_case.set_leader;
+
 import data_access.FirebaseAccessObject;
+import entity.CommonProject;
 import entity.Project;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,6 +11,8 @@ import use_case.set_leader.SetLeaderInputBoundary;
 import use_case.set_leader.SetLeaderInputData;
 import use_case.set_leader.SetLeaderInteractor;
 import use_case.set_leader.SetLeaderOutputBoundary;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -32,8 +37,8 @@ class SetLeaderInteractorTest {
         // Arrange
         String projectName = "TestProject";
         String newLeaderEmail = "test@example.com";
-        Project project = new Project(projectName, "currentLeader@example.com");
-        when(mockFirebaseAccessObject.getProject(projectName)).thenReturn(project);
+        CommonProject project = new CommonProject(projectName, newLeaderEmail, new ArrayList<>());
+        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
 
         SetLeaderInputData inputData = new SetLeaderInputData(projectName, newLeaderEmail);
 
@@ -55,7 +60,7 @@ class SetLeaderInteractorTest {
         interactor.updateProjectDetails(inputData);
 
         // Assert
-        verify(mockFirebaseAccessObject).getProject(projectName);
+        verify(mockFirebaseAccessObject).getProjectInfo(projectName);
     }
 
     /**
@@ -68,8 +73,8 @@ class SetLeaderInteractorTest {
         // Arrange
         String projectName = "TestProject";
         String originalLeader = "leader@example.com";
-        Project project = new Project(projectName, originalLeader);
-        when(mockFirebaseAccessObject.getProject(projectName)).thenReturn(project);
+        CommonProject project = new CommonProject(projectName, originalLeader, new ArrayList<>());
+        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
 
         SetLeaderInputData inputData = new SetLeaderInputData(projectName, originalLeader);
 
@@ -91,6 +96,6 @@ class SetLeaderInteractorTest {
         interactor.updateProjectDetails(inputData);
 
         // Assert
-        verify(mockFirebaseAccessObject).getProject(projectName);
+        verify(mockFirebaseAccessObject).getProjectInfo(projectName);
     }
 }
