@@ -195,6 +195,7 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
         this.add(meetingDateInfo);
         this.add(startTimeInfo);
         this.add(endTimeInfo);
+        this.add(projectNameInfo);
         this.add(buttons);
     }
 

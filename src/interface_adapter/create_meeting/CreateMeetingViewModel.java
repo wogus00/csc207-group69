@@ -5,6 +5,9 @@ import interface_adapter.ViewModel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * ViewModel for the Create Meeting use case.
+ */
 public class CreateMeetingViewModel extends ViewModel {
 
     public static final String CREATE_BUTTON_LABEL = "Create Meeting";
@@ -16,31 +19,45 @@ public class CreateMeetingViewModel extends ViewModel {
     public static final String END_TIME_LABEL = "Enter end time";
     public static final String PROJECT_NAME_LABEL = "Enter project name";
 
-
-
-
     private CreateMeetingState state = new CreateMeetingState();
 
+    /**
+     * It constructs a new instance of CreateMeetingViewModel and sets the view name.
+     */
     public CreateMeetingViewModel() {
         super("create meeting");
     }
 
+    /**
+     * Updates the current state of the Create Meeting use case.
+     * @param state The new state to be set.
+     */
     public void setState(CreateMeetingState state) {
         this.state = state;
     }
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-
+    /**
+     * Notifies all listeners that the property has changed.
+     */
     public void firePropertyChanged() {
         support.firePropertyChange("state", null, this.state);
     }
 
+    /**
+     * Adds a PropertyChangeListener to the listener list.
+     * @param listener The PropertyChangeListener to be added.
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
 
-    public CreateMeetingState getState() {
+    /**
+     * Getter method that returns the current state of the create meeting process.
+     * @return state that represents current state of the create meeting process.
+     */
+    public static CreateMeetingState getState() {
         return state;
     }
 }
