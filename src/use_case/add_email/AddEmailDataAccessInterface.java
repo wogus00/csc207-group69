@@ -15,8 +15,8 @@ public interface AddEmailDataAccessInterface {
      * to include a new member's email. The method will locate the project by its name
      * and then add the specified email to the project's member list.
      *
-     * @param projectName the name of the project to which the member email should be added
-     * @param email the email address of the new member to be added to the project
+     * @param projectName The name of the project to which the member email should be added
+     * @param email The email address of the new member to be added to the project
      */
     void addMemberToProject(String projectName, String email);
 }

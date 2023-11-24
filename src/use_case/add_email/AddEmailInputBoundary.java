@@ -14,7 +14,7 @@ public interface AddEmailInputBoundary {
      * It takes an instance of {@code AddEmailInputData} which contains all necessary information
      * about the project and the email to be added, and processes this data to update the project details.
      *
-     * @param addEmailInputData the data transfer object containing information about the project and the email to be added
+     * @param addEmailInputData The data transfer object containing information about the project and the email to be added
      */
     void updateProjectDetails(AddEmailInputData addEmailInputData);
 }

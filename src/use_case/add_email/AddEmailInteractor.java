@@ -20,8 +20,8 @@ public class AddEmailInteractor implements AddEmailInputBoundary {
      * and an output boundary object. These objects are used for adding member emails to projects
      * and handling the presentation logic after the operation, respectively.
      *
-     * @param projectDataAccessInterface the data access object used for adding member emails
-     * @param addEmailOutputBoundary the output boundary object used for presentation logic
+     * @param projectDataAccessInterface The data access object used for adding member emails
+     * @param addEmailOutputBoundary The output boundary object used for presentation logic
      */
     public AddEmailInteractor(AddEmailDataAccessInterface projectDataAccessInterface,
                                    AddEmailOutputBoundary addEmailOutputBoundary) {
@@ -36,7 +36,7 @@ public class AddEmailInteractor implements AddEmailInputBoundary {
      * and the email to be added, updates the project details using the data access object,
      * and then prepares the success view using the presenter.
      *
-     * @param addEmailInputData the data transfer object containing information about the project and the email to be added
+     * @param addEmailInputData The data transfer object containing information about the project and the email to be added
      */
     @Override
     public void updateProjectDetails(AddEmailInputData addEmailInputData) {

@@ -12,8 +12,8 @@ public class AddEmailInputData {
     /**
      * Constructs a new instance of {@code AddEmailInputData} with specified project name and email.
      *
-     * @param projectName the name of the project to which the email will be added
-     * @param email the email address to be added to the project
+     * @param projectName The name of the project to which the email will be added
+     * @param email The email address to be added to the project
      */
     public AddEmailInputData(String projectName, String email) {
         this.projectName = projectName;
@@ -23,7 +23,7 @@ public class AddEmailInputData {
     /**
      * Retrieves the name of the project.
      *
-     * @return the name of the project associated with this data
+     * @return The name of the project associated with this data
      */
     public String getProjectName() {
         return projectName;
@@ -32,7 +32,7 @@ public class AddEmailInputData {
     /**
      * Retrieves the email address to be added to the project.
      *
-     * @return the email address associated with this data
+     * @return The email address associated with this data
      */
     public String getEmail() {
         return email;

@@ -22,7 +22,7 @@ public interface AddEmailOutputBoundary {
      * It should handle the logic for displaying an error message or view to the user,
      * providing feedback on what went wrong.
      *
-     * @param error the error message to be displayed in the failure view
+     * @param error The error message to be displayed in the failure view
      */
     void prepareFailView(String error);
 }
