@@ -11,8 +11,11 @@ import entity.Announcement;
 import entity.CommonAnnouncement;
 import entity.Project;
 import entity.ProjectFactory;
+import entity.Task;
 import use_case.add_email.AddEmailDataAccessInterface;
+import use_case.complete_task.CompleteTaskDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
+import use_case.create_task.CreateTaskDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 import use_case.delete_announcement.DeleteAnnouncementDataAccessInterface;
 import use_case.create_announcement.CreateAnnouncementDataAccessInterface;
@@ -28,7 +31,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
+
 public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface {
+
     Firestore db;
     ProjectFactory projectFactory;
 
@@ -62,7 +67,15 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             data.put("leaderEmail", leaderEmail);
             data.put("memberEmails", memberEmails);
             ApiFuture<WriteResult> result = docRef.set(data);
+            Map<String, Object> data1 = new HashMap<>();
+            DocumentReference docRefTask = db.collection(projectName).document("taskInfo");
+            DocumentReference docRefMeeting = db.collection(projectName).document("meetingInfo");
+            DocumentReference docRefAnnounce = db.collection(projectName).document("announcementInfo");
+            docRefTask.set(data1);
+            docRefMeeting.set(data1);
+            docRefAnnounce.set(data1);
     }
+
 
     public Project getProjectInfo(String projectName) {
         DocumentReference docRef = db.collection(projectName).document("projectInfo");
@@ -118,9 +131,40 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         // TODO: remove member from project
     }
 
-    public boolean existsByName(String newProjectName) {
-        //TODO: add ways to check if newProjectName exists in db collection
-        return true;
+    public boolean existsByName(String projectName) {
+        Iterable<CollectionReference> collections = db.listCollections();
+        for (CollectionReference collRef : collections) {
+            if (collRef.getId().equals(projectName)){
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    @Override
+    public void saveTask(String projectName, Task newTask) {
+        ;
+    }
+
+    @Override
+    public boolean taskNameExists(String projectName, String taskName) {
+        return false;
+    }
+
+    @Override
+    public void completeTask(String projectName, String taskName) {
+        // TODO: add methods
+    }
+
+    @Override
+    public boolean userHasAccessToTask(String projectName, String taskName, String userEmail) {
+        return false;
+    }
+
+    @Override
+    public boolean memberExists(String projectName, ArrayList<String> workingMembersList) {
+        return false;
     }
 
     @Override

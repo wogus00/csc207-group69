@@ -15,6 +15,13 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * View class representing the login view in the application's GUI.
+ * This class is responsible for rendering the login interface, handling user inputs,
+ * and responding to login-related events.
+ * It extends JPanel to fit in the CardLayout of views, and implements ActionListener and
+ * PropertyChangeListener to respond to the user actions and model changes.
+ */
 public class LoginView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewName = "log in";
@@ -30,6 +37,15 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     final JButton create;
     private final LoginController loginController;
 
+    /**
+     * Constructs a new LoginView with the specified models and controller.
+     * Sets up the UI components for the login view, including input fields for project name and user email,
+     * login and create buttons, and initializes action listeners for these components.
+     *
+     * @param loginViewModel The view model for the login view, manages the state and behavior of the login view
+     * @param controller The login controller that handles login actions performed.
+     * @param viewManagerModel The model responsible for managing different views in the application.
+     */
     public LoginView(LoginViewModel loginViewModel, LoginController controller, ViewManagerModel viewManagerModel) {
 
         this.loginController = controller;
@@ -123,15 +139,24 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
 
     /**
      * React to a button click that results in evt.
+     *
+     * @param evt The ActionEvent object.
      */
-
     public void actionPerformed(ActionEvent evt){}
 
+    /**
+     * React to property changes in the view model.
+     *
+     * @param evt The PropertyChangeEvent object.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         LoginState state = (LoginState) evt.getNewValue();
         if (state.getLoginError() != null) {
             JOptionPane.showMessageDialog(this, state.getLoginError());
+        } if (state.isLogout()) {
+            projectNameInputField.setText("");
+            userEmailInputField.setText("");
         }
 
     }

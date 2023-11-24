@@ -18,7 +18,6 @@ import java.io.IOException;
 
 public class LoginUseCaseFactory {
 
-    /** Prevent instantiation. */
     private LoginUseCaseFactory() {}
 
     public static LoginView createLoginView(
@@ -26,6 +25,8 @@ public class LoginUseCaseFactory {
             LoginViewModel loginViewModel,
             MainPageViewModel mainPageViewModel,
             LoginDataAccessInterface loginDataAccessObject) {
+
+
 
         try {
             LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, mainPageViewModel, loginDataAccessObject);

@@ -23,7 +23,7 @@ public class CreateProjectUseCaseFactory {
                                                       MainPageViewModel mainPageViewModel) {
         try {
             CreateProjectController createProjectController = createProjectUseCase(viewManagerModel, createProjectViewModel, userDataAccessObject, gmailDataAccessObject, mainPageViewModel);
-            return new CreateProjectView(createProjectController, createProjectViewModel);
+            return new CreateProjectView(createProjectController, createProjectViewModel, viewManagerModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Invalid File");
         }

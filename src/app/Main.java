@@ -2,16 +2,16 @@ package app;
 
 import data_access.FirebaseAccessObject;
 import data_access.GmailDataAccessObject;
-import entity.CommonProjectFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.create_project.CreateProjectViewModel;
 
+import interface_adapter.create_task.CreateTaskViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageViewModel;
 import use_case.login.LoginDataAccessInterface;
 import view.CreateProjectView;
+import view.CreateTaskView;
 import view.LoginView;
-import view.MainPageView;
 import view.ViewManager;
 
 import javax.swing.*;
@@ -39,6 +39,7 @@ public class Main {
         CreateProjectViewModel createProjectViewModel = new CreateProjectViewModel();
         MainPageViewModel mainPageViewModel = new MainPageViewModel();
         LoginViewModel loginViewModel = new LoginViewModel();
+        CreateTaskViewModel createTaskViewModel = new CreateTaskViewModel();
 
         FirebaseAccessObject firebaseAccessObject;
         GmailDataAccessObject gmailDataAccessObject = new GmailDataAccessObject();
@@ -50,11 +51,13 @@ public class Main {
         LoginView loginView = LoginUseCaseFactory.createLoginView(viewManagerModel,loginViewModel,mainPageViewModel, (LoginDataAccessInterface) firebaseAccessObject);
         views.add(loginView, loginView.viewName);
 
-        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel);
+
+        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel);
         views.add(mainPageView, mainPageView.viewName);
 
-        viewManagerModel.setActiveView(loginView.viewName);
+        viewManagerModel.setActiveView(createTaskView.viewName);
         viewManagerModel.firePropertyChanged();
+
         application.pack();
         application.setVisible(true);
 

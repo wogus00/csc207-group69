@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * State class for the main page
+ * It stores data for the project logged in and email of the user
+ */
 public class MainPageState {
     private String projectName = "";
 
@@ -19,6 +23,12 @@ public class MainPageState {
     private ArrayList<String> meetingList = new ArrayList<>(Arrays.asList(""));
 
     private ArrayList<String> announcements = new ArrayList<>(Arrays.asList("No Announcements"));
+
+    /**
+     * Creates a new MainPageState as a copy of another MainPageState.
+     *
+     * @param copy The MainPageState instance to copy.
+     */
     public MainPageState(MainPageState copy) {
         projectName = copy.projectName;;
         userEmail = copy.userEmail;
@@ -29,49 +39,132 @@ public class MainPageState {
         announcements = copy.announcements;
     }
 
-    // Because of the previous copy constructor, the default constructor must be explicit.
+    /**
+     * Constructs a default MainPageState with initial values.
+     */
     public MainPageState() {}
 
+    /**
+     * Retrieves the project name.
+     *
+     * @return The name of the project.
+     */
     public String getProjectName() {return projectName;}
 
+    /**
+     * Sets the project name.
+     *
+     * @param projectName The name of the project.
+     */
     public void setProjectName(String projectName) {this.projectName = projectName;}
 
+    /**
+     * Retrieves the user email.
+     *
+     * @return The email of the user.
+     */
     public String getUserEmail() {
         return userEmail;
     }
 
+    /**
+     * Sets the user email.
+     *
+     * @param userEmail The email of user.
+     */
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
     }
 
+    /**
+     * Retrieves the email of the leader of the project.
+     *
+     * @return The email fo the leader.
+     */
     public String getLeaderEmail() {
         return leaderEmail;
     }
 
+    /**
+     * Sets the email of the leader of the project.
+     *
+     * @param leaderEmail The email of the leader.
+     */
     public void setLeaderEmail(String leaderEmail) {
         this.leaderEmail = leaderEmail;
     }
 
+    /**
+     * Retrieves the array list of all members' (except the leader) email of the project.
+     *
+     * @return The array list of all members' email.
+     */
     public ArrayList<String> getMemberEmail() {return memberEmail;}
 
+    /**
+     * Sets the array list of all members' (except the leader) email of the project.
+     *
+     * @param memberEmail The array list of all members' email.
+     */
     public void setMemberEmail(ArrayList<String> memberEmail) {this.memberEmail = memberEmail;}
 
+    /**
+     * Retrieves the array list of name of tasks in the project.
+     *
+     * @return The array list of all task names.
+     */
     public ArrayList<String> getTaskList() {return taskList;}
 
+    /**
+     * Retrieves the array list of name of tasks in the project.
+     *
+     * @param taskList The array list of all task names.
+     */
     public void setTaskList(ArrayList<String> taskList) {this.taskList = taskList;}
 
+    /**
+     * Retrieves the array list of name of meetings in the project.
+     *
+     * @return The array list of all meeting names.
+     */
     public ArrayList<String> getMeetingList() {return meetingList;}
 
+    /**
+     * Sets the array list of name of meetings in the project.
+     *
+     * @param meetingList The array list of all meeting names.
+     */
     public void setMeetingList(ArrayList<String> meetingList) {this.meetingList = meetingList;}
 
+    /**
+     * Retrieves the array list of messages of all announcements in the project.
+     *
+     * @return The array list of all announcement messages
+     */
     public ArrayList<String> getAnnouncements() {return announcements;}
 
+    /**
+     * Sets the array list of messages of all announcements in the project.
+     *
+     * @param announcements The array list of all announcement messages
+     */
     public void setAnnouncements(ArrayList<String> announcements) {this.announcements = announcements;}
 
+    /**
+     * Returns an HTML-formatted text for a label to be displayed on the main page view.
+     * The label displays a list of members, tasks, or meetings based on the inputted type.
+     * It is modified to have a decent format when shown on the main page view.
+     * Default value for the return text is set for no information about the type to shown
+     *
+     * @param type String representing the type of information to be displayed by the label.
+     *             Expected values are "member", "task", or "meeting".
+     * @return String representing the text for a certain label.
+     */
     public String getLabel(String type) {
         List<String> list = new ArrayList<>();
         StringBuilder labelBuilder = new StringBuilder("<html>"); // Use HTML to allow for text wrapping if needed
         int charsCount = 3;
+        boolean empty = false;
 
         if (type.equals("member")) {
             list.add(this.leaderEmail);
@@ -117,9 +210,26 @@ public class MainPageState {
 
 
         labelBuilder.append("</html>");
+        if (list.isEmpty()) {
+            if (type.equals("member")) {
+                labelBuilder = new StringBuilder("<html>Member List: No members</html>");
+            } if (type.equals("task")) {
+                labelBuilder = new StringBuilder("<html>Task List: No Tasks</html>");
+            } if (type.equals("meeting")) {
+                labelBuilder = new StringBuilder("<html>Meeting List: No Meetings</html>");
+            }
+        }
         return labelBuilder.toString();
     }
 
+    /**
+     * Returns an HTML-formatted text for a message to be displayed as a prompt on the main page view.
+     * The text displayed information about all members, tasks and meetings in the project
+     * It is modified so that the text has a decent format when shown on a JOptionPane     *
+     *
+     * @return String representing the text for a prompt showing specific information about all members,
+     * tasks and meetings in the project.
+     */
     public String getShowAllMessage() {
         List<String> memberList = new ArrayList<>();
         memberList.add(this.leaderEmail + "(leader)");
@@ -146,8 +256,20 @@ public class MainPageState {
         return messageBuilder.toString();
     }
 
+    /**
+     * Returns an HTML-formatted text for the label showing an announcement on the main page.
+     * It is modified to have a decent format when shown on the main page view.
+     * Default value for the return text is set for no announcements in the project
+     *
+     * @return String representing the text for the announcement label.
+     */
     public String getAnnouncementLabel(){
-        String text = this.announcements.get(this.announcements.size() - 1);
+        String text;
+        if (this.announcements.isEmpty()) {
+            text = "No announcement";
+        } else {
+            text = this.announcements.get(this.announcements.size() - 1);
+        }
 
         final int maxLength = 146; // maximum length for two lines
 
@@ -163,6 +285,13 @@ public class MainPageState {
         return "<html>Announcement:<br/>" + text + "</html>";
     }
 
+    /**
+     * Returns an HTML-formatted text for the more detailed information about announcements as a prompt
+     * It is modified to have a decent format when shown as a prompt
+     * Default value for the return text is set for no announcements in the project
+     *
+     * @return String representing the text for the announcement information on a JOptionPanel.
+     */
     public String getRecentAnnouncements(){
         ArrayList<String> recents = new ArrayList<>();
         int length = this.announcements.size() - 1;
