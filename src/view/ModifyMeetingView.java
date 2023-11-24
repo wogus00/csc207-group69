@@ -1,9 +1,9 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.create_meeting.CreateMeetingController;
-import interface_adapter.create_meeting.CreateMeetingState;
-import interface_adapter.create_meeting.CreateMeetingViewModel;
+import interface_adapter.modify_meeting.ModifyMeetingController;
+import interface_adapter.modify_meeting.ModifyMeetingState;
+import interface_adapter.modify_meeting.ModifyMeetingViewModel;
 import interface_adapter.modify_meeting.ModifyMeetingController;
 import interface_adapter.modify_meeting.ModifyMeetingState;
 import interface_adapter.modify_meeting.ModifyMeetingViewModel;
@@ -22,14 +22,14 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
 
     public final String viewName = "Modify Meeting";
     private ViewManagerModel viewManagerModel;
-    private final CreateMeetingViewModel createMeetingViewModel;
+    private final ModifyMeetingViewModel modifyMeetingViewModel;
     private final JTextField meetingNameInputField = new JTextField(15);
     private final JTextField participantEmailInputField = new JTextField(15);
     private final JTextField meetingDateInputField = new JTextField(15);
     private final JTextField startTimeInputField = new JTextField(15);
     private final JTextField endTimeInputField = new JTextField(15);
     private final JTextField projectNameInputField = new JTextField(15);
-    private final CreateMeetingController createMeetingController;
+    private final ModifyMeetingController modifyMeetingController;
     private final JButton modify;
     private final JButton cancel;
     public ModifyMeetingView(ViewManagerModel viewManagerModel, ModifyMeetingController modifyMeetingController, ModifyMeetingViewModel modifyMeetingViewModel) {
@@ -37,7 +37,7 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
         this.modifyMeetingController = modifyMeetingController;
         this.modifyMeetingViewModel = modifyMeetingViewModel;
 
-        JLabel title = new JLabel(CreateMeetingViewModel.TITLE_LABEL);
+        JLabel title = new JLabel(ModifyMeetingViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         LabelTextPanel meetingNameInfo = new LabelTextPanel(
@@ -54,9 +54,9 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
                 new JLabel(ModifyMeetingViewModel.PROJECT_NAME_LABEL), projectNameInputField);
 
         JPanel buttons = new JPanel();
-        modify = new JButton(CreateMeetingViewModel.MODIFY_BUTTON_LABEL);
-        cancel = new JButton(CreateMeetingViewModel.CANCEL_BUTTON_LABEL);
-        buttons.add(create);
+        modify = new JButton(ModifyMeetingViewModel.MODIFY_BUTTON_LABEL);
+        cancel = new JButton(ModifyMeetingViewModel.CANCEL_BUTTON_LABEL);
+        buttons.add(modify);
         buttons.add(cancel);
 
         cancel.addActionListener(new ActionListener() {
@@ -72,7 +72,7 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
         modify.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(create)) {
+                        if (evt.getSource().equals(modify)) {
                             ModifyMeetingState currentState = modifyMeetingViewModel.getState();
                             String meetingName = currentState.getMeetingName();
                             ArrayList<String> participantEmail = currentState.getParticipantEmail();
@@ -91,7 +91,7 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
                             currentState = modifyMeetingViewModel.getState();
                             if (currentState.getMeetingNameError() == null) {
                                 JOptionPane.showMessageDialog(ModifyMeetingView.this,
-                                        "created meeting successfully");
+                                        "modifyd meeting successfully");
                                 viewManagerModel.setActiveView("Main Page");
                                 viewManagerModel.firePropertyChanged();
                             }
