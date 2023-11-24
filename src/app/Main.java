@@ -8,6 +8,7 @@ import interface_adapter.create_project.CreateProjectViewModel;
 import interface_adapter.create_task.CreateTaskViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageViewModel;
+import use_case.login.LoginDataAccessInterface;
 import view.CreateProjectView;
 import view.CreateTaskView;
 import view.LoginView;
@@ -47,7 +48,7 @@ public class Main {
         CreateProjectView createProjectView = CreateProjectUseCaseFactory.createProjectView(viewManagerModel, createProjectViewModel, firebaseAccessObject, gmailDataAccessObject, mainPageViewModel);
         views.add(createProjectView, createProjectView.viewName);
 
-        LoginView loginView = LoginUseCaseFactory.createLoginView(viewManagerModel,loginViewModel,mainPageViewModel, firebaseAccessObject);
+        LoginView loginView = LoginUseCaseFactory.createLoginView(viewManagerModel,loginViewModel,mainPageViewModel, (LoginDataAccessInterface) firebaseAccessObject);
         views.add(loginView, loginView.viewName);
 
 

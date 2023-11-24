@@ -7,5 +7,10 @@ public interface Announcement {
 
     String getMessage();
 
+    String getAuthor();
+
     LocalDateTime getCreationTime();
+
+
+    String getId();
 }
