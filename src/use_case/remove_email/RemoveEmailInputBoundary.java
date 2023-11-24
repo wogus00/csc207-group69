@@ -16,7 +16,7 @@ public interface RemoveEmailInputBoundary {
      * and the email to be removed, and initiates the process of updating the project details
      * to reflect the removal of this email.
      *
-     * @param removeEmailInputData the data transfer object containing information about the project and the email to be removed
+     * @param removeEmailInputData The data transfer object containing information about the project and the email to be removed
      */
     void updateProjectDetails(RemoveEmailInputData removeEmailInputData);
 }

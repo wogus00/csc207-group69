@@ -12,8 +12,8 @@ public class RemoveEmailInputData {
     /**
      * Constructs a new instance of {@code RemoveEmailInputData} with a specified project name and email.
      *
-     * @param projectName the name of the project from which the email will be removed
-     * @param email the email address to be removed from the project
+     * @param projectName The name of the project from which the email will be removed
+     * @param email The email address to be removed from the project
      */
     public RemoveEmailInputData(String projectName, String email) {
         this.projectName = projectName;
@@ -23,7 +23,7 @@ public class RemoveEmailInputData {
     /**
      * Retrieves the name of the project.
      *
-     * @return the name of the project associated with this data
+     * @return The name of the project associated with this data
      */
     public String getProjectName() {
         return projectName;
@@ -32,7 +32,7 @@ public class RemoveEmailInputData {
     /**
      * Retrieves the email address to be removed from the project.
      *
-     * @return the email address associated with this data
+     * @return The email address associated with this data
      */
     public String getEmail() {
         return email;

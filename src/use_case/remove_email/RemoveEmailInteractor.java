@@ -21,8 +21,8 @@ public class RemoveEmailInteractor implements RemoveEmailInputBoundary {
      * and an output boundary object. These objects are used for removing member emails from projects
      * and handling the presentation logic after the operation, respectively.
      *
-     * @param projectDataAccessInterface the data access object used for removing member emails
-     * @param removeEmailOutputBoundary the output boundary object used for presentation logic
+     * @param projectDataAccessInterface The data access object used for removing member emails
+     * @param removeEmailOutputBoundary The output boundary object used for presentation logic
      */
     public RemoveEmailInteractor(RemoveEmailDataAccessInterface projectDataAccessInterface,
                               RemoveEmailOutputBoundary removeEmailOutputBoundary) {
@@ -37,7 +37,7 @@ public class RemoveEmailInteractor implements RemoveEmailInputBoundary {
      * and the email to be removed, updates the project details using the data access object,
      * and then prepares the success view using the presenter.
      *
-     * @param removeEmailInputData the data transfer object containing information about the project and the email to be removed
+     * @param removeEmailInputData The data transfer object containing information about the project and the email to be removed
      */
     @Override
     public void updateProjectDetails(RemoveEmailInputData removeEmailInputData) {

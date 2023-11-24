@@ -13,8 +13,8 @@ public interface RemoveEmailDataAccessInterface {
      * to remove a member's email. The method will locate the project by its name
      * and then remove the specified email from the project's member list.
      *
-     * @param projectName the name of the project from which the member email should be removed
-     * @param email the email address of the member to be removed from the project
+     * @param projectName The name of the project from which the member email should be removed
+     * @param email The email address of the member to be removed from the project
      */
     void removeMemberFromProject(String projectName, String email);
 }
