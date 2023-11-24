@@ -8,10 +8,11 @@ import interface_adapter.create_project.CreateProjectViewModel;
 import interface_adapter.create_task.CreateTaskViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageViewModel;
-import view.CreateProjectView;
-import view.CreateTaskView;
-import view.LoginView;
-import view.ViewManager;
+import use_case.create_meeting.CreateMeetingDataAccessInterface;
+import use_case.create_meeting.CreateMeetingGmailDataAccessInterface;
+import view.*;
+import interface_adapter.create_meeting.CreateMeetingViewModel;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,8 +55,11 @@ public class Main {
         MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel);
         views.add(mainPageView, mainPageView.viewName);
 
-        viewManagerModel.setActiveView(createTaskView.viewName);
-        viewManagerModel.firePropertyChanged();
+
+
+        CreateMeetingViewModel createMeetingViewModel = new CreateMeetingViewModel();
+        CreateMeetingView createMeetingView = CreateMeetingUseCaseFactory.createMeetingView(viewManagerModel, createMeetingViewModel, (CreateMeetingDataAccessInterface) firebaseAccessObject, (CreateMeetingGmailDataAccessInterface) gmailDataAccessObject, mainPageViewModel);
+        views.add(createMeetingView, createMeetingView.viewName);
 
         application.pack();
         application.setVisible(true);

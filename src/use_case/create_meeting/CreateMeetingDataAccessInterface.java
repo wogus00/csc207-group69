@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import entity.Meeting;
 
 public interface CreateMeetingDataAccessInterface {
-        void saveMeeting(String projectName, Meeting newMeeting);
+        void saveMeeting(Meeting newMeeting);
 
-        boolean projectNameExists(String projectName, String meetingName);
+        boolean meetingNameExists(String projectName, String meetingName);
 
         boolean memberExists(String projectName, ArrayList<String> participantEmail);
 }

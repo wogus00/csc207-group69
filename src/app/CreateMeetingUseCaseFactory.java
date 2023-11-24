@@ -17,9 +17,9 @@ public class CreateMeetingUseCaseFactory {
     private CreateMeetingUseCaseFactory() {}
 
     public static CreateMeetingView createMeetingView(ViewManagerModel viewManagerModel,
-                                                CreateMeetingViewModel createMeetingViewModel,
-                                                CreateMeetingDataAccessInterface userDataAccessObject,
-                                                CreateMeetingGmailDataAccessInterface gmailDataAccessObject,
+                                                    CreateMeetingViewModel createMeetingViewModel,
+                                                    CreateMeetingDataAccessInterface userDataAccessObject,
+                                                    CreateMeetingGmailDataAccessInterface gmailDataAccessObject,
                                                       MainPageViewModel mainPageViewModel) {
         try {
             CreateMeetingController createMeetingController = createMeetingUseCase(viewManagerModel, createMeetingViewModel, userDataAccessObject, gmailDataAccessObject, mainPageViewModel);
@@ -34,9 +34,10 @@ public class CreateMeetingUseCaseFactory {
     private static CreateMeetingController createMeetingUseCase(ViewManagerModel viewManagerModel,
                                                                 CreateMeetingViewModel createMeetingViewModel,
                                                                 CreateMeetingDataAccessInterface createMeetingDataAccessObject,
-                                                                CreateMeetingGmailDataAccessInterface gmailDataAccessObject, MainPageViewModel mainPageViewModel) throws IOException {
+                                                                CreateMeetingGmailDataAccessInterface gmailDataAccessObject,
+                                                                MainPageViewModel mainPageViewModel) throws IOException {
 
-        CreateMeetingOutputBoundary createMeetingOutputBoundary = new CreateMeetingPresenter(viewManagerModel, createMeetingViewModel);
+        CreateMeetingOutputBoundary createMeetingOutputBoundary = new CreateMeetingPresenter(viewManagerModel, createMeetingViewModel, mainPageViewModel);
 
         MeetingFactory meetingFactory = new CommonMeetingFactory();
 

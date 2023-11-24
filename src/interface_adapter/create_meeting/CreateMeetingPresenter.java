@@ -15,6 +15,7 @@ public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
 
     private final CreateMeetingViewModel createMeetingViewModel;
     private ViewManagerModel viewManagerModel;
+    private final MainPageViewModel mainPageViewModel;
     /**
      * Constructor method that creates CreateMeetingPresenter class with the view manager model and view model.
      *
@@ -22,9 +23,11 @@ public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
      * @param viewManagerModel View manager model that is responsible for managing the active view.
      */
     public CreateMeetingPresenter(ViewManagerModel viewManagerModel,
-                                  CreateMeetingViewModel createMeetingViewModel) {
+                                  CreateMeetingViewModel createMeetingViewModel,
+                                  MainPageViewModel mainPageViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.createMeetingViewModel = createMeetingViewModel;
+        this.mainPageViewModel = mainPageViewModel;
     }
 
     /**

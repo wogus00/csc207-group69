@@ -10,16 +10,10 @@ import entity.Meeting;
 import entity.Project;
 import entity.ProjectFactory;
 import entity.Task;
-import entity.Meeting;
-import entity.MeetingFactory;
 import use_case.add_email.AddEmailDataAccessInterface;
-import use_case.complete_task.CompleteTaskDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
-import use_case.create_task.CreateTaskDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 
-import java.time.LocalDate;
-import java.sql.Time;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
@@ -133,58 +127,36 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
 
     }
 
-    public boolean projectNameExists(String projectName, String meetingName){
+    public boolean meetingNameExists(String projectName, String meetingName){
+        DocumentReference docRefMeeting = db.collection(projectName).document("meetingInfo");
         return true;
     }
 
-    public void saveMeeting(String projectName, String meetingName){
-        if (!projectNameExists(projectName, meetingName)){
+    @Override
+    public void saveMeeting(Meeting meeting){
+        String meetingName = meeting.getMeetingName();
+        String projectName = meeting.getProjectName();
+        if (!meetingNameExists(projectName, meetingName)){
             ArrayList<String> participantEmail = meeting.getParticipantEmail();
             String meetingDate = meeting.getMeetingDate();
             String startTime = meeting.getStartTime();
             String endTime = meeting.getEndTime();
-            String projectName = meeting.getProjectName();
 
-            DocumentReference docRef = db.collection(meetingName).document("meetingInfo");
-            Map<String, Object> data = new HashMap<>();
-            data.put("meetingName", meetingName);
-            data.put("participantEmail", participantEmail);
-            data.put("meetingDate", meetingDate);
-            data.put("startTime", startTime);
-            data.put("endTime", endTime);
-            data.put("projectName", projectName);
-            ApiFuture<WriteResult> result = docRef.set(data);
+            DocumentReference docRefMeeting = db.collection(projectName).document("meetingInfo");
+            Map<String, Object> meetingData = new HashMap<>();
+            meetingData.put("meetingName", meetingName);
+            meetingData.put("participantEmail", participantEmail);
+            meetingData.put("meetingDate", meetingDate);
+            meetingData.put("startTime", startTime);
+            meetingData.put("endTime", endTime);
+            meetingData.put("projectName", projectName);
+            docRefMeeting.set(meetingData);
         }
     }
-}
 
 
     public boolean memberExists(String projectName, String email){
         return true;
     }
 
-    @Override
-    public void saveTask(String projectName, Task newTask) {
-        ;
-    }
-
-    @Override
-    public boolean taskNameExists(String projectName, String taskName) {
-        return false;
-    }
-
-    @Override
-    public void completeTask(String projectName, String taskName) {
-        // TODO: add methods
-    }
-
-    @Override
-    public boolean userHasAccessToTask(String projectName, String taskName, String userEmail) {
-        return false;
-    }
-
-    @Override
-    public boolean memberExists(String projectName, ArrayList<String> workingMembersList) {
-        return false;
-    }
 }

@@ -60,13 +60,13 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
         String endTime = createMeetingInputData.getEndTime();
         String projectName = createMeetingInputData.getProjectName();
 
-        if (!createMeetingDataAccessObject.projectNameExists(projectName, meetingName)) {
+        if (!createMeetingDataAccessObject.meetingNameExists(projectName, meetingName)) {
             createMeetingPresenter.prepareFailView("Meeting name is already taken");
         } else if (!createMeetingDataAccessObject.memberExists(projectName, participantEmail)) {
             createMeetingPresenter.prepareFailView("Member does not exist");
         } else {
             Meeting newMeeting = meetingFactory.create(meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
-            createMeetingDataAccessObject.saveMeeting(projectName, newMeeting);
+            createMeetingDataAccessObject.saveMeeting(newMeeting);
 
             for (String toEmail: participantEmail) {
                 try {
@@ -78,6 +78,5 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
             CreateMeetingOutputData createMeetingOutputData = new CreateMeetingOutputData(meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
             createMeetingPresenter.prepareSuccessView(createMeetingOutputData);
         }
-
     }
 }
