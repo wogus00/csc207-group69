@@ -8,6 +8,12 @@ import javax.mail.internet.AddressException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Public interactor class for "Create Project" use case.
+ * It is responsible for executing the  business logic associated with creating the project.
+ * Interacts with FirebaseDataAccessObject to create the project and save it to the database, GmailDataAccessObject to send emails, and communicates with the presenter
+ * to update the view based on completion of the use case.
+ */
 public class CreateProjectInteractor implements CreateProjectInputBoundary {
     final CreateProjectDataAccessInterface createProjectDataAccessObject;
 
@@ -15,6 +21,12 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
     final CreateProjectOutputBoundary createProjectPresenter;
     final ProjectFactory projectFactory;
 
+    /**
+     * @param projectDataAccessInterface Interface implemented by FirebaseDataAccessObject responsible for communicating with Google Firebase.
+     * @param gmailDataAccessInterface Interface implemented by GmailDataAccessObject responsible for communicating with Gmail API
+     * @param createProjectOutputBoundary Output Boundary to present the result of the creating project
+     * @param projectFactory ProjectFactory entity responsible for creating the project.
+     */
     public CreateProjectInteractor(CreateProjectDataAccessInterface projectDataAccessInterface,
                                    CreateProjectGmailDataAccessInterface gmailDataAccessInterface,
                                    CreateProjectOutputBoundary createProjectOutputBoundary,
