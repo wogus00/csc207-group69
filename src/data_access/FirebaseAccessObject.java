@@ -108,6 +108,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
 
 
 
+
     public void addMemberToProject(String projectName, String email) {
         // TODO: add member to project
     }
@@ -117,14 +118,31 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     }
 
     public boolean existsByName(String projectName) {
-        Iterable<CollectionReference> collections = db.listCollections();
-        for (CollectionReference collRef : collections) {
-            if (collRef.getId().equals(projectName)){
+        DocumentReference docRef = db.collection("IDCollection").document("IDCollection");
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot IDInfo = null;
+        try {
+            IDInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        };
+        ArrayList<String> arrayList = (ArrayList<String>) IDInfo.get("IDCollection");
+        String[] collections;
+        if (arrayList == null) {
+            collections = new String[0];
+        } else {
+            collections = arrayList.toArray(new String[0]);
+        }
+        CollectionName collectionName = new CollectionName(collections, this);
+        Iterator<CollectionReference> collectionIterator = collectionName.iterator();
+        while (collectionIterator.hasNext()){
+            if (collectionIterator.next().getId().equals(projectName)) {
                 return true;
             }
         }
         return false;
-
     }
 
     @Override
