@@ -10,6 +10,8 @@ import entity.Meeting;
 import entity.Project;
 import entity.ProjectFactory;
 import entity.Task;
+import entity.Meeting;
+import entity.MeetingFactory;
 import use_case.add_email.AddEmailDataAccessInterface;
 import use_case.complete_task.CompleteTaskDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
@@ -24,15 +26,16 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, LoginDataAccessInterface {
     Firestore db;
     ProjectFactory projectFactory;
 
     private final Map<String, Integer> headers = new LinkedHashMap<>();
     private final Map<String, Project> projects = new HashMap<>();
+
     // Load Firebase Admin SDK credentials
     public FirebaseAccessObject() {
-    FileInputStream serviceAccount;
+        FileInputStream serviceAccount;
         try {
             serviceAccount = new FileInputStream("Google_Firebase_SDK.json");
             FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
@@ -44,9 +47,9 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     }
 
     public void save(Project project) {
-            String projectName = project.getProjectName();
-            String leaderEmail = project.getLeaderEmail();
-            ArrayList<String> memberEmails = project.getMemberEmails();
+        String projectName = project.getProjectName();
+        String leaderEmail = project.getLeaderEmail();
+        ArrayList<String> memberEmails = project.getMemberEmails();
 
             DocumentReference docRef = db.collection(projectName).document("projectInfo");
             Map<String, Object> data = new HashMap<>();
@@ -74,7 +77,8 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             throw new RuntimeException(e);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
-        };
+        }
+        ;
         String leaderEmail = projectInfo.getString("leaderEmail");
         ArrayList<String> memberEmails = (ArrayList<String>) projectInfo.get("memberEmails");
         Project project = new CommonProject(projectName, leaderEmail, memberEmails);
@@ -139,17 +143,20 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             String meetingDate = meeting.getMeetingDate();
             String startTime = meeting.getStartTime();
             String endTime = meeting.getEndTime();
+            String projectName = meeting.getProjectName();
 
-            DocumentReference docRef = db.collection(projectName).document("meetingInfo");
+            DocumentReference docRef = db.collection(meetingName).document("meetingInfo");
             Map<String, Object> data = new HashMap<>();
             data.put("meetingName", meetingName);
             data.put("participantEmail", participantEmail);
             data.put("meetingDate", meetingDate);
             data.put("startTime", startTime);
             data.put("endTime", endTime);
+            data.put("projectName", projectName);
             ApiFuture<WriteResult> result = docRef.set(data);
         }
     }
+}
 
 
     public boolean memberExists(String projectName, String email){

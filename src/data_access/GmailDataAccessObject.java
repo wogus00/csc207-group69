@@ -150,4 +150,23 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
     public Message sendTaskCompletionEmail(String fromEmail, String toEmail, String taskName) {
         return null;
     }
+
+    @Override
+    public Message sendMeetingCreationEmail(String fromEmail, String toEmail, String meetingName) throws MessagingException, IOException {
+        String messageSubject =  "You are invited to meeting: " + meetingName;
+        String bodyText = fromEmail + "has invited you to" + meetingName + "\nPlease check your meeting list for details.";
+        Message message = mimeEncoder(fromEmail, toEmail, messageSubject, bodyText);
+        try {
+            message = service.users().messages().send("me", message).execute();
+            return message;
+        } catch (GoogleJsonResponseException e) {
+            GoogleJsonError error = e.getDetails();
+            if (error.getCode() == 403) {
+                System.err.println("Unable to send message: " + e.getDetails());
+            } else {
+                throw e;
+            }
+        }
+        return null;
+    }
 }

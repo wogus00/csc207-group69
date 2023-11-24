@@ -22,7 +22,7 @@ public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
      * @param viewManagerModel View manager model that is responsible for managing the active view.
      */
     public CreateMeetingPresenter(ViewManagerModel viewManagerModel,
-                                  CreateMeetingViewModel createMeetingViewModel,) {
+                                  CreateMeetingViewModel createMeetingViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.createMeetingViewModel = createMeetingViewModel;
     }
@@ -42,8 +42,5 @@ public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
      */
     @Override
     public void prepareFailView(String error) {
-        CreateMeetingState createMeetingState = CreateMeetingViewModel.getState();
-        createMeetingState.setMeetingNameError(error);
-        createMeetingViewModel.firePropertyChanged();
     }
 }

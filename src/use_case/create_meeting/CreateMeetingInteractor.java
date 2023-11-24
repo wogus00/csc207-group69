@@ -3,6 +3,7 @@ package use_case.create_meeting;
 import entity.Meeting;
 import entity.MeetingFactory;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -59,9 +60,9 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
         String endTime = createMeetingInputData.getEndTime();
         String projectName = createMeetingInputData.getProjectName();
 
-        if (!createMeetingDataAccessObject.meetingNameTaken(projectName, meetingName)) {
+        if (!createMeetingDataAccessObject.projectNameExists(projectName, meetingName)) {
             createMeetingPresenter.prepareFailView("Meeting name is already taken");
-        } else if (!createMeetingDataAccessObject.participantsExist(projectName, participantEmail)) {
+        } else if (!createMeetingDataAccessObject.memberExists(projectName, participantEmail)) {
             createMeetingPresenter.prepareFailView("Member does not exist");
         } else {
             Meeting newMeeting = meetingFactory.create(meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
@@ -70,7 +71,7 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
             for (String toEmail: participantEmail) {
                 try {
                     createMeetingGmailAccessObject.sendMeetingCreationEmail(toEmail, fromEmail, meetingName);
-                } catch (MessagingException | IOException e) {
+                } catch (IOException | MessagingException e) {
                     throw new RuntimeException(e);
                 }
             }
