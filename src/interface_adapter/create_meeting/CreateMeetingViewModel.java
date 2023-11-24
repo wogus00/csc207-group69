@@ -57,7 +57,7 @@ public class CreateMeetingViewModel extends ViewModel {
      * Getter method that returns the current state of the create meeting process.
      * @return state that represents current state of the create meeting process.
      */
-    public static CreateMeetingState getState() {
+    public CreateMeetingState getState() {
         return state;
     }
 }
