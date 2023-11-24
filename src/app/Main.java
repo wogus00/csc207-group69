@@ -5,6 +5,9 @@ import data_access.GmailDataAccessObject;
 import entity.CommonProjectFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.create_project.CreateProjectViewModel;
+import interface_adapter.add_email.AddEmailViewModel;
+import interface_adapter.remove_email.RemoveEmailViewModel;
+import interface_adapter.set_leader.SetLeaderViewModel;
 
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageViewModel;
@@ -12,6 +15,9 @@ import view.CreateProjectView;
 import view.LoginView;
 import view.MainPageView;
 import view.ViewManager;
+import view.AddEmailView;
+import view.RemoveEmailView;
+import view.SetLeaderView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,7 +58,19 @@ public class Main {
         MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel);
         views.add(mainPageView, mainPageView.viewName);
 
-        viewManagerModel.setActiveView(loginView.viewName);
+        AddEmailViewModel addEmailViewModel = new AddEmailViewModel();
+        AddEmailView addEmailView = AddEmailUseCaseFactory.addEmailView(viewManagerModel,  addEmailViewModel, firebaseAccessObject);
+        views.add(addEmailView, addEmailView.viewName);
+
+        RemoveEmailViewModel removeEmailViewModel = new RemoveEmailViewModel();
+        RemoveEmailView removeEmailView = RemoveEmailUseCaseFactory.removeEmailView(viewManagerModel,  removeEmailViewModel, firebaseAccessObject);
+        views.add(removeEmailView, removeEmailView.viewName);
+
+        SetLeaderViewModel setLeaderViewModel = new SetLeaderViewModel();
+        SetLeaderView setLeaderView = SetLeaderUseCaseFactory.setLeaderView(viewManagerModel,  setLeaderViewModel, firebaseAccessObject);
+        views.add(setLeaderView, setLeaderView.viewName);
+
+        viewManagerModel.setActiveView(addEmailView.viewName);
         viewManagerModel.firePropertyChanged();
         application.pack();
         application.setVisible(true);
