@@ -50,7 +50,7 @@ class CreateProjectInteractorTest {
      * Tests the scenario where a project already exists in the system.
      * The method should verify that the interactor correctly identifies the existing project
      * and calls the presenter's prepareFailView method with the appropriate message.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException If an I/O error occurs
      */
     @Test
     void testProjectAlreadyExists() throws IOException, AddressException {
@@ -70,8 +70,8 @@ class CreateProjectInteractorTest {
      * Tests the successful creation of a new project.
      * This method checks if the interactor correctly handles the project creation process,
      * including saving the project and notifying the members via email.
-     * @throws IOException if an I/O error occurs
-     * @throws AddressException if there is an issue with the email addresses
+     * @throws IOException If an I/O error occurs
+     * @throws AddressException If there is an issue with the email addresses
      */
     @Test
     void testSuccessfulProjectCreation() throws IOException, AddressException {

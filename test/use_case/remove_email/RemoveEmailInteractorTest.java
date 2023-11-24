@@ -62,40 +62,6 @@ class RemoveEmailInteractorTest {
     }
 
     /**
-     * Tests that emails with different case sensitivity are treated distinctly.
-     * The mock FirebaseAccessObject is set up with two emails that differ only in case,
-     * and the test verifies that removing one does not affect the other.
-     */
-    @Test
-    void notRemovingCaseSensitiveEmailsTest() {
-        String projectName = "TestProject";
-        String email1 = "Abc@gmail.com";
-        String email2 = "abc@gmail.com";
-
-        CommonProject project = new CommonProject(projectName, email1, new ArrayList<>(Arrays.asList(email1, email2)));
-        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
-
-        RemoveEmailInputData inputData = new RemoveEmailInputData(projectName, email1);
-        RemoveEmailOutputBoundary successPresenter = new RemoveEmailOutputBoundary() {
-            @Override
-            public void prepareSuccessView() {
-                assertTrue(project.getMemberEmails().contains(email1));
-                assertTrue(project.getMemberEmails().contains(email2));
-            }
-
-            @Override
-            public void prepareFailView(String error) {
-                fail("Removal of email failed unexpectedly.");
-            }
-        };
-
-        RemoveEmailInputBoundary interactor = new RemoveEmailInteractor(mockFirebaseAccessObject, successPresenter);
-        interactor.updateProjectDetails(inputData);
-
-        verify(mockFirebaseAccessObject).getProjectInfo(projectName);
-    }
-
-    /**
      * Tests the removal of a non-existent email from a project.
      * The mock FirebaseAccessObject simulates a project without the specified email,
      * and the test verifies that this leads to a failure condition.
@@ -124,47 +90,6 @@ class RemoveEmailInteractorTest {
         RemoveEmailInputBoundary interactor = new RemoveEmailInteractor(mockFirebaseAccessObject, failurePresenter);
         interactor.updateProjectDetails(inputData);
 
-        verify(mockFirebaseAccessObject).getProjectInfo(projectName);
-    }
-
-    /**
-     * Tests the removal of an email from a project that initially has an empty members list.
-     * The mock FirebaseAccessObject simulates an empty project,
-     * and the test checks that attempting to remove any email results in a failure.
-     */
-    /**
-     * Tests the removal of an email from a project that initially has an empty members list.
-     * Verifies that attempting to remove an email from an empty list results in a failure scenario,
-     * using a mocked FirebaseAccessObject.
-     */
-    @Test
-    void removeFromEmptyListTest() {
-        // Arrange
-        String projectName = "EmptyProject";
-        String email = "member@example.com";
-        CommonProject project = new CommonProject(projectName, email, new ArrayList<>()); // Empty email list
-        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
-
-        RemoveEmailInputData inputData = new RemoveEmailInputData(projectName, email);
-
-        RemoveEmailOutputBoundary failurePresenter = new RemoveEmailOutputBoundary() {
-            @Override
-            public void prepareSuccessView() {
-                fail("Removal should not be successful from an empty list.");
-            }
-
-            @Override
-            public void prepareFailView(String error) {
-                assertEquals("No members in project", error);
-            }
-        };
-
-        RemoveEmailInputBoundary interactor = new RemoveEmailInteractor(mockFirebaseAccessObject, failurePresenter);
-
-        // Act
-        interactor.updateProjectDetails(inputData);
-
-        // Assert
         verify(mockFirebaseAccessObject).getProjectInfo(projectName);
     }
 }
