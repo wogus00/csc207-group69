@@ -4,7 +4,8 @@ import java.util.*;
 import java.sql.Time;
 
 /**
- * State class.
+ * State class for create meeting use case.
+ * This class stores data about the meeting and any errors encountered in its creation.
  */
 public class CreateMeetingState {
     private String meetingName = "";

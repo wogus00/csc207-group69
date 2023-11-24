@@ -136,9 +136,9 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     public void saveMeeting(String projectName, String meetingName){
         if (!projectNameExists(projectName, meetingName)){
             ArrayList<String> participantEmail = meeting.getParticipantEmail();
-            LocalDate meetingDate = meeting.getMeetingDate();
-            Time startTime = meeting.getStartTime();
-            Time endTime = meeting.getEndTime();
+            String meetingDate = meeting.getMeetingDate();
+            String startTime = meeting.getStartTime();
+            String endTime = meeting.getEndTime();
 
             DocumentReference docRef = db.collection(projectName).document("meetingInfo");
             Map<String, Object> data = new HashMap<>();
