@@ -5,10 +5,7 @@ import use_case.create_meeting.CreateMeetingInputData;
 import java.util.*;
 
 /**
- * Controller class is responsible for creating a meeting.
- * This class takes inputs from the user about the details of the meeting and
- * passes it to the Create Meeting use case interactor.
- *
+ * Controller class.
  */
 
 public class CreateMeetingController {
