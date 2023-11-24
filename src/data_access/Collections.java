@@ -1,17 +1,16 @@
 package data_access;
 
 import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class CollectionName implements Iterable<CollectionReference> {
+public class Collections implements Iterable<CollectionReference> {
 
     FirebaseAccessObject firebaseAccessObject;
     String[] collectionList;
 
-    public CollectionName (String[] collectionList, FirebaseAccessObject firebaseAccessObject) {
+    public Collections (String[] collectionList, FirebaseAccessObject firebaseAccessObject) {
         this.collectionList = collectionList;
         this.firebaseAccessObject = firebaseAccessObject;
     }

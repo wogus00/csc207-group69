@@ -59,6 +59,24 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             docRefTask.set(data1);
             docRefMeeting.set(data1);
             docRefAnnounce.set(data1);
+            DocumentReference docRefCollection = db.collection("IDCollection").document("IDCollection");
+            ApiFuture<DocumentSnapshot> snapShot = docRefCollection.get();
+            DocumentSnapshot IDInfo = null;
+            try {
+                IDInfo = snapShot.get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            };
+            ArrayList<String> arrayList = (ArrayList<String>) IDInfo.get("IDCollection");
+            Map<String, Object> data2 = new HashMap<>();
+            if (arrayList == null) {
+                arrayList = new ArrayList<>();
+            }
+            arrayList.add(projectName);
+            data2.put("IDCollection",arrayList);
+            docRefCollection.set(data2);
     }
 
 
@@ -129,14 +147,14 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             throw new RuntimeException(e);
         };
         ArrayList<String> arrayList = (ArrayList<String>) IDInfo.get("IDCollection");
-        String[] collections;
+        String[] collectionName;
         if (arrayList == null) {
-            collections = new String[0];
+            collectionName = new String[0];
         } else {
-            collections = arrayList.toArray(new String[0]);
+            collectionName = arrayList.toArray(new String[0]);
         }
-        CollectionName collectionName = new CollectionName(collections, this);
-        Iterator<CollectionReference> collectionIterator = collectionName.iterator();
+        Collections collections = new Collections(collectionName, this);
+        Iterator<CollectionReference> collectionIterator = collections.iterator();
         while (collectionIterator.hasNext()){
             if (collectionIterator.next().getId().equals(projectName)) {
                 return true;
