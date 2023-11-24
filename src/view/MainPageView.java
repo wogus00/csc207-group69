@@ -15,7 +15,13 @@ import java.util.Objects;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
-
+/**
+ * View class for main page view in the application's GUI.
+ * It presents information about the project and handles user actions with clicking specific buttons
+ * on the main page
+ * It extends JPanel and implements ActionListener and PropertyChangeListener to interact with
+ * the user actions and model changes.
+ */
 public class MainPageView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewName = "Main Page";
@@ -39,6 +45,15 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
     JButton recentAnnouncement;
     JLabel recentAnnouncementInfo = new JLabel();
 
+    /**
+     * Constructs a new MainPageView class with specific models
+     * Sets up the UI components for the main page view, including function buttons with their action
+     * listeners.
+     *
+     * @param viewManagerModel The model responsible for managing different views in the application.
+     * @param mainPageViewModel The view model for the main page view, manages the state and behavior of the main page view
+     * @param loginViewModel The view model for the login view, manages the state and behavior of the login view
+     */
     public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel, LoginViewModel loginViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.mainPageViewModel = mainPageViewModel;
@@ -369,12 +384,21 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         // Center the window and make it visible
     }
 
-
+    /**
+     * React to a button click that results in evt.
+     *
+     * @param evt The ActionEvent object.
+     */
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent evt) {
 
     }
 
+    /**
+     * React to property changes in the view model.
+     *
+     * @param evt The PropertyChangeEvent object.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         MainPageState state = (MainPageState) evt.getNewValue();

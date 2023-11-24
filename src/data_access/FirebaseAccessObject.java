@@ -58,6 +58,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             docRefAnnounce.set(data1);
     }
 
+
     public Project getProjectInfo(String projectName) {
         DocumentReference docRef = db.collection(projectName).document("projectInfo");
         ApiFuture<DocumentSnapshot> snapShot = docRef.get();
@@ -112,8 +113,14 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         // TODO: remove member from project
     }
 
-    public boolean existsByName(String newProjectName) {
-        //TODO: add ways to check if newProjectName exists in db collection
-        return true;
+    public boolean existsByName(String projectName) {
+        Iterable<CollectionReference> collections = db.listCollections();
+        for (CollectionReference collRef : collections) {
+            if (collRef.getId().equals(projectName)){
+                return true;
+            }
+        }
+        return false;
+
     }
 }
