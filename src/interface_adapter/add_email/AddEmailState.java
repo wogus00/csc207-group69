@@ -1,5 +1,7 @@
 package interface_adapter.add_email;
 
+import interface_adapter.create_announcement.CreateAnnouncementState;
+
 /**
  * The {@code AddEmailState} class represents the state of the view model for the add email process.
  * It holds information about the current state, specifically any error messages that might occur
@@ -18,7 +20,6 @@ public class AddEmailState {
     public AddEmailState(AddEmailState copy) {
         this.error = copy.error;
     }
-
     /**
      * Constructs a new {@code AddEmailState} with no errors.
      * This default constructor initializes the state with no error message, representing
@@ -36,4 +37,5 @@ public class AddEmailState {
     public void setError(String error) {
         this.error = error;
     }
+    public String error(){return error;}
 }

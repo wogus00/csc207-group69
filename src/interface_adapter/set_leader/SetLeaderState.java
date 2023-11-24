@@ -38,4 +38,5 @@ public class SetLeaderState {
     public void setError(String error) {
         this.error = error;
     }
+    public String error(){return error;}
 }

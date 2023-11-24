@@ -8,7 +8,7 @@ import interface_adapter.add_email.AddEmailState;
  * during the email removal process.
  */
 public class RemoveEmailState {
-    private String error;
+    private String error = null;
 
     /**
      * Constructs a copy of an existing {@code RemoveEmailState}.
@@ -38,4 +38,5 @@ public class RemoveEmailState {
     public void setError(String error) {
         this.error = error;
     }
+    public String error(){return error;}
 }
