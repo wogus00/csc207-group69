@@ -45,9 +45,6 @@ public class AddEmailView extends JPanel implements ActionListener, PropertyChan
         this.addEmailViewModel = addEmailViewModel;
         addEmailViewModel.addPropertyChangeListener(this);
 
-        JLabel title = new JLabel(AddEmailViewModel.TITLE_LABEL);
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         LabelTextPanel addEmailInfo = new LabelTextPanel(
                 new JLabel(addEmailViewModel.ADD_EMAIL_LABEL), titleInputField);
 
@@ -101,7 +98,6 @@ public class AddEmailView extends JPanel implements ActionListener, PropertyChan
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        this.add(title);
         this.add(addEmailInfo);
         this.add(buttons);
     }
