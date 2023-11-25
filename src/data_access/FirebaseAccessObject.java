@@ -113,24 +113,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     }
 
     public boolean existsByName(String projectName) {
-        DocumentReference docRef = db.collection("IDCollection").document("IDCollection");
-        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
-        DocumentSnapshot IDInfo = null;
-        try {
-            IDInfo = snapShot.get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        };
-        ArrayList<String> arrayList = (ArrayList<String>) IDInfo.get("IDCollection");
-        String[] collectionName;
-        if (arrayList == null) {
-            collectionName = new String[0];
-        } else {
-            collectionName = arrayList.toArray(new String[0]);
-        }
-        Collections collections = new Collections(collectionName, this);
+        Collections collections = new Collections(this);
         Iterator<CollectionReference> collectionIterator = collections.iterator();
         while (collectionIterator.hasNext()){
             if (collectionIterator.next().getId().equals(projectName)) {
