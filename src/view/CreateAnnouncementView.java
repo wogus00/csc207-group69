@@ -3,6 +3,7 @@ import interface_adapter.create_announcement.CreateAnnouncementController;
 import interface_adapter.create_announcement.CreateAnnouncementState;
 import interface_adapter.create_announcement.CreateAnnouncementViewModel;
 
+import javax.mail.internet.AddressException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,9 +12,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 
+/**
+ * The view component for creating announcements in the application.
+ * It provides user interface elements for users to input announcement details and send them.
+ */
 public class CreateAnnouncementView extends JPanel implements ActionListener, PropertyChangeListener {
-    public final String viewName = "Make an announcement";
+    public final String viewName = "Create announcement";
 
     private final CreateAnnouncementViewModel createAnnouncementViewModel;
 
@@ -27,7 +33,16 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
 
     private final JButton cancel;
 
-    public CreateAnnouncementView(CreateAnnouncementController controller, CreateAnnouncementViewModel createAnnouncementViewModel) {
+    /**
+     * Constructs a CreateAnnouncementView with the specified controller and view model.
+     *
+     * @param controller                   The controller handling the announcement creation logic.
+     * @param createAnnouncementViewModel  The view model providing the state and properties for the view.
+     */
+
+    public CreateAnnouncementView(CreateAnnouncementController controller,
+                                  CreateAnnouncementViewModel createAnnouncementViewModel) {
+
         this.createAnnouncementController = controller;
         this.createAnnouncementViewModel = createAnnouncementViewModel;
         createAnnouncementViewModel.addPropertyChangeListener(this);
@@ -53,10 +68,21 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
                         if (evt.getSource().equals(announcementSent)) {
                             CreateAnnouncementState currentState = createAnnouncementViewModel.getState();
 
-                            String currentTitle = currentState.getAnnouncementTitle();
-                            String currentMessage = currentState.getMessage();
+                            try{
+                                String currentTitle = currentState.getAnnouncementTitle();
+                                String currentMessage = currentState.getMessage();
+                                String author = currentState.getAuthor();
+                                createAnnouncementController.execute(currentTitle, currentMessage, author);
+                            } catch (IOException | AddressException e) {
+                                throw new RuntimeException(e);
+                            }
+                            currentState = createAnnouncementViewModel.getState();
+                            if (currentState.getAnnouncementTitleError() == null) {
+                                JOptionPane.showMessageDialog(CreateAnnouncementView.this, "create announcement successfully");
+                            }
 
-                            createAnnouncementController.execute(currentTitle, currentMessage);
+
+
                         }
                     }
                 }
@@ -68,8 +94,8 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
                     @Override
                     public void keyTyped(KeyEvent e) {
                         CreateAnnouncementState currentState = createAnnouncementViewModel.getState();
-
-                        currentState.setAnnouncementTitle(titleInputField.getText());
+                        String text = titleInputField.getText() + e.getKeyChar();
+                        currentState.setAnnouncementTitle(text);
                         createAnnouncementViewModel.setState(currentState);
                     }
 
@@ -90,8 +116,8 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
                     @Override
                     public void keyTyped(KeyEvent e) {
                         CreateAnnouncementState currentState = createAnnouncementViewModel.getState();
-
-                        currentState.setMessage(messageInputFiled.getText());
+                        String text = messageInputFiled.getText() + e.getKeyChar();
+                        currentState.setMessage(text);
 
                         createAnnouncementViewModel.setState(currentState);
                     }
@@ -117,20 +143,27 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
         this.add(buttons);
     }
 
-    public void actionPerfomed(ActionEvent evt) {
+
+    /**
+     * Handles action events triggered within the view.
+     *
+     * @param e The ActionEvent object.
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
         System.out.println("Cancel not implemented yet.");
     }
 
+    /**
+     * Responds to property changes in the view model.
+     *
+     * @param evt The PropertyChangeEvent object.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         CreateAnnouncementState state = (CreateAnnouncementState) evt.getNewValue();
         if (state.getAnnouncementTitleError() != null) {
             JOptionPane.showMessageDialog(this, state.getAnnouncementTitleError());
         }
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JOptionPane.showConfirmDialog(this, "Cancel not implemented yet.");
     }
 }

@@ -1,5 +1,7 @@
 package interface_adapter.main_page;
 
+import entity.Announcement;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -310,4 +312,5 @@ public class MainPageState {
 
     }
 
+    public void addAnnouncement(String announcementTitle){this.announcements.add(announcementTitle);}
 }
