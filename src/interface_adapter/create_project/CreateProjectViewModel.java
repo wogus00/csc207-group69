@@ -8,6 +8,7 @@ import java.beans.PropertyChangeSupport;
 public class CreateProjectViewModel extends ViewModel {
 
     public static final String CREATE_BUTTON_LABEL = "Create Project";
+    public static final String LOGIN_BUTTON_LABEL = "Login";
     public static final String TITLE_LABEL = "Create Project View";
     public static final String PROJECTNAME_LABEL = "Enter project name";
     public static final String LEADER_EMAIL_LABEL = "Enter leader's email";

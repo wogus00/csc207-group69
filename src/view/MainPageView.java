@@ -1,6 +1,8 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.login.LoginState;
+import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageState;
 import interface_adapter.main_page.MainPageViewModel;
 
@@ -9,15 +11,17 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
+/**
+ * View class for main page view in the application's GUI.
+ * It presents information about the project and handles user actions with clicking specific buttons
+ * on the main page
+ * It extends JPanel and implements ActionListener and PropertyChangeListener to interact with
+ * the user actions and model changes.
+ */
 public class MainPageView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewName = "Main Page";
@@ -25,6 +29,8 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
     final ViewManagerModel viewManagerModel;
 
     final MainPageViewModel mainPageViewModel;
+
+    final LoginViewModel loginViewModel;
 
     JLabel titleLabel;
     JLabel leaderEmailInfo = new JLabel();
@@ -39,9 +45,19 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
     JButton recentAnnouncement;
     JLabel recentAnnouncementInfo = new JLabel();
 
-    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel) {
+    /**
+     * Constructs a new MainPageView class with specific models
+     * Sets up the UI components for the main page view, including function buttons with their action
+     * listeners.
+     *
+     * @param viewManagerModel The model responsible for managing different views in the application.
+     * @param mainPageViewModel The view model for the main page view, manages the state and behavior of the main page view
+     * @param loginViewModel The view model for the login view, manages the state and behavior of the login view
+     */
+    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel, LoginViewModel loginViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.mainPageViewModel = mainPageViewModel;
+        this.loginViewModel = loginViewModel;
         this.mainPageViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BorderLayout());
@@ -144,13 +160,14 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         JButton meetingButton = new JButton("Meeting");
         JButton announcementButton = new JButton("Announcement");
         JButton projectButton = new JButton("Project");
+        JButton logoutButton = new JButton("Log out");
 
 
         typeButtonPanel.add(taskButton);
         typeButtonPanel.add(meetingButton);
         typeButtonPanel.add(announcementButton);
         typeButtonPanel.add(projectButton);
-
+        typeButtonPanel.add(logoutButton);
 
 
         // Additional button panels for extension, initially not visible
@@ -283,6 +300,23 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
             this.repaint();
         });
 
+        logoutButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        LoginState loginState = new LoginState();
+                        loginState.setLogout(true);
+                        loginViewModel.setState(loginState);
+                        loginViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("log in");
+                        viewManagerModel.firePropertyChanged();
+                        MainPageState state = new MainPageState();
+                        mainPageViewModel.setState(state);
+                        mainPageViewModel.firePropertyChanged();
+                    }
+                }
+        );
+
         buttonT1.addActionListener(     // create task
                 new ActionListener() {
                     @Override
@@ -350,12 +384,21 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         // Center the window and make it visible
     }
 
-
+    /**
+     * React to a button click that results in evt.
+     *
+     * @param evt The ActionEvent object.
+     */
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent evt) {
 
     }
 
+    /**
+     * React to property changes in the view model.
+     *
+     * @param evt The PropertyChangeEvent object.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         MainPageState state = (MainPageState) evt.getNewValue();
