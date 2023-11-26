@@ -19,10 +19,10 @@ public class MainPageState {
 
     private ArrayList<String> memberEmail = new ArrayList<>();
 
-    private ArrayList<String> taskList = new ArrayList<>(Arrays.asList(""));
-    private ArrayList<String> meetingList = new ArrayList<>(Arrays.asList(""));
+    private ArrayList<String> taskList = new ArrayList<>();
+    private ArrayList<String> meetingList = new ArrayList<>();
 
-    private ArrayList<String> announcements = new ArrayList<>(Arrays.asList("No Announcements"));
+    private ArrayList<String> announcements = new ArrayList<>();
 
     /**
      * Creates a new MainPageState as a copy of another MainPageState.
