@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 
 import javax.swing.*;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
@@ -72,6 +73,33 @@ public class LoginViewTest {
         loginView.propertyChange(evt);
         assertEquals("", loginView.projectNameInputField.getText());
         assertEquals("", loginView.userEmailInputField.getText());
+    }
+
+    @Test
+    public void testLogInButtonActionListener() {
+        LoginState mockState = new LoginState();
+        mockState.setProjectName("Test Project");
+        mockState.setUserEmail("test@example.com");
+
+        when(mockLoginViewModel.getState()).thenReturn(mockState);
+
+        // Simulate button click
+        ActionEvent clickEvent = new ActionEvent(loginView.logIn, ActionEvent.ACTION_PERFORMED, "");
+        loginView.logIn.getActionListeners()[0].actionPerformed(clickEvent);
+
+        // Verify the loginController.execute is called with correct data
+        verify(mockLoginController).execute("Test Project", "test@example.com");
+    }
+
+    @Test
+    public void testCreateButtonActionListener() {
+        // Simulate button click
+        ActionEvent clickEvent = new ActionEvent(loginView.create, ActionEvent.ACTION_PERFORMED, "");
+        loginView.create.getActionListeners()[0].actionPerformed(clickEvent);
+
+        // Verify viewManagerModel.setActiveView is called with "create project"
+        verify(mockViewManagerModel).setActiveView("create project");
+        verify(mockViewManagerModel).firePropertyChanged();
     }
 
 
