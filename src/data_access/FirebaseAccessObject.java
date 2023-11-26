@@ -11,16 +11,18 @@ import entity.Project;
 import entity.ProjectFactory;
 import entity.Task;
 import use_case.add_email.AddEmailDataAccessInterface;
+import use_case.create_meeting.CreateMeetingDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, LoginDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, LoginDataAccessInterface, CreateMeetingDataAccessInterface {
     Firestore db;
     ProjectFactory projectFactory;
 
@@ -127,13 +129,21 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
 
     }
 
-    public boolean meetingNameExists(String projectName, String meetingName){
-        DocumentReference docRefMeeting = db.collection(projectName).document("meetingInfo");
-        return true;
+    public boolean meetingNameExists(String projectName, String meetingName) throws ExecutionException, InterruptedException {
+        DocumentReference docRef = db.collection(projectName).document("meetingInfo");
+        ApiFuture<DocumentSnapshot> snapshot = docRef.get();
+        DocumentSnapshot document = snapshot.get();
+
+        if (document.exists()) {
+            Map<String, Object> meetingInfo = document.getData();
+            return meetingInfo != null && meetingInfo.containsKey(meetingName);
+        } else {
+            return false;
+        }
     }
 
     @Override
-    public void saveMeeting(Meeting meeting){
+    public void saveMeeting(Meeting meeting) throws ExecutionException, InterruptedException {
         String meetingName = meeting.getMeetingName();
         String projectName = meeting.getProjectName();
         if (!meetingNameExists(projectName, meetingName)){
@@ -155,8 +165,27 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     }
 
 
-    public boolean memberExists(String projectName, String email){
-        return true;
+    public boolean memberExists(String projectName, ArrayList<String> emails) throws ExecutionException, InterruptedException {
+        DocumentReference docRef = db.collection(projectName).document("projectInfo");
+        ApiFuture<DocumentSnapshot> snapshot = docRef.get();
+        DocumentSnapshot document = snapshot.get();
+
+        if (document.exists()) {
+            // Get the project's leaderEmail
+            String leaderEmail = document.getString("leaderEmail");
+
+            // Get the project's memberEmails
+            ArrayList<String> memberEmails = (ArrayList<String>) document.get("memberEmails");
+
+            // Check if all provided emails are either leaderEmail or part of memberEmails
+            for (String email : emails) {
+                if (!email.equals(leaderEmail) && (memberEmails == null || !memberEmails.contains(email))) {
+                    return false; // At least one email is not in leaderEmail or memberEmails
+                }
+            }
+            return true; // All emails are either leaderEmail or part of memberEmails
+        }
+        return false; // Project not found
     }
 
 }
