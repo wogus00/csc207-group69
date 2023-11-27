@@ -1,6 +1,7 @@
 package data_access;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -30,6 +31,7 @@ import use_case.create_announcement.CreateAnnouncementDataAccessInterface;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.time.LocalDateTime;
@@ -37,7 +39,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, RemoveEmailDataAccessInterface, SetLeaderDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface {
+
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface {
+
 
     Firestore db;
     ProjectFactory projectFactory;
@@ -90,6 +94,24 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             docRefTask.set(data1);
             docRefMeeting.set(data1);
             docRefAnnounce.set(data1);
+            DocumentReference docRefCollection = db.collection("IDCollection").document("IDCollection");
+            ApiFuture<DocumentSnapshot> snapShot = docRefCollection.get();
+            DocumentSnapshot IDInfo = null;
+            try {
+                IDInfo = snapShot.get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            };
+            ArrayList<String> arrayList = (ArrayList<String>) IDInfo.get("IDCollection");
+            Map<String, Object> data2 = new HashMap<>();
+            if (arrayList == null) {
+                arrayList = new ArrayList<>();
+            }
+            arrayList.add(projectName);
+            data2.put("IDCollection",arrayList);
+            docRefCollection.set(data2);
     }
 
 
@@ -110,32 +132,10 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         return project;
     }
 
-    public ArrayList<String> getInfoList(String projectName, String listType) {
-        ArrayList<String> list = new ArrayList<>();
-
-        DocumentReference docRef = db.collection(projectName).document(listType);
-        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
-        DocumentSnapshot typeInfo = null;
-        try {
-            typeInfo = snapShot.get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        };
-        Map<String, Object> fields = typeInfo.getData();
-        list.addAll(fields.keySet());
-        if (listType.equals("announcementInfo")) {
-            List<String> messageList = new ArrayList<>();
-            for (String key: list) {
-                Map<String, Object> entry = (Map<String, Object>) fields.get(key);
-                messageList.add((String) entry.get("message"));
-            }
-            list = new ArrayList<>();
-            list.addAll(messageList);
-        }
-        return list;
+    public ArrayList<String> getInfoList(String projectName, InfoListRetrieveStrategy infoListRetrieveStrategy) {
+        return (ArrayList<String>) infoListRetrieveStrategy.getInfoList(projectName, this);
     }
+
 
 
 
@@ -266,23 +266,54 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     }
 
     public boolean existsByName(String projectName) {
-        Iterable<CollectionReference> collections = db.listCollections();
-        for (CollectionReference collRef : collections) {
-            if (collRef.getId().equals(projectName)){
+        Collections collections = new Collections(this);
+        Iterator<CollectionReference> collectionIterator = collections.iterator();
+        while (collectionIterator.hasNext()){
+            if (collectionIterator.next().getId().equals(projectName)) {
                 return true;
             }
         }
         return false;
-
     }
 
     @Override
     public void saveTask(String projectName, Task newTask) {
-        ;
+        DocumentReference docRef = db.collection(projectName).document("taskInfo");
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot taskInfo = null;
+        try {
+            taskInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        };
+        LocalDate deadlineDate = newTask.getDeadline();
+        // Convert LocalDate to LocalDateTime (start of the day)
+        LocalDateTime deadlineTime = deadlineDate.atStartOfDay();
+
+        // Convert LocalDateTime to Timestamp
+        Timestamp deadline = Timestamp.of(java.sql.Timestamp.valueOf(deadlineTime));
+
+        Map<String, Object> fields = taskInfo.getData();
+        Map<String, Object> task = new HashMap<>();
+        task.put("taskName", newTask.getTaskName());
+        task.put("supervisor", newTask.getSupervisor());
+        task.put("workingMemberList",newTask.getWorkingMembersList());
+        task.put("deadline",deadline);
+        task.put("comments", newTask.getComments());
+        task.put("status",newTask.getStatus());
+        fields.put(newTask.getTaskName(), task);
+        docRef.set(fields);
     }
 
     @Override
     public boolean taskNameExists(String projectName, String taskName) {
+        TaskListRetrieveStrategy strategy = new TaskListRetrieveStrategy();
+        ArrayList<String> taskList = (ArrayList<String>) strategy.getInfoList(projectName, this);
+        if (taskList.contains(taskName)) {
+            return true;
+        }
         return false;
     }
 
@@ -298,7 +329,27 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
 
     @Override
     public boolean memberExists(String projectName, ArrayList<String> workingMembersList) {
-        return false;
+        ArrayList<String> allMembers = new ArrayList<>();
+        DocumentReference docRef = db.collection(projectName).document("projectInfo");
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot projectInfo = null;
+        try {
+            projectInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        };
+        String leaderEmail = projectInfo.getString("leaderEmail");
+        ArrayList<String> memberEmails = (ArrayList<String>) projectInfo.get("memberEmails");
+        allMembers.add(leaderEmail);
+        allMembers.addAll(memberEmails);
+        for (String member: workingMembersList) {
+            if (!allMembers.contains(member)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
