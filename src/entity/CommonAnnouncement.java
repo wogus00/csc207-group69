@@ -25,20 +25,17 @@ public class CommonAnnouncement implements Announcement {
      * @param creationTime      the time at which the announcement was created
      * @param author            the author of the announcement
      * @param id                the unique identifier for the announcement
-     * @param emailsSent        the emails to be sent the announcement
      */
     public CommonAnnouncement(String announcementTitle,
                               String message,
                               LocalDateTime creationTime,
                               String author,
-                              String id,
-                              ArrayList<String> emailsSent) {
+                              String id) {
         this.announcementTitle = announcementTitle;
         this.message = message;
         this.creationTime = creationTime;
         this.author = author;
         this.id = id;
-        this.emailsSent = emailsSent;
     }
 
     /**
@@ -82,13 +79,4 @@ public class CommonAnnouncement implements Announcement {
     public String getId() { return id; }
 
 
-    /**
-     * Retrieves the emails to be sent the announcement.
-     *
-     * @return the emails to be sent the announcement
-     */
-    @Override
-    public ArrayList<String> getEmailsSent() {
-        return emailsSent;
-    }
 }

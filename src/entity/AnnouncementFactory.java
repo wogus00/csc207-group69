@@ -9,6 +9,5 @@ public interface AnnouncementFactory {
                         String message,
                         LocalDateTime ltd,
                         String author,
-                        String id,
-                        ArrayList<String> emailsSent);
+                        String id);
 }

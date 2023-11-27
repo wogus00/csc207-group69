@@ -15,6 +15,4 @@ public interface Announcement {
 
     String getId();
 
-    ArrayList<String> getEmailsSent();
-
 }
