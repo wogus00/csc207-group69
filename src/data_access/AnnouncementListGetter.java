@@ -1,11 +1,9 @@
 package data_access;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
@@ -14,7 +12,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
-public class AnnouncementListRetrieveStrategy implements InfoListRetrieveStrategy{
+public class AnnouncementListGetter implements InfoListGetter {
 
     @Override
     public List<String> getInfoList(String projectName, FirebaseAccessObject firebaseAccessObject) {

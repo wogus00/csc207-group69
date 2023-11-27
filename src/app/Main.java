@@ -3,8 +3,10 @@ package app;
 import data_access.FirebaseAccessObject;
 import data_access.GmailDataAccessObject;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.complete_task.CompleteTaskViewModel;
 import interface_adapter.create_project.CreateProjectViewModel;
 import interface_adapter.add_email.AddEmailViewModel;
+import interface_adapter.modify_task.ModifyTaskViewModel;
 import interface_adapter.remove_email.RemoveEmailViewModel;
 import interface_adapter.set_leader.SetLeaderViewModel;
 
@@ -12,6 +14,10 @@ import interface_adapter.create_task.CreateTaskViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageViewModel;
 import use_case.login.LoginDataAccessInterface;
+import view.*;
+import view.AddEmailView;
+import view.RemoveEmailView;
+import view.SetLeaderView;
 import view.CreateProjectView;
 import view.CreateTaskView;
 import view.LoginView;
@@ -46,6 +52,8 @@ public class Main {
         MainPageViewModel mainPageViewModel = new MainPageViewModel();
         LoginViewModel loginViewModel = new LoginViewModel();
         CreateTaskViewModel createTaskViewModel = new CreateTaskViewModel();
+        CompleteTaskViewModel completeTaskViewModel = new CompleteTaskViewModel();
+        ModifyTaskViewModel modifyTaskViewModel = new ModifyTaskViewModel();
 
         FirebaseAccessObject firebaseAccessObject;
         GmailDataAccessObject gmailDataAccessObject = new GmailDataAccessObject();
@@ -54,11 +62,19 @@ public class Main {
         CreateProjectView createProjectView = CreateProjectUseCaseFactory.createProjectView(viewManagerModel, createProjectViewModel, firebaseAccessObject, gmailDataAccessObject, mainPageViewModel);
         views.add(createProjectView, createProjectView.viewName);
 
-        LoginView loginView = LoginUseCaseFactory.createLoginView(viewManagerModel,loginViewModel,mainPageViewModel, (LoginDataAccessInterface) firebaseAccessObject);
+        LoginView loginView = LoginUseCaseFactory.createLoginView(viewManagerModel,loginViewModel,mainPageViewModel, firebaseAccessObject);
         views.add(loginView, loginView.viewName);
 
+        CreateTaskView createTaskView = CreateTaskUseCaseFactory.createTaskView(viewManagerModel,createTaskViewModel,firebaseAccessObject,gmailDataAccessObject, mainPageViewModel);
+        views.add(createTaskView, createTaskView.viewName);
 
-        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel);
+        ModifyTaskView modifyTaskView = ModifyTaskUseCaseFactory.modifyTaskView(viewManagerModel, modifyTaskViewModel,firebaseAccessObject, gmailDataAccessObject);
+        views.add(modifyTaskView,modifyTaskView.viewName);
+
+        CompleteTaskView completeTaskView = CompleteTaskUseCaseFactory.completeTaskView(viewManagerModel, completeTaskViewModel, firebaseAccessObject, gmailDataAccessObject, mainPageViewModel);
+        views.add(completeTaskView, completeTaskView.viewName);
+
+        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel, createTaskViewModel, completeTaskViewModel, modifyTaskViewModel);
         views.add(mainPageView, mainPageView.viewName);
 
 
@@ -74,7 +90,8 @@ public class Main {
         SetLeaderView setLeaderView = SetLeaderUseCaseFactory.setLeaderView(viewManagerModel,  setLeaderViewModel, firebaseAccessObject);
         views.add(setLeaderView, setLeaderView.viewName);
 
-        viewManagerModel.setActiveView(createTaskView.viewName);
+        viewManagerModel.setActiveView(loginView.viewName);
+
         viewManagerModel.firePropertyChanged();
 
         application.pack();

@@ -8,7 +8,6 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import entity.CommonProject;
 
-import entity.Meeting;
 import entity.Announcement;
 import entity.CommonAnnouncement;
 
@@ -21,6 +20,7 @@ import use_case.create_project.CreateProjectDataAccessInterface;
 import use_case.create_task.CreateTaskDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 
+import use_case.modify_task.ModifyTaskDataAccessInterface;
 import use_case.remove_email.RemoveEmailDataAccessInterface;
 import use_case.set_leader.SetLeaderDataAccessInterface;
 
@@ -36,11 +36,9 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
 
 
-
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface, SetLeaderDataAccessInterface, RemoveEmailDataAccessInterface, AddEmailDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface, SetLeaderDataAccessInterface, RemoveEmailDataAccessInterface, AddEmailDataAccessInterface, ModifyTaskDataAccessInterface {
 
 
     Firestore db;
@@ -132,8 +130,8 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         return project;
     }
 
-    public ArrayList<String> getInfoList(String projectName, InfoListRetrieveStrategy infoListRetrieveStrategy) {
-        return (ArrayList<String>) infoListRetrieveStrategy.getInfoList(projectName, this);
+    public ArrayList<String> getInfoList(String projectName, InfoListGetter infoListGetter) {
+        return (ArrayList<String>) infoListGetter.getInfoList(projectName, this);
     }
 
 
@@ -297,12 +295,37 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
 
     @Override
     public boolean taskNameExists(String projectName, String taskName) {
-        TaskListRetrieveStrategy strategy = new TaskListRetrieveStrategy();
+        TaskListGetter strategy = new TaskListGetter();
         ArrayList<String> taskList = (ArrayList<String>) strategy.getInfoList(projectName, this);
         if (taskList.contains(taskName)) {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void deleteOldTask(String projectName, String oldTaskName) {
+        DocumentReference docRef = db.collection(projectName).document("taskInfo");
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot typeInfo = null;
+        try {
+            typeInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+
+        Map<String, Object> fields = typeInfo.getData();
+        ArrayList<String> keyList = new ArrayList<>();
+        Map<String, Object> newFields = new HashMap<>();
+        keyList.addAll(fields.keySet());
+        for (String key: keyList) {
+            if (key != oldTaskName) {
+                newFields.put(key, fields.get(key));
+            }
+        }
+        docRef.set(newFields);
     }
 
     @Override

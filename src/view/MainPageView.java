@@ -9,6 +9,8 @@ import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageState;
 import interface_adapter.main_page.MainPageViewModel;
+import interface_adapter.modify_task.ModifyTaskState;
+import interface_adapter.modify_task.ModifyTaskViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,6 +39,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
     final LoginViewModel loginViewModel;
     CreateTaskViewModel createTaskViewModel;
     CompleteTaskViewModel completeTaskViewModel;
+    ModifyTaskViewModel modifyTaskViewModel;
 
     JLabel titleLabel;
     JLabel leaderEmailInfo = new JLabel();
@@ -60,12 +63,13 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
      * @param mainPageViewModel The view model for the main page view, manages the state and behavior of the main page view
      * @param loginViewModel The view model for the login view, manages the state and behavior of the login view
      */
-    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel, LoginViewModel loginViewModel, CreateTaskViewModel createTaskViewModel, CompleteTaskViewModel completeTaskViewModel) {
+    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel, LoginViewModel loginViewModel, CreateTaskViewModel createTaskViewModel, CompleteTaskViewModel completeTaskViewModel, ModifyTaskViewModel modifyTaskViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.mainPageViewModel = mainPageViewModel;
         this.loginViewModel = loginViewModel;
         this.createTaskViewModel = createTaskViewModel;
         this.completeTaskViewModel = completeTaskViewModel;
+        this.modifyTaskViewModel = modifyTaskViewModel;
         this.mainPageViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BorderLayout());
@@ -342,6 +346,13 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonT2.addActionListener(                // This creates an anonymous subclass of ActionListener and instantiates it.
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        ModifyTaskState modifyTaskState = modifyTaskViewModel.getState();
+                        modifyTaskState.setProjectName(mainPageState.getProjectName());
+                        modifyTaskViewModel.setState(modifyTaskState);
+                        modifyTaskViewModel .firePropertyChanged();
+                        viewManagerModel.setActiveView("Modify Task");
+                        viewManagerModel.firePropertyChanged();
                     }
                 }
         );

@@ -1,8 +1,7 @@
 package use_case.login;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 import data_access.*;
 
 /**
@@ -53,9 +52,9 @@ public class LoginInteractor implements LoginInputBoundary {
             if (!userEmail.equals(leaderEmail) && !memberEmails.contains(userEmail)) {
                 loginPresenter.prepareFailView("User email " + userEmail + " does not exist for the project " + projectName + ".");
             } else {
-                ArrayList<String> taskList = userDataAccessObject.getInfoList(projectName, new TaskListRetrieveStrategy());
-                ArrayList<String> meetingList = userDataAccessObject.getInfoList(projectName, new MeetingListRetrieveStrategy());
-                ArrayList<String> announcements = userDataAccessObject.getInfoList(projectName, new AnnouncementListRetrieveStrategy());
+                ArrayList<String> taskList = userDataAccessObject.getInfoList(projectName, new TaskListGetter());
+                ArrayList<String> meetingList = userDataAccessObject.getInfoList(projectName, new MeetingListGetter());
+                ArrayList<String> announcements = userDataAccessObject.getInfoList(projectName, new AnnouncementListGetter());
                 LoginOutputData loginOutputData = new LoginOutputData(projectName, userEmail, leaderEmail, memberEmails, taskList, meetingList, announcements, false);
                 loginPresenter.prepareSuccessView(loginOutputData);
             }

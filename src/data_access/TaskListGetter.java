@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class TaskListRetrieveStrategy implements InfoListRetrieveStrategy{
+public class TaskListGetter implements InfoListGetter {
 
     @Override
     public List<String> getInfoList(String projectName, FirebaseAccessObject firebaseAccessObject) {

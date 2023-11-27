@@ -1,14 +1,9 @@
 package view;
 
-import data_access.TaskListRetrieveStrategy;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.create_project.CreateProjectState;
 import interface_adapter.create_task.CreateTaskController;
 import interface_adapter.create_task.CreateTaskState;
 import interface_adapter.create_task.CreateTaskViewModel;
-import interface_adapter.login.LoginState;
-import interface_adapter.main_page.MainPageState;
-import interface_adapter.main_page.MainPageViewModel;
 
 import javax.swing.*;
 import java.awt.*;

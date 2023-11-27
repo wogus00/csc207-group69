@@ -20,6 +20,7 @@ import use_case.complete_task.CompleteTaskDataAccessInterface;
 import use_case.complete_task.CompleteTaskGmailDataAccessInterface;
 import use_case.create_project.CreateProjectGmailDataAccessInterface;
 import use_case.create_task.CreateTaskGmailDataAccessInterface;
+import use_case.modify_task.ModifyTaskGmailDataAccessInterface;
 
 import java.io.*;
 import java.util.Properties;
@@ -33,7 +34,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
-public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, CompleteTaskGmailDataAccessInterface {
+public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, CompleteTaskGmailDataAccessInterface, ModifyTaskGmailDataAccessInterface {
 
     private static final String APPLICATION_NAME = "group-project";
 
