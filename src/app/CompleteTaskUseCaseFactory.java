@@ -4,6 +4,7 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.complete_task.CompleteTaskController;
 import interface_adapter.complete_task.CompleteTaskPresenter;
 import interface_adapter.complete_task.CompleteTaskViewModel;
+import interface_adapter.main_page.MainPageViewModel;
 import use_case.complete_task.*;
 import view.CompleteTaskView;
 
@@ -15,15 +16,16 @@ public class CompleteTaskUseCaseFactory {
     public static CompleteTaskView completeTaskView(ViewManagerModel viewManagerModel,
                                                     CompleteTaskViewModel completeTaskViewModel,
                                                     CompleteTaskDataAccessInterface userDataAccessObject,
-                                                    CompleteTaskGmailDataAccessInterface gmailDataAccessObject) {
-        CompleteTaskController completeTaskController = completeTaskUseCase(viewManagerModel, completeTaskViewModel, userDataAccessObject, gmailDataAccessObject);
+                                                    CompleteTaskGmailDataAccessInterface gmailDataAccessObject,
+                                                    MainPageViewModel mainPageViewModel) {
+        CompleteTaskController completeTaskController = completeTaskUseCase(viewManagerModel, completeTaskViewModel, userDataAccessObject, gmailDataAccessObject, mainPageViewModel);
         return new CompleteTaskView(viewManagerModel, completeTaskController, completeTaskViewModel);
 
 
     }
 
-    private static CompleteTaskController completeTaskUseCase(ViewManagerModel viewManagerModel, CompleteTaskViewModel completeTaskViewModel, CompleteTaskDataAccessInterface userDataAccessObject, CompleteTaskGmailDataAccessInterface gmailDataAccessObject) {
-        CompleteTaskOutputBoundary completeTaskOutputBoundary = new CompleteTaskPresenter(viewManagerModel, completeTaskViewModel);
+    private static CompleteTaskController completeTaskUseCase(ViewManagerModel viewManagerModel, CompleteTaskViewModel completeTaskViewModel, CompleteTaskDataAccessInterface userDataAccessObject, CompleteTaskGmailDataAccessInterface gmailDataAccessObject, MainPageViewModel mainPageViewModel) {
+        CompleteTaskOutputBoundary completeTaskOutputBoundary = new CompleteTaskPresenter(viewManagerModel, completeTaskViewModel, mainPageViewModel);
 
         CompleteTaskInputBoundary completeTaskInteractor = new CompleteTaskInteractor(userDataAccessObject, gmailDataAccessObject, completeTaskOutputBoundary);
         return new CompleteTaskController(completeTaskInteractor);

@@ -79,9 +79,13 @@ public class CreateTaskView extends JPanel implements ActionListener, PropertyCh
                             String workingMembers = currentState.getWorkingMembersList();
                             String deadline = currentState.getDeadline();
                             String comments = currentState.getComments();
+                            currentState.setCreateTaskError(null);
+                            createTaskViewModel.setState(currentState);
                             createTaskController.execute(projectName, taskName, supervisor, workingMembers, deadline, comments);
                             if (createTaskViewModel.getState().getCreateTaskError() == null) {
                                 JOptionPane.showMessageDialog(CreateTaskView.this, "created task successfully");
+                            } else {
+                                JOptionPane.showMessageDialog(CreateTaskView.this, createTaskViewModel.getState().getCreateTaskError());
                             }
                         }
                     }
@@ -196,9 +200,6 @@ public class CreateTaskView extends JPanel implements ActionListener, PropertyCh
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        CreateTaskState state = (CreateTaskState) evt.getNewValue();
-        if (state.getCreateTaskError() != null) {
-            JOptionPane.showMessageDialog(this, state.getCreateTaskError());
-        }
+
     }
 }

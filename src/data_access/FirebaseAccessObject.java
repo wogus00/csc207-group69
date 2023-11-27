@@ -40,7 +40,7 @@ import java.util.*;
 
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface, SetLeaderDataAccessInterface, RemoveEmailDataAccessInterface, AddEmailDataAccessInterface {
 
 
     Firestore db;
@@ -51,7 +51,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     // Load Firebase Admin SDK credentials
     public FirebaseAccessObject() {
         try {
-            serviceAccount = new FileInputStream("Google_Firebase_SDK.json");
+            FileInputStream serviceAccount = new FileInputStream("Google_Firebase_SDK.json");
             FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
             boolean hasBeenInitialized = false;
             List<FirebaseApp> firebaseApps = FirebaseApp.getApps();
@@ -175,18 +175,6 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         }
     }
 
-    public boolean existsByName(String newProjectName) {
-        //TODO: add ways to check if newProjectName exists in db collection
-        try {
-            DocumentReference docRef = db.collection(newProjectName).document("projectInfo");
-            ApiFuture<DocumentSnapshot> future = docRef.get();
-            DocumentSnapshot document = future.get();
-            return document.exists();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     @Override
     public void removeMemberFromProject(String projectName, String email) {
@@ -319,11 +307,44 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
 
     @Override
     public void completeTask(String projectName, String taskName) {
-        // TODO: add methods
+        DocumentReference docRef = db.collection(projectName).document("taskInfo");
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot typeInfo = null;
+        try {
+            typeInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+
+        Map<String, Object> fields = typeInfo.getData();
+        Map<String, Object> task = (Map<String, Object>) fields.get(taskName);
+        task.put("status", true);
+        fields.put(taskName, task);
+        docRef.set(fields);
     }
 
     @Override
     public boolean userHasAccessToTask(String projectName, String taskName, String userEmail) {
+        DocumentReference docRef = db.collection(projectName).document("taskInfo");
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot typeInfo = null;
+        try {
+            typeInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+
+        Map<String, Object> fields = typeInfo.getData();
+        Map<String, Object> task = (Map<String, Object>) fields.get(taskName);
+        String supervisor = (String) task.get("supervisor");
+        ArrayList<String> memberList = (ArrayList<String>) task.get("workingMemberList");
+        if (supervisor.equals(userEmail) | memberList.contains(userEmail)) {
+            return true;
+        }
         return false;
     }
 

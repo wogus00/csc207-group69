@@ -84,12 +84,16 @@ public class CompleteTaskView extends JPanel implements ActionListener, Property
                             String projectName = currentState.getProjectName();
                             String taskName = currentState.getTaskName();
                             String userEmail = currentState.getUserEmail();
+                            currentState.setTaskNameError(null);
+                            completeTaskViewModel.setState(currentState);
                             completeTaskController.execute(projectName, taskName, userEmail);
                             currentState = completeTaskViewModel.getState();
                             if (currentState.getTaskNameError() == null) {
                                 JOptionPane.showMessageDialog(CompleteTaskView.this, "completed task successfully");
                                 viewManagerModel.setActiveView("Main Page");
                                 viewManagerModel.firePropertyChanged();
+                            } else {
+                                JOptionPane.showMessageDialog(CompleteTaskView.this, currentState.getTaskNameError());
                             }
                         }
                     }

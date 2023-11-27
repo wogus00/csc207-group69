@@ -48,9 +48,8 @@ public class CompleteTaskInteractor implements CompleteTaskInputBoundary {
 
         } else {
             completeTaskDataAccessObject.completeTask(projectName, taskName);
+            CompleteTaskOutputData completeTaskOutputData = new CompleteTaskOutputData(taskName);
+            completeTaskPresenter.prepareSuccessView(completeTaskOutputData);
         }
-
-        CompleteTaskOutputData completeTaskOutputData = new CompleteTaskOutputData();
-        completeTaskPresenter.prepareSuccessView(completeTaskOutputData);
     }
 }
