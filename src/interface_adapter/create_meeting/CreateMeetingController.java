@@ -3,6 +3,7 @@ package interface_adapter.create_meeting;
 import use_case.create_meeting.CreateMeetingInputBoundary;
 import use_case.create_meeting.CreateMeetingInputData;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Controller class is responsible for creating a meeting.
@@ -33,7 +34,7 @@ public class CreateMeetingController {
      * @param endTime                    The ending time of the meeting.
      * @param projectName                The name of the project that this meeting is about.
      */
-    public void execute(String meetingName, ArrayList<String> participantEmail, String meetingDate, String startTime, String endTime, String projectName) {
+    public void execute(String meetingName, ArrayList<String> participantEmail, String meetingDate, String startTime, String endTime, String projectName) throws ExecutionException, InterruptedException {
         CreateMeetingInputData createMeetingInputData = new CreateMeetingInputData(
                 meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
 

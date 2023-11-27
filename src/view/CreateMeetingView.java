@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeListener;
+import java.util.concurrent.ExecutionException;
 
 
 public class CreateMeetingView extends JPanel implements ActionListener, PropertyChangeListener {
@@ -85,14 +86,20 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
                             String startTime = currentState.getStartTime();
                             String endTime = currentState.getEndTime();
                             String projectName = currentState.getProjectName();
-                            createMeetingController.execute(
-                                    currentState.getMeetingName(),
-                                    currentState.getParticipantEmail(),
-                                    currentState.getMeetingDate(),
-                                    currentState.getStartTime(),
-                                    currentState.getEndTime(),
-                                    currentState.getProjectName()
-                            );
+                            try {
+                                createMeetingController.execute(
+                                        currentState.getMeetingName(),
+                                        currentState.getParticipantEmail(),
+                                        currentState.getMeetingDate(),
+                                        currentState.getStartTime(),
+                                        currentState.getEndTime(),
+                                        currentState.getProjectName()
+                                );
+                            } catch (ExecutionException e) {
+                                throw new RuntimeException(e);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
                             currentState = createMeetingViewModel.getState();
                             if (currentState.getMeetingNameError() == null) {
                                 JOptionPane.showMessageDialog(CreateMeetingView.this,
