@@ -3,9 +3,12 @@ package use_case.create_task;
 import entity.Task;
 import entity.TaskFactory;
 
+import com.google.cloud.Timestamp;
+
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,12 +61,13 @@ public class CreateTaskInteractor implements CreateTaskInputBoundary {
         // Parse the string into a LocalDate object
         LocalDate deadline = LocalDate.parse(createTaskInputData.getDeadline(), formatter);
 
+
         ArrayList<String> workingMembersList = stringToArrayList(createTaskInputData.getWorkingMembersList());
         boolean status = createTaskInputData.getStatus();
         // check if taskName already exists
         // check if member exists in project name
         // then send the email to the people and prepare successView
-        if (!createTaskDataAccessObject.taskNameExists(projectName, taskName)) {
+        if (createTaskDataAccessObject.taskNameExists(projectName, taskName)) {
             createTaskPresenter.prepareFailView("Task name already Exists");
         } else if (!createTaskDataAccessObject.memberExists(projectName, workingMembersList)) {
             createTaskPresenter.prepareFailView("Member does not exist");
@@ -78,7 +82,7 @@ public class CreateTaskInteractor implements CreateTaskInputBoundary {
                     throw new RuntimeException(e);
                 }
             }
-            CreateTaskOutputData createTaskOutputData = new CreateTaskOutputData();
+            CreateTaskOutputData createTaskOutputData = new CreateTaskOutputData(taskName);
             createTaskPresenter.prepareSuccessView(createTaskOutputData);
         }
 
