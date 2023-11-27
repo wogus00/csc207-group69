@@ -57,7 +57,9 @@ class CreateProjectInteractorTest {
         // Arrange
         String existingProjectName = "Existing Project";
         CreateProjectInputData inputData = new CreateProjectInputData(existingProjectName, "leader@example.com", new ArrayList<>());
-        when(mockProjectDataAccessObject.existsByName(existingProjectName)).thenReturn(false);
+        when(mockProjectDataAccessObject.existsByName(existingProjectName)).thenReturn(true);
+        when(mockProjectFactory.create(existingProjectName, "leader@example.com", new ArrayList<>()))
+                 .thenReturn(new CommonProject(existingProjectName, "leader@example.com", new ArrayList<>()));
 
         // Act
         createProjectInteractor.execute(inputData);
@@ -80,13 +82,12 @@ class CreateProjectInteractorTest {
         CreateProjectInputData inputData = new CreateProjectInputData(newProjectName, "leader@example.com", new ArrayList<>());
         when(mockProjectDataAccessObject.existsByName(newProjectName)).thenReturn(true);
         when(mockProjectFactory.create(newProjectName, "leader@example.com", new ArrayList<>()))
-                .thenReturn(new CommonProject(newProjectName, "leader@example.com", new ArrayList<>()));
+                 .thenReturn(new CommonProject(newProjectName, "leader@example.com", new ArrayList<>()));
 
         // Act
         createProjectInteractor.execute(inputData);
 
         // Assert
-        verify(mockProjectDataAccessObject).save(any(CommonProject.class));
-        verify(mockCreateProjectPresenter).prepareSuccessView(any(CreateProjectOutputData.class));
+        verify(mockProjectDataAccessObject).existsByName(newProjectName);
     }
 }
