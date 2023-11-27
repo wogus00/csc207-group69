@@ -7,10 +7,7 @@ import interface_adapter.create_announcement.CreateAnnouncementController;
 import interface_adapter.create_announcement.CreateAnnouncementPresenter;
 import interface_adapter.create_announcement.CreateAnnouncementViewModel;
 import interface_adapter.main_page.MainPageViewModel;
-import use_case.create_announcement.CreateAnnouncementDataAccessInterface;
-import use_case.create_announcement.CreateAnnouncementInputBoundary;
-import use_case.create_announcement.CreateAnnouncementInteractor;
-import use_case.create_announcement.CreateAnnouncementOutputBoundary;
+import use_case.create_announcement.*;
 import view.CreateAnnouncementView;
 
 import javax.swing.*;
@@ -35,15 +32,22 @@ public class CreateAnnouncementUseCaseFactory {
      * @param viewManagerModel The model for managing different views in the application.
      * @param createAnnouncementViewModel The view model for creating announcements.
      * @param announcementDataAccessObject The data access object for announcements.
+     * @param gmailDataAccessObject The data access object for emails about announcements.
      * @param mainPageViewModel The main page view model of the application.
      * @return A configured instance of {@link CreateAnnouncementView}.
      */
     public static CreateAnnouncementView createAnnouncementView(ViewManagerModel viewManagerModel,
                                                                 CreateAnnouncementViewModel createAnnouncementViewModel,
                                                                 CreateAnnouncementDataAccessInterface announcementDataAccessObject,
+                                                                CreateAnnouncementGmailDataAccessInterface gmailDataAccessObject,
                                                                 MainPageViewModel mainPageViewModel) {
         try {
-            CreateAnnouncementController createAnnouncementController = createAnnouncementUseCase(viewManagerModel, createAnnouncementViewModel, announcementDataAccessObject, mainPageViewModel);
+            CreateAnnouncementController createAnnouncementController = createAnnouncementUseCase(
+                    viewManagerModel,
+                    createAnnouncementViewModel,
+                    announcementDataAccessObject,
+                    gmailDataAccessObject,
+                    mainPageViewModel);
             return new CreateAnnouncementView(createAnnouncementController, createAnnouncementViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Invalid announcement");
@@ -59,6 +63,7 @@ public class CreateAnnouncementUseCaseFactory {
      * @param viewManagerModel The model for managing different views in the application.
      * @param createAnnouncementViewModel The view model for creating announcements.
      * @param announcementDataAccessObject The data access object for announcements.
+     * @param gmailDataAccessObject The data access object for Gmail object.
      * @param mainPageViewModel The main page view model of the application.
      * @return A configured instance of {@link CreateAnnouncementController}.
      * @throws IOException If an I/O error occurs.
@@ -66,12 +71,13 @@ public class CreateAnnouncementUseCaseFactory {
     private static CreateAnnouncementController createAnnouncementUseCase(ViewManagerModel viewManagerModel,
                                                                           CreateAnnouncementViewModel createAnnouncementViewModel,
                                                                           CreateAnnouncementDataAccessInterface announcementDataAccessObject,
+                                                                          CreateAnnouncementGmailDataAccessInterface gmailDataAccessObject,
                                                                           MainPageViewModel mainPageViewModel) throws IOException {
         CreateAnnouncementOutputBoundary createAnnouncementOutputBoundary = new CreateAnnouncementPresenter(viewManagerModel, createAnnouncementViewModel, mainPageViewModel);
 
         AnnouncementFactory announcementFactory = new CommonAnnouncementFactory();
 
-        CreateAnnouncementInputBoundary createAnnouncementInteractor = new CreateAnnouncementInteractor(announcementDataAccessObject, createAnnouncementOutputBoundary, announcementFactory);
+        CreateAnnouncementInputBoundary createAnnouncementInteractor = new CreateAnnouncementInteractor(announcementDataAccessObject, createAnnouncementOutputBoundary, announcementFactory, gmailDataAccessObject);
 
         return new CreateAnnouncementController(createAnnouncementInteractor);
     }

@@ -2,9 +2,13 @@ package use_case.create_announcement;
 
 import entity.Announcement;
 import entity.AnnouncementFactory;
+import entity.CommonAnnouncement;
+import entity.Project;
 import interface_adapter.create_announcement.CreateAnnouncementPresenter;
+import use_case.create_project.CreateProjectGmailDataAccessInterface;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  * Interactor for handling the creation of announcements.
@@ -19,6 +23,8 @@ public class CreateAnnouncementInteractor implements CreateAnnouncementInputBoun
 
     final AnnouncementFactory announcementFactory;
 
+    final CreateAnnouncementGmailDataAccessInterface gmailDataAccessObject;
+
     /**
      * Constructs a CreateAnnouncementInteractor with the necessary dependencies for announcement creation.
      *
@@ -28,10 +34,12 @@ public class CreateAnnouncementInteractor implements CreateAnnouncementInputBoun
      */
     public CreateAnnouncementInteractor(CreateAnnouncementDataAccessInterface createAnnouncementDataAccessObject,
                                         CreateAnnouncementOutputBoundary createAnnouncementOutputBoundary,
-                                        AnnouncementFactory announcementFactory) {
+                                        AnnouncementFactory announcementFactory,
+                                        CreateAnnouncementGmailDataAccessInterface gmailDataAccessObject) {
         this.createAnnouncementDataAccessObject = createAnnouncementDataAccessObject;
         this.createAnnouncementPresenter = createAnnouncementOutputBoundary;
         this.announcementFactory = announcementFactory;
+        this.gmailDataAccessObject = gmailDataAccessObject;
     }
 
     /**
@@ -43,9 +51,6 @@ public class CreateAnnouncementInteractor implements CreateAnnouncementInputBoun
      */
 
 
-    // TODO send announcements to selected gmail users. Look at the CreateTask for the implementation
-    // TODO so, i also have to edit gmaildataaccess
-
     @Override
     public void execute(CreateAnnouncementInputData createAnnouncementInputData) {
         LocalDateTime now = LocalDateTime.now();
@@ -56,19 +61,37 @@ public class CreateAnnouncementInteractor implements CreateAnnouncementInputBoun
                 createAnnouncementInputData.getAuthor(),
                 createAnnouncementInputData.getAnnouncementId());
 
-        // Save the announcement to Firebase
         try {
+            // Save the announcement to Firebase
             createAnnouncementDataAccessObject.save(announcement);
+
+            // Fetch the project name from the announcement ID
+            String projectName = createAnnouncementDataAccessObject.getProjectNameFromAnnouncementId(createAnnouncementInputData.getAnnouncementId());
+            if (projectName != null) {
+                // Fetch project information to get member emails
+                Project project = createAnnouncementDataAccessObject.getProjectInfo(projectName);
+                ArrayList<String> memberEmails = project.getMemberEmails();
+
+                // Send emails to each project member
+                for (String email : memberEmails) {
+                    // Assuming GmailDataAccessObject is available and properly initialized
+                    // Replace 'gmailDataAccessObject' with your actual GmailDataAccessObject instance
+                    gmailDataAccessObject.sendAnnouncementCreationEmail(createAnnouncementInputData.getAuthor(), email, createAnnouncementInputData.getAnnouncementTitle());
+                }
+            }
+
+            // Prepare success response
             CreateAnnouncementOutputData createAnnouncementOutputData = new CreateAnnouncementOutputData(
                     announcement.getAnnouncementTitle(),
                     announcement.getMessage(),
                     now.toString(),
-                    true,  // Assuming the save operation is successful
+                    true,
                     announcement.getAuthor(),
                     announcement.getId());
             createAnnouncementPresenter.prepareSuccessView(createAnnouncementOutputData);
+
         } catch (Exception e) {
-            // Handle any exceptions, e.g., database connection failure
+            // Handle any exceptions, e.g., database connection failure or email sending failure
             CreateAnnouncementOutputData createAnnouncementOutputData = new CreateAnnouncementOutputData(
                     announcement.getAnnouncementTitle(),
                     announcement.getMessage(),
@@ -79,6 +102,8 @@ public class CreateAnnouncementInteractor implements CreateAnnouncementInputBoun
             createAnnouncementPresenter.prepareFailView(e.getMessage());
         }
     }
+
+
 
 
 }

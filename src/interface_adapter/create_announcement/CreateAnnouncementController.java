@@ -5,6 +5,7 @@ import use_case.create_announcement.CreateAnnouncementInputData;
 
 import javax.mail.internet.AddressException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Controller for handling the creation of announcements.
