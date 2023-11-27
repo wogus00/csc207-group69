@@ -22,10 +22,13 @@ class CreateAnnouncementInteractorTest {
 
     private CreateAnnouncementInteractor interactor;
 
+    @Mock
+    private CreateAnnouncementGmailDataAccessInterface gmailDataAccessObject;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        interactor = new CreateAnnouncementInteractor(dataAccessObject, presenter, factory);
+        interactor = new CreateAnnouncementInteractor(dataAccessObject, presenter, factory, gmailDataAccessObject);
     }
 
     @Test
