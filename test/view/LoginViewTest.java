@@ -102,5 +102,51 @@ public class LoginViewTest {
         verify(mockViewManagerModel).firePropertyChanged();
     }
 
+    @Test
+    public void testProjectNameInputField() {
+        LoginState mockState = new LoginState();
+        when(mockLoginViewModel.getState()).thenReturn(mockState);
+
+        // Arrange
+        final char keyChar = 'a';
+        KeyEvent keyEvent = new KeyEvent(loginView.projectNameInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, keyChar);
+        KeyEvent keyPressedEvent = new KeyEvent(loginView.projectNameInputField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, keyChar);
+        KeyEvent keyReleasedEvent = new KeyEvent(loginView.projectNameInputField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_A, keyChar);
+
+        // Act
+        for (KeyListener listener : loginView.projectNameInputField.getKeyListeners()) {
+            listener.keyTyped(keyEvent);
+            listener.keyPressed(keyPressedEvent);
+            listener.keyReleased(keyReleasedEvent);
+        }
+
+        LoginState expectedState = new LoginState();
+        expectedState.setProjectName("a");  // Since 'a' is the key character you simulated
+        verify(mockLoginViewModel).setState(refEq(expectedState));
+    }
+
+    @Test
+    public void testUserEmailInputField() {
+        LoginState mockState = new LoginState();
+        when(mockLoginViewModel.getState()).thenReturn(mockState);
+
+        // Arrange
+        final char keyChar = 'a';
+        KeyEvent keyEvent = new KeyEvent(loginView.userEmailInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, keyChar);
+        KeyEvent keyPressedEvent = new KeyEvent(loginView.userEmailInputField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, keyChar);
+        KeyEvent keyReleasedEvent = new KeyEvent(loginView.userEmailInputField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_A, keyChar);
+
+        // Act
+        for (KeyListener listener : loginView.userEmailInputField.getKeyListeners()) {
+            listener.keyTyped(keyEvent);
+            listener.keyPressed(keyPressedEvent);
+            listener.keyReleased(keyReleasedEvent);
+        }
+
+        LoginState expectedState = new LoginState();
+        expectedState.setUserEmail("a");  // Since 'a' is the key character you simulated
+        verify(mockLoginViewModel).setState(refEq(expectedState));
+    }
+
 
 }

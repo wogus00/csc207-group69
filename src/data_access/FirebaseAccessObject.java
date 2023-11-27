@@ -1,6 +1,7 @@
 package data_access;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -24,6 +25,7 @@ import use_case.create_announcement.CreateAnnouncementDataAccessInterface;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.time.LocalDateTime;
@@ -32,7 +34,7 @@ import java.util.*;
 
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface {
 
     Firestore db;
     ProjectFactory projectFactory;
@@ -140,11 +142,42 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
 
     @Override
     public void saveTask(String projectName, Task newTask) {
-        ;
+        DocumentReference docRef = db.collection(projectName).document("taskInfo");
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot taskInfo = null;
+        try {
+            taskInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        };
+        LocalDate deadlineDate = newTask.getDeadline();
+        // Convert LocalDate to LocalDateTime (start of the day)
+        LocalDateTime deadlineTime = deadlineDate.atStartOfDay();
+
+        // Convert LocalDateTime to Timestamp
+        Timestamp deadline = Timestamp.of(java.sql.Timestamp.valueOf(deadlineTime));
+
+        Map<String, Object> fields = taskInfo.getData();
+        Map<String, Object> task = new HashMap<>();
+        task.put("taskName", newTask.getTaskName());
+        task.put("supervisor", newTask.getSupervisor());
+        task.put("workingMemberList",newTask.getWorkingMembersList());
+        task.put("deadline",deadline);
+        task.put("comments", newTask.getComments());
+        task.put("status",newTask.getStatus());
+        fields.put(newTask.getTaskName(), task);
+        docRef.set(fields);
     }
 
     @Override
     public boolean taskNameExists(String projectName, String taskName) {
+        TaskListRetrieveStrategy strategy = new TaskListRetrieveStrategy();
+        ArrayList<String> taskList = (ArrayList<String>) strategy.getInfoList(projectName, this);
+        if (taskList.contains(taskName)) {
+            return true;
+        }
         return false;
     }
 
@@ -160,7 +193,27 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
 
     @Override
     public boolean memberExists(String projectName, ArrayList<String> workingMembersList) {
-        return false;
+        ArrayList<String> allMembers = new ArrayList<>();
+        DocumentReference docRef = db.collection(projectName).document("projectInfo");
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot projectInfo = null;
+        try {
+            projectInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        };
+        String leaderEmail = projectInfo.getString("leaderEmail");
+        ArrayList<String> memberEmails = (ArrayList<String>) projectInfo.get("memberEmails");
+        allMembers.add(leaderEmail);
+        allMembers.addAll(memberEmails);
+        for (String member: workingMembersList) {
+            if (!allMembers.contains(member)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

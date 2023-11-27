@@ -1,6 +1,8 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.create_task.CreateTaskState;
+import interface_adapter.create_task.CreateTaskViewModel;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageState;
@@ -31,6 +33,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
     final MainPageViewModel mainPageViewModel;
 
     final LoginViewModel loginViewModel;
+    CreateTaskViewModel createTaskViewModel;
 
     JLabel titleLabel;
     JLabel leaderEmailInfo = new JLabel();
@@ -54,10 +57,11 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
      * @param mainPageViewModel The view model for the main page view, manages the state and behavior of the main page view
      * @param loginViewModel The view model for the login view, manages the state and behavior of the login view
      */
-    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel, LoginViewModel loginViewModel) {
+    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel, LoginViewModel loginViewModel, CreateTaskViewModel createTaskViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.mainPageViewModel = mainPageViewModel;
         this.loginViewModel = loginViewModel;
+        this.createTaskViewModel = createTaskViewModel;
         this.mainPageViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BorderLayout());
@@ -321,7 +325,12 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        CreateTaskState createTaskState = createTaskViewModel.getState();
+                        createTaskState.setProjectName(mainPageState.getProjectName());
+                        createTaskViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Create Task");
+                        viewManagerModel.firePropertyChanged();
                     }
                 }
         );

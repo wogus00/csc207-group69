@@ -23,7 +23,8 @@ public class TaskListRetrieveStrategy implements InfoListRetrieveStrategy{
             throw new RuntimeException(e);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
-        };
+        }
+
         Map<String, Object> fields = typeInfo.getData();
         list.addAll(fields.keySet());
         ArrayList<String> keys = new ArrayList<>();

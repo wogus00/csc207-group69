@@ -31,15 +31,21 @@ public class AnnouncementListRetrieveStrategy implements InfoListRetrieveStrateg
             throw new RuntimeException(e);
         };
         Map<String, Object> fields = typeInfo.getData();
+        Map<String, String> Time_to_Message = new HashMap<>();
         list.addAll(fields.keySet());
-        List<String> messageList = new ArrayList<>();
         for (String key: list) {
             Map<String, Object> entry = (Map<String, Object>) fields.get(key);
-            messageList.add((String) entry.get("message"));
+            String message = (String) entry.get("message");
+            String creationTime = (String) entry.get("creationTime");
+            Time_to_Message.put(creationTime, message);
         }
+        ArrayList<String> timeList = new ArrayList<>();
+        timeList.addAll(Time_to_Message.keySet());
+        Collections.sort(timeList);
         list = new ArrayList<>();
-        list.addAll(messageList);
-
+        for (String key: timeList) {
+            list.add(Time_to_Message.get(key));
+        }
         return list;
     }
 }
