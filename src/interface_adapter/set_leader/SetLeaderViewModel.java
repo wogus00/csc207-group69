@@ -1,33 +1,33 @@
-package interface_adapter.add_email;
+package interface_adapter.set_leader;
 
 import interface_adapter.ViewModel;
+import interface_adapter.remove_email.RemoveEmailState;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
- * The {@code AddEmailViewModel} class extends {@code ViewModel} and represents the view model for the add email feature.
+ * The {@code SetLeaderViewModel} class extends {@code ViewModel} and represents the view model for the set leader feature.
  * It maintains the state relevant to the UI and provides methods to notify observers of changes.
- * This class also defines static constants to be used as labels in the view.
+ * This class also defines static constants to be used as labels in the view for consistency and ease of modification.
  */
-public class AddEmailViewModel extends ViewModel {
-
+public class SetLeaderViewModel extends ViewModel {
     public static final String CREATE_BUTTON_LABEL = "Create Project";
     public static final String TITLE_LABEL = "Create Project View";
     public static final String PROJECTNAME_LABEL = "Enter project name";
     public static final String LEADER_EMAIL_LABEL = "Enter leader's email";
     public static final String MEMBER_EMAIL_LABEL = "Enter all members' email";
     public final String CANCEL_BUTTON_LABEL = "Cancel";
-    public final String ADD_EMAIL_LABEL = "Enter email you want to add";
+    public final String SET_LEADER_LABEL = "Enter new leader";
 
-    private AddEmailState state = new AddEmailState();
+    private SetLeaderState state = new SetLeaderState();
 
     /**
-     * Constructs an {@code AddEmailViewModel} object.
+     * Constructs an {@code SetLeaderViewModel} object.
      * Initializes the view model with a default state and the specified context.
      */
-    public AddEmailViewModel() {
-        super("add email");
+    public SetLeaderViewModel() {
+        super("set new leader");
     }
 
     /**
@@ -35,7 +35,7 @@ public class AddEmailViewModel extends ViewModel {
      *
      * @param state The new state of the view model.
      */
-    public void setState(AddEmailState state) {
+    public void setState(SetLeaderState state) {
         this.state = state;
     }
 
@@ -55,16 +55,25 @@ public class AddEmailViewModel extends ViewModel {
      *
      * @param listener The {@code PropertyChangeListener} to be added.
      */
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        support.addPropertyChangeListener(listener);
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {}
+
+    /**
+     * Removes a {@code PropertyChangeListener} from the listener list.
+     * This method allows for the dynamic management of listeners that should no longer receive property change events.
+     *
+     * @param listener The {@code PropertyChangeListener} to be removed.
+     */
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
     }
 
     /**
      * Retrieves the current state of the view model.
      *
-     * @return The current {@code AddEmailState} of the view model.
+     * @return The current {@code SetLeaderState} of the view model.
      */
-    public AddEmailState getState() {
+    public SetLeaderState getState() {
         return state;
     }
 }
