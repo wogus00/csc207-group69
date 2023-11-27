@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.create_project.CreateProjectController;
 import interface_adapter.create_project.CreateProjectState;
 import interface_adapter.create_project.CreateProjectViewModel;
@@ -8,6 +9,7 @@ import interface_adapter.create_project.CreateProjectViewModel;
 
 import javax.mail.internet.AddressException;
 import javax.swing.*;
+import javax.swing.text.View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,19 +23,23 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
     public final String viewName = "create project";
 
     private final CreateProjectViewModel createProjectViewModel;
+    private final ViewManagerModel viewManagerModel;
     private final JTextField projectNameInputField = new JTextField(15);
     private final JTextField leaderEmailInputField = new JTextField(15);
     private final JTextField memberEmailInputField = new JTextField(15);
     private final CreateProjectController createProjectController;
 
     private final JButton create;
+    private final JButton login;
 
 
     public CreateProjectView(CreateProjectController createProjectController,
-                             CreateProjectViewModel createProjectViewModel) {
+                             CreateProjectViewModel createProjectViewModel,
+                             ViewManagerModel viewManagerModel) {
 
         this.createProjectController = createProjectController;
         this.createProjectViewModel = createProjectViewModel;
+        this.viewManagerModel = viewManagerModel;
         createProjectViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(CreateProjectViewModel.TITLE_LABEL);
@@ -49,7 +55,8 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
         JPanel buttons = new JPanel();
         create = new JButton(CreateProjectViewModel.CREATE_BUTTON_LABEL);
         buttons.add(create);
-
+        login = new JButton(CreateProjectViewModel.LOGIN_BUTTON_LABEL);
+        buttons.add(login);
 
         create.addActionListener(
                 new ActionListener() {
@@ -69,6 +76,17 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
                             if (currentState.getProjectNameError() == null) {
                                 JOptionPane.showMessageDialog(CreateProjectView.this, "create project successfully");
                             }
+                        }
+                    }
+                }
+        );
+
+        login.addActionListener(                // This creates an anonymous subclass of ActionListener and instantiates it.
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(login)) {
+                            viewManagerModel.setActiveView("log in");
+                            viewManagerModel.firePropertyChanged();
                         }
                     }
                 }
