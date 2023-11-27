@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Public Interactor class for the Create Meeting use case.
@@ -51,7 +52,7 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
      *                               CreateMeetingInteractor class
      */
     @Override
-    public void execute(CreateMeetingInputData createMeetingInputData) {
+    public void execute(CreateMeetingInputData createMeetingInputData) throws ExecutionException, InterruptedException {
         String meetingName = createMeetingInputData.getMeetingName();
         ArrayList<String> participantEmail = createMeetingInputData.getParticipantEmail();
         String fromEmail = createMeetingInputData.getParticipantEmail().get(0);
