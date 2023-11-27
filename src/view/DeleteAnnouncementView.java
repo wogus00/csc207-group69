@@ -14,9 +14,12 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+
+
 /**
- * The view component for deleting announcements in the application.
- * It provides user interface elements for users to select and delete announcements.
+ * The DeleteAnnouncementView class represents the GUI view for deleting announcements.
+ * This class extends JPanel and includes user interface elements for selecting and
+ * deleting announcements.
  */
 public class DeleteAnnouncementView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "Delete announcement";
@@ -29,6 +32,12 @@ public class DeleteAnnouncementView extends JPanel implements ActionListener, Pr
     private JButton deleteAnnouncementButton;
     private JButton cancel;
 
+    /**
+     * Constructs a new DeleteAnnouncementView with a given controller and view model.
+     *
+     * @param controller The controller associated with this view.
+     * @param deleteAnnouncementViewModel The view model for delete announcement operations.
+     */
     public DeleteAnnouncementView(DeleteAnnouncementController controller,
                                   DeleteAnnouncementViewModel deleteAnnouncementViewModel) {
         this.deleteAnnouncementController = controller;
@@ -42,10 +51,6 @@ public class DeleteAnnouncementView extends JPanel implements ActionListener, Pr
                 new JLabel(deleteAnnouncementViewModel.DELETE_ANNOUNCEMENT_BUTTON_LABEL), announcementIdInputField
         );
 
-//        LabelTextPanel announcementCurrentUserinfo = new LabelTextPanel(
-//                new JLabel(deleteAnnouncementViewModel.CURRENT_USER), currentUserInputField
-//        );
-
         JPanel buttons = new JPanel();
         deleteAnnouncementButton = new JButton(deleteAnnouncementViewModel.DELETE_ANNOUNCEMENT_BUTTON_LABEL);
         buttons.add(deleteAnnouncementButton);
@@ -54,6 +59,7 @@ public class DeleteAnnouncementView extends JPanel implements ActionListener, Pr
 
         deleteAnnouncementButton.addActionListener(
                 new ActionListener() {
+
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         if(evt.getSource().equals(deleteAnnouncementButton)) {
@@ -102,11 +108,21 @@ public class DeleteAnnouncementView extends JPanel implements ActionListener, Pr
         this.add(buttons);
     }
 
+    /**
+     * Invoked when an action occurs on the view components.
+     *
+     * @param e The action event.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println("Cancel not implemented yet.");
     }
 
+    /**
+     * This method gets called when a bound property is changed.
+     *
+     * @param evt The property change event.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         DeleteAnnouncementState state = (DeleteAnnouncementState) evt.getNewValue();

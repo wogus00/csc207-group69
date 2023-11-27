@@ -15,7 +15,7 @@ public class CreateAnnouncementViewModel extends ViewModel {
 
     public final String CREATE_ANOUNCEMENT_BUTTON_LABEL = "Send Announcement";
 
-    public final String CANSEL_BUTTON_LABEL = "Cansel";
+    public final String CANSEL_BUTTON_LABEL = "Cancel";
 
     private CreateAnnouncementState state = new CreateAnnouncementState();
 
