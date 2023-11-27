@@ -8,7 +8,6 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import entity.CommonProject;
 
-import entity.Meeting;
 import entity.Announcement;
 import entity.CommonAnnouncement;
 
@@ -20,9 +19,6 @@ import use_case.complete_task.CompleteTaskDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
 import use_case.create_task.CreateTaskDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
-
-import use_case.remove_email.RemoveEmailDataAccessInterface;
-import use_case.set_leader.SetLeaderDataAccessInterface;
 
 import use_case.delete_announcement.DeleteAnnouncementDataAccessInterface;
 import use_case.create_announcement.CreateAnnouncementDataAccessInterface;
@@ -36,8 +32,6 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-
 
 
 public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface {
@@ -382,6 +376,36 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     }
 
     @Override
+    public String getProjectNameFromAnnouncementId(String announcementId) {
+        DocumentReference docRef = db.collection("announcements").document(announcementId);
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        try {
+            DocumentSnapshot document = future.get();
+            if (document.exists()) {
+                // Assuming that the document contains a field named "projectName"
+                // that stores the name of the project associated with the announcement.
+                String projectName = document.getString("projectName");
+                if (projectName != null && !projectName.isEmpty()) {
+                    return projectName;
+                } else {
+                    // Handle the case where "projectName" is not set or is empty
+                    System.out.println("Project name not found for announcement with ID: " + announcementId);
+                    return null;
+                }
+            } else {
+                // Handle the case where the announcement doesn't exist
+                System.out.println("Announcement with ID: " + announcementId + " does not exist.");
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exceptions
+            return null;
+        }
+    }
+
+
+    @Override
     public boolean deleteAnnouncement(String announcementId) {
         // Assuming that the Firestore database has already been initialized in the constructor
         // and db is your Firestore instance
@@ -395,8 +419,10 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         }
     }
 
+
+
     @Override
-    public CommonAnnouncement getAnnouncementById(String announcementId) {
+    public Announcement getAnnouncementById(String announcementId) {
         DocumentReference docRef = db.collection("announcements").document(announcementId);
         ApiFuture<DocumentSnapshot> future = docRef.get();
         try {
