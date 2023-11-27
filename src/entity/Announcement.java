@@ -1,6 +1,7 @@
 package entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public interface Announcement {
     String getAnnouncementTitle();
@@ -13,4 +14,7 @@ public interface Announcement {
 
 
     String getId();
+
+    ArrayList<String> getEmailsSent();
+
 }
