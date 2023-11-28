@@ -11,12 +11,11 @@ public class CreateTaskState {
 
     private String projectName ="";
     private String taskName = "";
-    private String taskNameError = null;
+    private String createTaskError = null;
 
     private String supervisor ="";
 
     private String workingMembersList = "";
-    private String workingMembersError = null;
 
     private String deadline;
 
@@ -31,10 +30,9 @@ public class CreateTaskState {
     public CreateTaskState(CreateTaskState copy) {
         projectName = copy.projectName;
         taskName = copy.taskName;
-        taskNameError = copy.taskNameError;
+        createTaskError = copy.createTaskError;
         supervisor = copy.supervisor;
         workingMembersList = copy.workingMembersList;
-        workingMembersError = copy.workingMembersError;
         deadline = copy.deadline;
         comments = copy.comments;
         status = copy.status;
@@ -51,16 +49,13 @@ public class CreateTaskState {
      * Setter method that updates taskNameError for CreateTaskState.
      * @param taskNameError String that indicates taskNameError
      */
-    public void setTaskNameError(String taskNameError) {
-        this.taskNameError = taskNameError;
-    }
 
     /**
      * Setter method that updates workingMembersError for CreateTaskState.
      * @param workingMembersError String that indicates workingMembersError
      */
-    public void setWorkingMembersError(String workingMembersError) {
-        this.workingMembersError = workingMembersError;
+    public void setCreateTaskError(String workingMembersError) {
+        this.createTaskError = workingMembersError;
     }
 
     /**
@@ -160,20 +155,14 @@ public class CreateTaskState {
         return taskName;
     }
 
-    /**
-     * Getter method that returns taskNameError from CreateTaskState.
-     * @return String that indicates taskNameError
-     */
-    public String getTaskNameError() {
-        return taskNameError;
-    }
+
 
     /**
      * Getter method that returns WorkingMembersError from CreateTaskState.
      * @return String that indicates WorkingMembersError
      */
-    public String getWorkingMembersError() {
-        return workingMembersError;
+    public String getCreateTaskError() {
+        return createTaskError;
     }
 
     /**

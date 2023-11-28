@@ -19,10 +19,10 @@ public class MainPageState {
 
     private ArrayList<String> memberEmail = new ArrayList<>();
 
-    private ArrayList<String> taskList = new ArrayList<>(Arrays.asList(""));
-    private ArrayList<String> meetingList = new ArrayList<>(Arrays.asList(""));
+    private ArrayList<String> taskList = new ArrayList<>();
+    private ArrayList<String> meetingList = new ArrayList<>();
 
-    private ArrayList<String> announcements = new ArrayList<>(Arrays.asList("No Announcements"));
+    private ArrayList<String> announcements = new ArrayList<>();
 
     /**
      * Creates a new MainPageState as a copy of another MainPageState.
@@ -294,17 +294,20 @@ public class MainPageState {
      */
     public String getRecentAnnouncements(){
         ArrayList<String> recents = new ArrayList<>();
-        int length = this.announcements.size() - 1;
-        if (length > 2) {
-            length = 2;
-        }
-        for (int i = 0; i <= length; i++) {
-            recents.add(this.announcements.get(length - i));
-        }
-        while (recents.size() < 3) {
-            recents.add("");
-        }
+        if (this.announcements.isEmpty()) {
+            recents = new ArrayList<>(Arrays.asList("No announcements", "", ""));
+        } else {
 
+            int length = this.announcements.size() - 1;
+
+
+            for (int i = 0; i <= length; i++) {
+                recents.add(this.announcements.get(length - i));
+            }
+            while (recents.size() < 3) {
+                recents.add("");
+            }
+        }
         return String.format("<html>%s<br/>%s<br/>%s</html>", "- " + recents.get(0), "- " + recents.get(1), "- " + recents.get(2));
 
     }

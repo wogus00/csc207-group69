@@ -22,7 +22,7 @@ import java.beans.PropertyChangeListener;
  * It extends JPanel to fit in the CardLayout of views, and implements ActionListener and
  * PropertyChangeListener to respond to the user actions and model changes.
  */
-public class LoginView extends JPanel implements ActionListener, PropertyChangeListener {
+public class LoginView extends JPanel implements PropertyChangeListener {
 
     public final String viewName = "log in";
     private final LoginViewModel loginViewModel;
@@ -94,41 +94,45 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                 }
         );
 
-        projectNameInputField.addKeyListener(new KeyListener() {
-            @Override
+        projectNameInputField.addKeyListener(
+                new KeyListener() {
+
             public void keyTyped(KeyEvent e) {
                 LoginState currentState = loginViewModel.getState();
                 currentState.setProjectName(projectNameInputField.getText() + e.getKeyChar());
                 loginViewModel.setState(currentState);
             }
 
-            @Override
+
             public void keyPressed(KeyEvent e) {
             }
 
-            @Override
+
             public void keyReleased(KeyEvent e) {
+
             }
-        });
+        }
+        );
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         userEmailInputField.addKeyListener(
                 new KeyListener() {
-                    @Override
+
                     public void keyTyped(KeyEvent e) {
                         LoginState currentState = loginViewModel.getState();
                         currentState.setUserEmail(userEmailInputField.getText() + e.getKeyChar());
                         loginViewModel.setState(currentState);
                     }
 
-                    @Override
+
                     public void keyPressed(KeyEvent e) {
                     }
 
-                    @Override
+
                     public void keyReleased(KeyEvent e) {
                     }
-                });
+                }
+            );
 
         this.add(title);
         this.add(projectNameInfo);
@@ -137,12 +141,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         this.add(buttons);
     }
 
-    /**
-     * React to a button click that results in evt.
-     *
-     * @param evt The ActionEvent object.
-     */
-    public void actionPerformed(ActionEvent evt){}
+
 
     /**
      * React to property changes in the view model.

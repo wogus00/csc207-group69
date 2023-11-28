@@ -4,16 +4,17 @@ import data_access.FirebaseAccessObject;
 import data_access.GmailDataAccessObject;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.create_project.CreateProjectViewModel;
+import interface_adapter.add_email.AddEmailViewModel;
+import interface_adapter.create_task.CreateTaskController;
+import interface_adapter.remove_email.RemoveEmailViewModel;
+import interface_adapter.set_leader.SetLeaderViewModel;
 
 import interface_adapter.create_task.CreateTaskViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageViewModel;
 
 import use_case.login.LoginDataAccessInterface;
-import view.CreateProjectView;
-import view.CreateTaskView;
-import view.LoginView;
-import view.ViewManager;
+import view.*;
 
 
 import javax.swing.*;
@@ -54,14 +55,28 @@ public class Main {
         views.add(loginView, loginView.viewName);
 
 
-        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel);
+        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel, createTaskViewModel);
         views.add(mainPageView, mainPageView.viewName);
-
-
 
         CreateMeetingViewModel createMeetingViewModel = new CreateMeetingViewModel();
         CreateMeetingView createMeetingView = CreateMeetingUseCaseFactory.createMeetingView(viewManagerModel, createMeetingViewModel, (CreateMeetingDataAccessInterface) firebaseAccessObject, (CreateMeetingGmailDataAccessInterface) gmailDataAccessObject, mainPageViewModel);
         views.add(createMeetingView, createMeetingView.viewName);
+
+        AddEmailViewModel addEmailViewModel = new AddEmailViewModel();
+        AddEmailView addEmailView = AddEmailUseCaseFactory.addEmailView(viewManagerModel,  addEmailViewModel, firebaseAccessObject);
+        views.add(addEmailView, addEmailView.viewName);
+
+        RemoveEmailViewModel removeEmailViewModel = new RemoveEmailViewModel();
+        RemoveEmailView removeEmailView = RemoveEmailUseCaseFactory.removeEmailView(viewManagerModel,  removeEmailViewModel, firebaseAccessObject);
+        views.add(removeEmailView, removeEmailView.viewName);
+
+        SetLeaderViewModel setLeaderViewModel = new SetLeaderViewModel();
+        SetLeaderView setLeaderView = SetLeaderUseCaseFactory.setLeaderView(viewManagerModel,  setLeaderViewModel, firebaseAccessObject);
+        views.add(setLeaderView, setLeaderView.viewName);
+
+        viewManagerModel.setActiveView(removeEmailView.viewName);
+        viewManagerModel.firePropertyChanged();
+
 
         application.pack();
         application.setVisible(true);
