@@ -22,6 +22,7 @@ public class CreateAnnouncementPresenterTest {
 
     private CreateAnnouncementPresenter presenter;
 
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -46,12 +47,14 @@ public class CreateAnnouncementPresenterTest {
     public void testPrepareFailView() {
         // Arrange
         String error = "Error message";
+        CreateAnnouncementState mockCreateAnnouncementState = mock(CreateAnnouncementState.class);
+        when(mockCreateAnnouncementViewModel.getState()).thenReturn(mockCreateAnnouncementState);
 
         // Act
         presenter.prepareFailView(error);
 
         // Assert
-        verify(mockCreateAnnouncementViewModel).getState().setAnnouncementTitleError(error);
+        verify(mockCreateAnnouncementViewModel.getState()).setAnnouncementTitleError(error);
         verify(mockCreateAnnouncementViewModel).firePropertyChanged();
     }
 }

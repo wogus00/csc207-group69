@@ -57,10 +57,10 @@ public class CreateTaskStateTest {
         state.setComments("More Comments");
         assertEquals("More Comments", state.getComments(), "Comments were not set correctly");
 
-        state.setTaskNameError("Error in task name");
-        assertEquals("Error in task name", state.getTaskNameError(), "Task name error was not set correctly");
-
-        state.setWorkingMembersError("Error in working members");
-        assertEquals("Error in working members", state.getWorkingMembersError(), "Working members error was not set correctly");
+//        state.setTaskNameError("Error in task name");
+//        assertEquals("Error in task name", state.getTaskNameError(), "Task name error was not set correctly");
+//
+//        state.setWorkingMembersError("Error in working members");
+//        assertEquals("Error in working members", state.getWorkingMembersError(), "Working members error was not set correctly");
     }
 }

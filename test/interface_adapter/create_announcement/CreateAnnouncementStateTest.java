@@ -30,5 +30,4 @@ public class CreateAnnouncementStateTest {
         assertEquals("Id", copy.getId());
     }
 
-    // Additional tests for setters and getters...
 }

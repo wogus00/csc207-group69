@@ -2,14 +2,21 @@ package use_case.create_announcement;
 
 import entity.AnnouncementFactory;
 import entity.CommonAnnouncement;
+import entity.Project;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.mockito.Mockito.*;
+
+import javax.mail.MessagingException;
+
 
 class CreateAnnouncementInteractorTest {
 
@@ -35,26 +42,61 @@ class CreateAnnouncementInteractorTest {
     void testSuccessfulAnnouncementCreation() {
         CreateAnnouncementInputData inputData = new CreateAnnouncementInputData("Title", "Message", "Author");
         CommonAnnouncement mockAnnouncement = new CommonAnnouncement("Title", "Message", LocalDateTime.now(), "Author", "ID");
-        when(factory.create(anyString(), anyString(), any(LocalDateTime.class), anyString(), anyString())).thenReturn(mockAnnouncement);
+
+        when(factory.create(eq(inputData.getAnnouncementTitle()), eq(inputData.getMessage()),
+                any(LocalDateTime.class), eq(inputData.getAuthor()),
+                eq(inputData.getAnnouncementId()))).thenReturn(mockAnnouncement);
 
         interactor.execute(inputData);
 
-        verify(factory).create(inputData.getAnnouncementTitle(), inputData.getMessage(), any(LocalDateTime.class), inputData.getAuthor(), inputData.getAnnouncementId());
+        verify(factory).create(eq(inputData.getAnnouncementTitle()), eq(inputData.getMessage()),
+                any(LocalDateTime.class), eq(inputData.getAuthor()),
+                eq(inputData.getAnnouncementId()));
         verify(dataAccessObject).save(mockAnnouncement);
         verify(presenter).prepareSuccessView(any(CreateAnnouncementOutputData.class));
     }
+
 
     @Test
     void testFailedAnnouncementCreation() {
         CreateAnnouncementInputData inputData = new CreateAnnouncementInputData("Title", "Message", "Author");
         CommonAnnouncement mockAnnouncement = new CommonAnnouncement("Title", "Message", LocalDateTime.now(), "Author", "ID");
-        when(factory.create(anyString(), anyString(), any(LocalDateTime.class), anyString(), anyString())).thenReturn(mockAnnouncement);
+
+        when(factory.create(eq(inputData.getAnnouncementTitle()), eq(inputData.getMessage()),
+                any(LocalDateTime.class), eq(inputData.getAuthor()),
+                eq(inputData.getAnnouncementId()))).thenReturn(mockAnnouncement);
+
         doThrow(new RuntimeException("Database error")).when(dataAccessObject).save(mockAnnouncement);
 
         interactor.execute(inputData);
 
-        verify(factory).create(inputData.getAnnouncementTitle(), inputData.getMessage(), any(LocalDateTime.class), inputData.getAuthor(), inputData.getAnnouncementId());
+        verify(factory).create(eq(inputData.getAnnouncementTitle()), eq(inputData.getMessage()),
+                any(LocalDateTime.class), eq(inputData.getAuthor()),
+                eq(inputData.getAnnouncementId()));
         verify(dataAccessObject).save(mockAnnouncement);
         verify(presenter).prepareFailView(anyString());
     }
+
+    @Test
+    void testEmailSendingAfterSuccessfulAnnouncementCreation() throws MessagingException, IOException {
+        String projectName = "TestProject";
+        ArrayList<String> memberEmails = new ArrayList<>(Arrays.asList("member1@example.com", "member2@example.com"));
+        Project mockProject = mock(Project.class);
+        when(mockProject.getMemberEmails()).thenReturn(memberEmails);
+
+        CreateAnnouncementInputData inputData = new CreateAnnouncementInputData("Title", "Message", "Author");
+        CommonAnnouncement mockAnnouncement = new CommonAnnouncement("Title", "Message", LocalDateTime.now(), "Author", "ID");
+
+        when(factory.create(eq(inputData.getAnnouncementTitle()), eq(inputData.getMessage()),
+                any(LocalDateTime.class), eq(inputData.getAuthor()),
+                eq(inputData.getAnnouncementId()))).thenReturn(mockAnnouncement);
+        when(dataAccessObject.getProjectNameFromAnnouncementId(inputData.getAnnouncementId())).thenReturn(projectName);
+        when(dataAccessObject.getProjectInfo(projectName)).thenReturn(mockProject);
+
+        interactor.execute(inputData);
+
+        verify(gmailDataAccessObject, times(memberEmails.size())).sendAnnouncementCreationEmail(
+                eq(inputData.getAuthor()), anyString(), eq(inputData.getAnnouncementTitle()));
+    }
+
 }

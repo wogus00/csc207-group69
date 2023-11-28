@@ -50,7 +50,7 @@ public class CreateAnnouncementInputData {
      *
      * @return the author's name.
      */
-    String getAuthor(){return this.announcementId;}
+    String getAuthor(){return this.author;}
 
     /**
      * Retrieves the unique identifier for the announcement.
