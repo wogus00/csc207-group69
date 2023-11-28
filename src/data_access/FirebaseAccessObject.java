@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface, RemoveEmailDataAccessInterface, SetLeaderDataAccessInterface {
 
 
     Firestore db;
@@ -45,7 +45,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     // Load Firebase Admin SDK credentials
     public FirebaseAccessObject() {
         try {
-            serviceAccount = new FileInputStream("Google_Firebase_SDK.json");
+            FileInputStream serviceAccount = new FileInputStream("Google_Firebase_SDK.json");
             FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
             boolean hasBeenInitialized = false;
             List<FirebaseApp> firebaseApps = FirebaseApp.getApps();
@@ -169,18 +169,18 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         }
     }
 
-    public boolean existsByName(String newProjectName) {
-        //TODO: add ways to check if newProjectName exists in db collection
-        try {
-            DocumentReference docRef = db.collection(newProjectName).document("projectInfo");
-            ApiFuture<DocumentSnapshot> future = docRef.get();
-            DocumentSnapshot document = future.get();
-            return document.exists();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+//    public boolean existsByName(String newProjectName) {
+//        //TODO: add ways to check if newProjectName exists in db collection
+//        try {
+//            DocumentReference docRef = db.collection(newProjectName).document("projectInfo");
+//            ApiFuture<DocumentSnapshot> future = docRef.get();
+//            DocumentSnapshot document = future.get();
+//            return document.exists();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
     @Override
     public void removeMemberFromProject(String projectName, String email) {

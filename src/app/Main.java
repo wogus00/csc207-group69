@@ -5,6 +5,7 @@ import data_access.GmailDataAccessObject;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.create_project.CreateProjectViewModel;
 import interface_adapter.add_email.AddEmailViewModel;
+import interface_adapter.create_task.CreateTaskController;
 import interface_adapter.remove_email.RemoveEmailViewModel;
 import interface_adapter.set_leader.SetLeaderViewModel;
 
@@ -12,13 +13,7 @@ import interface_adapter.create_task.CreateTaskViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageViewModel;
 import use_case.login.LoginDataAccessInterface;
-import view.CreateProjectView;
-import view.CreateTaskView;
-import view.LoginView;
-import view.ViewManager;
-import view.AddEmailView;
-import view.RemoveEmailView;
-import view.SetLeaderView;
+import view.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,7 +53,7 @@ public class Main {
         views.add(loginView, loginView.viewName);
 
 
-        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel);
+        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel, createTaskViewModel);
         views.add(mainPageView, mainPageView.viewName);
 
 
@@ -74,7 +69,7 @@ public class Main {
         SetLeaderView setLeaderView = SetLeaderUseCaseFactory.setLeaderView(viewManagerModel,  setLeaderViewModel, firebaseAccessObject);
         views.add(setLeaderView, setLeaderView.viewName);
 
-        viewManagerModel.setActiveView(createTaskView.viewName);
+        viewManagerModel.setActiveView(removeEmailView.viewName);
         viewManagerModel.firePropertyChanged();
 
         application.pack();
