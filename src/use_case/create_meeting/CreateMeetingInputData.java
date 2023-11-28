@@ -35,11 +35,6 @@ public class CreateMeetingInputData {
                 this.endTime = endTime;
                 this.projectName = projectName;
     }
-    private ArrayList<String> stringToArrayListConverter(String participantEmailString) {
-        String[] participants = participantEmailString.split(",");
-        return new ArrayList<>(Arrays.asList(participants));
-    }
-
 
     /**
      * Getter method that returns title of the meeting.

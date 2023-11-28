@@ -52,7 +52,7 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
      *                               CreateMeetingInteractor class
      */
     @Override
-    public void execute(CreateMeetingInputData createMeetingInputData) throws ExecutionException, InterruptedException {
+    public void execute(CreateMeetingInputData createMeetingInputData){
         String meetingName = createMeetingInputData.getMeetingName();
         ArrayList<String> participantEmail = createMeetingInputData.getParticipantEmail();
         String fromEmail = createMeetingInputData.getParticipantEmail().get(0);

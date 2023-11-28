@@ -26,7 +26,7 @@ public class CommonMeeting implements Meeting {
      * @param endTime                    The ending time of the meeting.
      * @param projectName                The name of the project that this meeting is about.
      */
-    public CommonMeeting(String meetingName, ArrayList<String> participantEmail, String meetingDate, String startTime, String endTime, String endTime1, String projectName) {
+    public CommonMeeting(String meetingName, ArrayList<String> participantEmail, String meetingDate, String startTime, String endTime, String projectName) {
         this.meetingName = meetingName;
         this.participantEmail = participantEmail;
         this.meetingDate = meetingDate;
