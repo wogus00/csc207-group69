@@ -6,10 +6,9 @@ import javax.mail.internet.AddressException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 public class CreateProjectController {
-
     final CreateProjectInputBoundary createProjectUseCaseInteractor;
+
     public CreateProjectController(CreateProjectInputBoundary CreateProjectUseCaseInteractor) {
         this.createProjectUseCaseInteractor = CreateProjectUseCaseInteractor;
     }

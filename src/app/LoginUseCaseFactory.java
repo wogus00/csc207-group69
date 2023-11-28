@@ -27,27 +27,20 @@ public class LoginUseCaseFactory {
             LoginDataAccessInterface loginDataAccessObject) {
 
 
-
-        try {
             LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, mainPageViewModel, loginDataAccessObject);
             return new LoginView(loginViewModel, loginController,viewManagerModel);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Invalid Login");
-        }
 
-        return null;
     }
 
     private static LoginController createLoginUseCase(
             ViewManagerModel viewManagerModel,
             LoginViewModel loginViewModel,
             MainPageViewModel mainPageViewModel,
-            LoginDataAccessInterface loginDataAccessObject) throws IOException {
+            LoginDataAccessInterface loginDataAccessObject) {
 
         // Notice how we pass this method's parameters to the Presenter.
         LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, mainPageViewModel, loginViewModel);
 
-        ProjectFactory projectFactory = new CommonProjectFactory();
 
         LoginInputBoundary loginInteractor = new LoginInteractor(
                 loginDataAccessObject, loginOutputBoundary);

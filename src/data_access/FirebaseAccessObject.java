@@ -1,14 +1,17 @@
 package data_access;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import entity.CommonProject;
+
 import entity.Meeting;
 import entity.Announcement;
 import entity.CommonAnnouncement;
+
 import entity.Project;
 import entity.ProjectFactory;
 import entity.Task;
@@ -16,6 +19,10 @@ import use_case.add_email.AddEmailDataAccessInterface;
 import use_case.create_meeting.CreateMeetingDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
+
+import use_case.remove_email.RemoveEmailDataAccessInterface;
+import use_case.set_leader.SetLeaderDataAccessInterface;
+
 import use_case.delete_announcement.DeleteAnnouncementDataAccessInterface;
 import use_case.create_announcement.CreateAnnouncementDataAccessInterface;
 
@@ -24,6 +31,7 @@ import use_case.create_announcement.CreateAnnouncementDataAccessInterface;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.time.LocalDateTime;
@@ -32,7 +40,7 @@ import java.util.*;
 
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateMeetingDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface, RemoveEmailDataAccessInterface, SetLeaderDataAccessInterface, CreateMeetingDataAccessInterface {
 
     Firestore db;
     ProjectFactory projectFactory;
@@ -43,12 +51,23 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     // Load Firebase Admin SDK credentials
     public FirebaseAccessObject() {
         try {
-            // Check if FirebaseApp has already been initialized
-            if (FirebaseApp.getApps().isEmpty()) {
-                FileInputStream serviceAccount = new FileInputStream("Google_Firebase_SDK.json");
-                FirebaseOptions options = new FirebaseOptions.Builder()
-                        .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                        .build();
+            FileInputStream serviceAccount = new FileInputStream("Google_Firebase_SDK.json");
+            FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
+            boolean hasBeenInitialized = false;
+            List<FirebaseApp> firebaseApps = FirebaseApp.getApps();
+            for (FirebaseApp app : firebaseApps) {
+                if (app.getName().equals(FirebaseApp.DEFAULT_APP_NAME)) {
+                    hasBeenInitialized = true;
+                }
+            }
+            if (!hasBeenInitialized) {
+
+            // if (FirebaseApp.getApps().isEmpty()) {
+                // FileInputStream serviceAccount = new FileInputStream("Google_Firebase_SDK.json");
+                // FirebaseOptions options = new FirebaseOptions.Builder()
+                        // .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                        // .build();
+
                 FirebaseApp.initializeApp(options);
             }
         } catch (IOException e) {
@@ -75,6 +94,24 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             docRefTask.set(data1);
             docRefMeeting.set(data1);
             docRefAnnounce.set(data1);
+            DocumentReference docRefCollection = db.collection("IDCollection").document("IDCollection");
+            ApiFuture<DocumentSnapshot> snapShot = docRefCollection.get();
+            DocumentSnapshot IDInfo = null;
+            try {
+                IDInfo = snapShot.get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            };
+            ArrayList<String> arrayList = (ArrayList<String>) IDInfo.get("IDCollection");
+            Map<String, Object> data2 = new HashMap<>();
+            if (arrayList == null) {
+                arrayList = new ArrayList<>();
+            }
+            arrayList.add(projectName);
+            data2.put("IDCollection",arrayList);
+            docRefCollection.set(data2);
     }
 
 
@@ -96,53 +133,150 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         return project;
     }
 
-    public ArrayList<String> getInfoList(String projectName, String listType) {
-        ArrayList<String> list = new ArrayList<>();
-
-        DocumentReference docRef = db.collection(projectName).document(listType);
-        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
-        DocumentSnapshot typeInfo = null;
-        try {
-            typeInfo = snapShot.get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        };
-        Map<String, Object> fields = typeInfo.getData();
-        list.addAll(fields.keySet());
-        if (listType.equals("announcementInfo")) {
-            List<String> messageList = new ArrayList<>();
-            for (String key: list) {
-                Map<String, Object> entry = (Map<String, Object>) fields.get(key);
-                messageList.add((String) entry.get("message"));
-            }
-            list = new ArrayList<>();
-            list.addAll(messageList);
-        }
-        return list;
+    public ArrayList<String> getInfoList(String projectName, InfoListRetrieveStrategy infoListRetrieveStrategy) {
+        return (ArrayList<String>) infoListRetrieveStrategy.getInfoList(projectName, this);
     }
+
 
 
 
     public void addMemberToProject(String projectName, String email) {
-        // TODO: add member to project
+        DocumentReference docRef = db.collection(projectName).document("projectInfo");
+
+        // Run a transaction to ensure the email is not already in the list
+        ApiFuture<Void> transaction = db.runTransaction(t -> {
+            // Retrieve the current projectInfo document
+            DocumentSnapshot snapshot = t.get(docRef).get();
+            if (!snapshot.exists()) {
+                throw new IllegalStateException("Project with name " + projectName + " does not exist!");
+            }
+
+            // Check if the memberEmails list already contains the email
+            ArrayList<String> memberEmails = (ArrayList<String>) snapshot.get("memberEmails");
+            if (memberEmails != null && memberEmails.contains(email)) {
+                // If it does, throw an exception or handle accordingly
+                throw new IllegalArgumentException("Email " + email + " already exists in the project.");
+            } else {
+                // If not, add the email to the memberEmails list
+                if (memberEmails == null) memberEmails = new ArrayList<>();
+                memberEmails.add(email);
+                t.update(docRef, "memberEmails", memberEmails);
+            }
+
+            // Return successfully completing the transaction
+            return null;
+        });
+
+        // When the transaction is complete, you can handle if it was successful or if it failed
+        try {
+            transaction.get(); // This will throw if the transaction failed
+            System.out.println("Member added successfully.");
+        } catch (Exception e) {
+            e.printStackTrace(); // Log or handle any errors thrown during the transaction
+        }
     }
 
+//    public boolean existsByName(String newProjectName) {
+//        //TODO: add ways to check if newProjectName exists in db collection
+//        try {
+//            DocumentReference docRef = db.collection(newProjectName).document("projectInfo");
+//            ApiFuture<DocumentSnapshot> future = docRef.get();
+//            DocumentSnapshot document = future.get();
+//            return document.exists();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
+
+    @Override
     public void removeMemberFromProject(String projectName, String email) {
-        // TODO: remove member from project
+        DocumentReference docRef = db.collection(projectName).document("projectInfo");
+
+        // Run a transaction to ensure the email list is not empty
+        ApiFuture<Void> transaction = db.runTransaction(t -> {
+            // Retrieve the current projectInfo document
+            DocumentSnapshot snapshot = t.get(docRef).get();
+            if (!snapshot.exists()) {
+                throw new IllegalStateException("Project with name " + projectName + " does not exist!");
+            }
+
+            // Retrieve the memberEmails list
+            ArrayList<String> memberEmails = (ArrayList<String>) snapshot.get("memberEmails");
+            if (memberEmails == null || memberEmails.isEmpty()) {
+                // If the list is empty or null, throw an exception or handle accordingly
+                throw new IllegalStateException("The member email list is empty. No members to remove.");
+            }
+
+            // If the email exists in the list, remove it
+            if (memberEmails.contains(email)) {
+                memberEmails.remove(email);
+                t.update(docRef, "memberEmails", memberEmails);
+            } else {
+                // If the email does not exist in the list, handle this case, possibly with an exception or a warning
+                throw new IllegalArgumentException("Email " + email + " does not exist in the project.");
+            }
+
+            // Return successfully completing the transaction
+            return null;
+        });
+
+        // When the transaction is complete, handle if it was successful or if it failed
+        try {
+            transaction.get(); // This will throw if the transaction failed
+            System.out.println("Member removed successfully.");
+        } catch (Exception e) {
+            e.printStackTrace(); // Log or handle any errors thrown during the transaction
+        }
+    }
+
+
+    @Override
+    public void SetLeaderToNewLeader(String projectName, String newLeaderEmail) {
+        DocumentReference docRef = db.collection(projectName).document("projectInfo");
+
+        // Run a transaction to ensure the new leader is different from the current leader
+        ApiFuture<Void> transaction = db.runTransaction(t -> {
+            // Retrieve the current projectInfo document
+            DocumentSnapshot snapshot = t.get(docRef).get();
+            if (!snapshot.exists()) {
+                throw new IllegalStateException("Project with name " + projectName + " does not exist!");
+            }
+
+            // Check the current leader email
+            String currentLeaderEmail = snapshot.getString("leaderEmail");
+            if (newLeaderEmail.equals(currentLeaderEmail)) {
+                // If the new leader is the same as the current leader, throw an exception
+                throw new IllegalArgumentException("New leader email is the same as the current leader email.");
+            } else {
+                // If the new leader is different, update the document
+                t.update(docRef, "leaderEmail", newLeaderEmail);
+            }
+
+            // Return successfully completing the transaction
+            return null;
+        });
+
+        // When the transaction is complete, handle if it was successful or if it failed
+        try {
+            transaction.get(); // This will throw if the transaction failed
+            System.out.println("Leader updated successfully.");
+        } catch (Exception e) {
+            e.printStackTrace(); // Log or handle any errors thrown during the transaction
+        }
     }
 
     public boolean existsByName(String projectName) {
-        Iterable<CollectionReference> collections = db.listCollections();
-        for (CollectionReference collRef : collections) {
-            if (collRef.getId().equals(projectName)){
+        Collections collections = new Collections(this);
+        Iterator<CollectionReference> collectionIterator = collections.iterator();
+        while (collectionIterator.hasNext()){
+            if (collectionIterator.next().getId().equals(projectName)) {
                 return true;
             }
         }
         return false;
-
     }
+
 
     public boolean meetingNameExists(String projectName, String meetingName) throws ExecutionException, InterruptedException {
         DocumentReference docRef = db.collection(projectName).document("meetingInfo");
@@ -155,6 +289,47 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         } else {
             return false;
         }
+
+    @Override
+    public void saveTask(String projectName, Task newTask) {
+        DocumentReference docRef = db.collection(projectName).document("taskInfo");
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot taskInfo = null;
+        try {
+            taskInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        };
+        LocalDate deadlineDate = newTask.getDeadline();
+        // Convert LocalDate to LocalDateTime (start of the day)
+        LocalDateTime deadlineTime = deadlineDate.atStartOfDay();
+
+        // Convert LocalDateTime to Timestamp
+        Timestamp deadline = Timestamp.of(java.sql.Timestamp.valueOf(deadlineTime));
+
+        Map<String, Object> fields = taskInfo.getData();
+        Map<String, Object> task = new HashMap<>();
+        task.put("taskName", newTask.getTaskName());
+        task.put("supervisor", newTask.getSupervisor());
+        task.put("workingMemberList",newTask.getWorkingMembersList());
+        task.put("deadline",deadline);
+        task.put("comments", newTask.getComments());
+        task.put("status",newTask.getStatus());
+        fields.put(newTask.getTaskName(), task);
+        docRef.set(fields);
+    }
+
+    @Override
+    public boolean taskNameExists(String projectName, String taskName) {
+        TaskListRetrieveStrategy strategy = new TaskListRetrieveStrategy();
+        ArrayList<String> taskList = (ArrayList<String>) strategy.getInfoList(projectName, this);
+        if (taskList.contains(taskName)) {
+            return true;
+        }
+        return false;
+
     }
 
     @Override
@@ -180,27 +355,29 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     }
 
 
-    public boolean memberExists(String projectName, ArrayList<String> emails) throws ExecutionException, InterruptedException {
+    @Override
+    public boolean memberExists(String projectName, ArrayList<String> workingMembersList) {
+        ArrayList<String> allMembers = new ArrayList<>();
         DocumentReference docRef = db.collection(projectName).document("projectInfo");
-        ApiFuture<DocumentSnapshot> snapshot = docRef.get();
-        DocumentSnapshot document = snapshot.get();
-
-        if (document.exists()) {
-            // Get the project's leaderEmail
-            String leaderEmail = document.getString("leaderEmail");
-
-            // Get the project's memberEmails
-            ArrayList<String> memberEmails = (ArrayList<String>) document.get("memberEmails");
-
-            // Check if all provided emails are either leaderEmail or part of memberEmails
-            for (String email : emails) {
-                if (!email.equals(leaderEmail) && (memberEmails == null || !memberEmails.contains(email))) {
-                    return false; // At least one email is not in leaderEmail or memberEmails
-                }
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot projectInfo = null;
+        try {
+            projectInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        };
+        String leaderEmail = projectInfo.getString("leaderEmail");
+        ArrayList<String> memberEmails = (ArrayList<String>) projectInfo.get("memberEmails");
+        allMembers.add(leaderEmail);
+        allMembers.addAll(memberEmails);
+        for (String member: workingMembersList) {
+            if (!allMembers.contains(member)) {
+                return false;
             }
-            return true; // All emails are either leaderEmail or part of memberEmails
         }
-        return false; // Project not found
+        return true;
     }
 
 
@@ -275,7 +452,5 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             return null;
         }
     }
-
-
 }
 
