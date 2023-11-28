@@ -18,6 +18,7 @@ public class AddEmailViewModel extends ViewModel {
     public static final String LEADER_EMAIL_LABEL = "Enter leader's email";
     public static final String MEMBER_EMAIL_LABEL = "Enter all members' email";
     public final String CANCEL_BUTTON_LABEL = "Cancel";
+    public final String ADD_BUTTON_LABEL = "Add";
     public final String ADD_EMAIL_LABEL = "Enter email you want to add";
 
     private AddEmailState state = new AddEmailState();

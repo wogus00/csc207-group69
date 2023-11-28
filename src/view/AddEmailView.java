@@ -37,6 +37,7 @@ public class AddEmailView extends JPanel implements ActionListener, PropertyChan
     private final AddEmailController addEmailController;
 
     private final JButton cancel;
+    private final JButton add;
 
     public AddEmailView(AddEmailController controller,
                         AddEmailViewModel addEmailViewModel) {
@@ -52,6 +53,9 @@ public class AddEmailView extends JPanel implements ActionListener, PropertyChan
         cancel = new JButton(addEmailViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
         cancel.addActionListener(this);
+        add = new JButton(addEmailViewModel.ADD_BUTTON_LABEL);
+        buttons.add(add);
+        add.addActionListener(this);
 
         titleInputField.addKeyListener(
                 new KeyListener() {

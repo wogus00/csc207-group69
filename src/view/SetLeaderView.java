@@ -30,6 +30,7 @@ public class SetLeaderView extends JPanel implements ActionListener, PropertyCha
     private final SetLeaderController setLeaderController;
 
     private final JButton cancel;
+    private final JButton set;
 
     /**
      * Constructs a SetLeaderView with the specified controller and view model.
@@ -52,6 +53,9 @@ public class SetLeaderView extends JPanel implements ActionListener, PropertyCha
         cancel = new JButton(setLeaderViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
         cancel.addActionListener(this);
+        set = new JButton(setLeaderViewModel.SET_BUTTON_LABEL);
+        buttons.add(set);
+        set.addActionListener(this);
 
         titleInputField.addKeyListener(
                 new KeyListener() {

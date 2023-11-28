@@ -18,6 +18,7 @@ public class RemoveEmailViewModel extends ViewModel {
     public static final String LEADER_EMAIL_LABEL = "Enter leader's email";
     public static final String MEMBER_EMAIL_LABEL = "Enter all members' email";
     public final String CANCEL_BUTTON_LABEL = "Cancel";
+    public final String REMOVE_BUTTON_LABEL = "Remove";
     public final String REMOVE_EMAIL_LABEL = "Enter email you want to remove";
 
     private RemoveEmailState state = new RemoveEmailState();

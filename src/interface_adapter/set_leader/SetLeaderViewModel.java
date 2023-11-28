@@ -18,6 +18,7 @@ public class SetLeaderViewModel extends ViewModel {
     public static final String LEADER_EMAIL_LABEL = "Enter leader's email";
     public static final String MEMBER_EMAIL_LABEL = "Enter all members' email";
     public final String CANCEL_BUTTON_LABEL = "Cancel";
+    public final String SET_BUTTON_LABEL = "Set";
     public final String SET_LEADER_LABEL = "Enter new leader";
 
     private SetLeaderState state = new SetLeaderState();
