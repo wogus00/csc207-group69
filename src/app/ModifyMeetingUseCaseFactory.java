@@ -3,6 +3,7 @@ package app;
 import entity.CommonMeetingFactory;
 import entity.MeetingFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.main_page.MainPageViewModel;
 import interface_adapter.modify_meeting.ModifyMeetingController;
 import interface_adapter.modify_meeting.ModifyMeetingPresenter;
 import interface_adapter.modify_meeting.ModifyMeetingViewModel;
@@ -21,9 +22,10 @@ public class ModifyMeetingUseCaseFactory {
     public static ModifyMeetingView modifyMeetingView(ViewManagerModel viewManagerModel,
                                                 ModifyMeetingViewModel modifyMeetingViewModel,
                                                 ModifyMeetingDataAccessInterface userDataAccessObject,
-                                                ModifyMeetingGmailDataAccessInterface gmailDataAccessObject) {
+                                                ModifyMeetingGmailDataAccessInterface gmailDataAccessObject,
+                                                      MainPageViewModel mainPageViewModel) {
         try {
-            ModifyMeetingController modifyMeetingController = modifyMeetingUseCase(viewManagerModel, modifyMeetingViewModel, userDataAccessObject, gmailDataAccessObject);
+            ModifyMeetingController modifyMeetingController = modifyMeetingUseCase(viewManagerModel, modifyMeetingViewModel, userDataAccessObject, gmailDataAccessObject, mainPageViewModel);
             return new ModifyMeetingView(viewManagerModel, modifyMeetingController, modifyMeetingViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Invalid File");
@@ -35,9 +37,10 @@ public class ModifyMeetingUseCaseFactory {
     private static ModifyMeetingController modifyMeetingUseCase(ViewManagerModel viewManagerModel,
                                                           ModifyMeetingViewModel modifyMeetingViewModel,
                                                           ModifyMeetingDataAccessInterface userDataAccessObject,
-                                                          ModifyMeetingGmailDataAccessInterface gmailDataAccessObject) throws IOException {
+                                                          ModifyMeetingGmailDataAccessInterface gmailDataAccessObject,
+                                                                MainPageViewModel mainPageViewModel) throws IOException {
 
-        ModifyMeetingOutputBoundary modifyMeetingOutputBoundary = new ModifyMeetingPresenter(viewManagerModel, modifyMeetingViewModel);
+        ModifyMeetingOutputBoundary modifyMeetingOutputBoundary = new ModifyMeetingPresenter(viewManagerModel, modifyMeetingViewModel, mainPageViewModel);
 
         MeetingFactory meetingFactory = new CommonMeetingFactory();
 

@@ -17,6 +17,7 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class ModifyMeetingView extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -80,14 +81,20 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
                             String startTime = currentState.getStartTime();
                             String endTime = currentState.getEndTime();
                             String projectName = currentState.getProjectName();
-                            modifyMeetingController.execute(
-                                    currentState.getMeetingName(),
-                                    currentState.getParticipantEmail(),
-                                    currentState.getMeetingDate(),
-                                    currentState.getStartTime(),
-                                    currentState.getEndTime(),
-                                    currentState.getProjectName()
-                            );
+                            try {
+                                modifyMeetingController.execute(
+                                        currentState.getMeetingName(),
+                                        currentState.getParticipantEmail(),
+                                        currentState.getMeetingDate(),
+                                        currentState.getStartTime(),
+                                        currentState.getEndTime(),
+                                        currentState.getProjectName()
+                                );
+                            } catch (ExecutionException e) {
+                                throw new RuntimeException(e);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
                             currentState = modifyMeetingViewModel.getState();
                             if (currentState.getMeetingNameError() == null) {
                                 JOptionPane.showMessageDialog(ModifyMeetingView.this,

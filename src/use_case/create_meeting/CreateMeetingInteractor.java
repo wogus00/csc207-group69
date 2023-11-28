@@ -52,7 +52,7 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
      *                               CreateMeetingInteractor class
      */
     @Override
-    public void execute(CreateMeetingInputData createMeetingInputData){
+    public void execute(CreateMeetingInputData createMeetingInputData) throws ExecutionException, InterruptedException {
         String meetingName = createMeetingInputData.getMeetingName();
         ArrayList<String> participantEmail = createMeetingInputData.getParticipantEmail();
         String fromEmail = createMeetingInputData.getParticipantEmail().get(0);
@@ -61,7 +61,7 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
         String endTime = createMeetingInputData.getEndTime();
         String projectName = createMeetingInputData.getProjectName();
 
-        if (!createMeetingDataAccessObject.meetingNameExists(projectName, meetingName)) {
+        if (createMeetingDataAccessObject.meetingNameExists(projectName, meetingName)) {
             createMeetingPresenter.prepareFailView("Meeting name is already taken");
         } else if (!createMeetingDataAccessObject.memberExists(projectName, participantEmail)) {
             createMeetingPresenter.prepareFailView("Member does not exist");

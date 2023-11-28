@@ -1,6 +1,7 @@
 package interface_adapter.create_meeting;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.create_announcement.CreateAnnouncementState;
 import interface_adapter.main_page.MainPageState;
 import interface_adapter.main_page.MainPageViewModel;
 import interface_adapter.create_meeting.CreateMeetingState;
@@ -21,7 +22,9 @@ public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
      *
      * @param createMeetingViewModel View model for the Create Meeting use case.
      * @param viewManagerModel View manager model that is responsible for managing the active view.
+     * @param mainPageViewModel View model for the main page.
      */
+
     public CreateMeetingPresenter(ViewManagerModel viewManagerModel,
                                   CreateMeetingViewModel createMeetingViewModel,
                                   MainPageViewModel mainPageViewModel) {
@@ -37,6 +40,11 @@ public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
      */
     @Override
     public void prepareSuccessView(CreateMeetingOutputData response) {
+        MainPageState mainPageState = new MainPageState();
+        mainPageState.addAnnouncement(response.getMeetingName());
+        mainPageViewModel.setState(mainPageState);
+        viewManagerModel.setActiveView(createMeetingViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
     /**
      * Prepares a failure view when the creation of a meeting fails.
@@ -45,5 +53,8 @@ public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
      */
     @Override
     public void prepareFailView(String error) {
+        CreateMeetingState createMeetingState = createMeetingViewModel.getState();
+        createMeetingState.setMeetingNameError(error);
+        createMeetingViewModel.firePropertyChanged();
     }
 }

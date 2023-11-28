@@ -40,6 +40,14 @@ public class CreateMeetingViewModel extends ViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     /**
+     * Getter method that returns the current state of the create meeting process.
+     * @return state that represents current state of the create meeting process.
+     */
+    public CreateMeetingState getState() {
+        return state;
+    }
+
+    /**
      * Notifies all listeners that the property has changed.
      */
     public void firePropertyChanged() {
@@ -52,13 +60,5 @@ public class CreateMeetingViewModel extends ViewModel {
      */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
-    }
-
-    /**
-     * Getter method that returns the current state of the create meeting process.
-     * @return state that represents current state of the create meeting process.
-     */
-    public CreateMeetingState getState() {
-        return state;
     }
 }

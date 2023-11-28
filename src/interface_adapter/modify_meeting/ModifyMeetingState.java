@@ -150,10 +150,10 @@ public class ModifyMeetingState {
         return "ModifyMeetingState{" +
                 "meeting name='" + meetingName + '\'' +
                 ", participant email='" + participantEmail + '\'' +
-                ", meeting date" + meetingDate + '\'' +
-                ", start time" + startTime + '\'' +
-                ", end time" + endTime + '\'' +
-                ", project name" + projectName + '\'' +
+                ", meeting date='" + meetingDate + '\'' +
+                ", start time='" + startTime + '\'' +
+                ", end time='" + endTime + '\'' +
+                ", project name='" + projectName + '\'' +
                 '}';
     }
 }

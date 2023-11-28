@@ -3,6 +3,7 @@ package interface_adapter.modify_meeting;
 import use_case.modify_meeting.ModifyMeetingInputBoundary;
 import use_case.modify_meeting.ModifyMeetingInputData;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Controller class is responsible for creating a meeting.
@@ -33,7 +34,7 @@ public class ModifyMeetingController {
      * @param endTime                    The ending time of the meeting.
      * @param projectName                The name of the project that this meeting is about.
      */
-    public void execute(String meetingName, ArrayList<String> participantEmail, String meetingDate, String startTime, String endTime, String projectName) {
+    public void execute(String meetingName, ArrayList<String> participantEmail, String meetingDate, String startTime, String endTime, String projectName) throws ExecutionException, InterruptedException {
         ModifyMeetingInputData modifyMeetingInputData = new ModifyMeetingInputData(
                 meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
 

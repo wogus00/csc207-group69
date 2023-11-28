@@ -10,7 +10,7 @@ import java.sql.Time;
 public class CreateMeetingState {
     private String meetingName = "";
     private String meetingNameError = null;
-    private ArrayList<String> participantEmail =new ArrayList<>();
+    private ArrayList<String> participantEmail = new ArrayList<>();
     private String meetingDate = new String();
     private String startTime = new String();
     private String endTime = new String();
@@ -150,10 +150,10 @@ public class CreateMeetingState {
         return "CreateMeetingState{" +
                 "meeting name='" + meetingName + '\'' +
                 ", participant email='" + participantEmail + '\'' +
-                ", meeting date" + meetingDate + '\'' +
-                ", start time" + startTime + '\'' +
-                ", end time" + endTime + '\'' +
-                ", project name" + projectName + '\'' +
+                ", meeting date='" + meetingDate + '\'' +
+                ", start time='" + startTime + '\'' +
+                ", end time='" + endTime + '\'' +
+                ", project name='" + projectName + '\'' +
                 '}';
     }
 }
