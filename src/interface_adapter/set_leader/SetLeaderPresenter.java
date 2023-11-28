@@ -1,10 +1,13 @@
 package interface_adapter.set_leader;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.main_page.MainPageState;
 import interface_adapter.main_page.MainPageViewModel;
 import use_case.set_leader.SetLeaderOutputBoundary;
 import interface_adapter.set_leader.SetLeaderState;
 import interface_adapter.set_leader.SetLeaderViewModel;
+
+import java.util.ArrayList;
 
 /**
  * The {@code SetLeaderPresenter} class implements the {@code SetLeaderOutputBoundary} interface.
@@ -36,8 +39,18 @@ public class SetLeaderPresenter implements SetLeaderOutputBoundary {
      * triggering any observers that the view model state has changed.
      */
     @Override
-    public void prepareSuccessView() {
-        
+    public void prepareSuccessView(String new_leader) {
+        MainPageState mainPageState = mainPageViewModel.getState();
+        String old_leader = mainPageState.getLeaderEmail();
+        mainPageState.setLeaderEmail(new_leader);
+        ArrayList<String> memberList = mainPageState.getMemberEmail();
+        memberList.remove(new_leader);
+        memberList.add(old_leader);
+        mainPageState.setMemberEmail(memberList);
+        mainPageViewModel.setState(mainPageState);
+        mainPageViewModel.firePropertyChanged();
+        viewManagerModel.setActiveView("Main Page");
+        viewManagerModel.firePropertyChanged();
         viewModel.firePropertyChanged();
     }
 

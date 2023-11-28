@@ -83,7 +83,7 @@ public class Main {
         views.add(removeEmailView, removeEmailView.viewName);
 
         SetLeaderViewModel setLeaderViewModel = new SetLeaderViewModel();
-        SetLeaderView setLeaderView = SetLeaderUseCaseFactory.setLeaderView(viewManagerModel,  setLeaderViewModel, firebaseAccessObject);
+        SetLeaderView setLeaderView = SetLeaderUseCaseFactory.setLeaderView(viewManagerModel,  setLeaderViewModel, firebaseAccessObject, mainPageViewModel);
         views.add(setLeaderView, setLeaderView.viewName);
 
         MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel, createTaskViewModel, completeTaskViewModel, modifyTaskViewModel, addEmailViewModel, removeEmailViewModel, setLeaderViewModel);

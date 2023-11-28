@@ -2,6 +2,7 @@ package app;
 
 import com.google.api.services.gmail.Gmail;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.main_page.MainPageViewModel;
 import interface_adapter.set_leader.SetLeaderViewModel;
 import interface_adapter.set_leader.SetLeaderController;
 import interface_adapter.set_leader.SetLeaderPresenter;
@@ -35,10 +36,11 @@ public class SetLeaderUseCaseFactory {
     public static SetLeaderView setLeaderView(
             ViewManagerModel viewManagerModel,
             SetLeaderViewModel setLeaderViewModel,
-            SetLeaderDataAccessInterface setLeaderDataAccessObject) {
+            SetLeaderDataAccessInterface setLeaderDataAccessObject,
+            MainPageViewModel mainPageViewModel) {
 
         try {
-            SetLeaderController setLeaderController = SetLeaderUseCase(viewManagerModel, setLeaderViewModel, setLeaderDataAccessObject);
+            SetLeaderController setLeaderController = SetLeaderUseCase(viewManagerModel, setLeaderViewModel, setLeaderDataAccessObject, mainPageViewModel);
             return new SetLeaderView(setLeaderController, setLeaderViewModel, viewManagerModel);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error initializing Set Leader feature.");
@@ -59,9 +61,10 @@ public class SetLeaderUseCaseFactory {
     private static SetLeaderController SetLeaderUseCase(
             ViewManagerModel viewManagerModel,
             SetLeaderViewModel setLeaderViewModel,
-            SetLeaderDataAccessInterface setLeaderDataAccessObject) {
+            SetLeaderDataAccessInterface setLeaderDataAccessObject,
+            MainPageViewModel mainPageViewModel) {
 
-        SetLeaderOutputBoundary setLeaderOutputBoundary = new SetLeaderPresenter(setLeaderViewModel);
+        SetLeaderOutputBoundary setLeaderOutputBoundary = new SetLeaderPresenter(setLeaderViewModel, viewManagerModel, mainPageViewModel);
 
         SetLeaderInputBoundary setLeaderInteractor = new SetLeaderInteractor(
                 setLeaderDataAccessObject, setLeaderOutputBoundary);

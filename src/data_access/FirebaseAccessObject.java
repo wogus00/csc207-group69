@@ -236,6 +236,12 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
             } else {
                 // If the new leader is different, update the document
                 t.update(docRef, "leaderEmail", newLeaderEmail);
+                ArrayList<String> memberList = (ArrayList<String>) snapshot.get("memberEmails");
+                if (memberList != null) {
+                    memberList.remove(newLeaderEmail);
+                }
+                memberList.add(currentLeaderEmail);
+                t.update(docRef, "memberEmails", memberList);
             }
 
             // Return successfully completing the transaction

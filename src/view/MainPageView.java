@@ -64,6 +64,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
     JLabel announcementLabel;
     JButton recentAnnouncement;
     JLabel recentAnnouncementInfo = new JLabel();
+    private JPanel projectPanelExtension;
 
     /**
      * Constructs a new MainPageView class with specific models
@@ -233,7 +234,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonPanel.add(announcementPanelExtension);
         buttonList.add(announcementPanelExtension);
 
-        JPanel projectPanelExtension = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        projectPanelExtension = new JPanel(new FlowLayout(FlowLayout.LEFT));
         projectPanelExtension.setName("Project Extension");
         projectPanelExtension.setVisible(false);
 
@@ -484,6 +485,9 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         showAllInfo.setText(state.getShowAllMessage());
         announcementLabel.setText(state.getAnnouncementLabel());
         recentAnnouncementInfo.setText(state.getRecentAnnouncements());
+        if (!userEmailInfo.getText().equals(leaderEmailInfo.getText())) {
+            projectPanelExtension.setVisible(false);
+        }
 
 
 
