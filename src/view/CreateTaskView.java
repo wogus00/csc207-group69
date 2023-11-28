@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Objects;
 
 public class CreateTaskView extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -31,6 +32,7 @@ public class CreateTaskView extends JPanel implements ActionListener, PropertyCh
         this.viewManagerModel = viewManagerModel;
         this.createTaskController = createTaskController;
         this.createTaskViewModel = createTaskViewModel;
+        this.createTaskViewModel.addPropertyChangeListener(this);
 
 
         JLabel title = new JLabel(CreateTaskViewModel.TITLE_LABEL);
@@ -58,6 +60,11 @@ public class CreateTaskView extends JPanel implements ActionListener, PropertyCh
                 if (e.getSource().equals(cancel)) {
                     viewManagerModel.setActiveView("Main Page");
                     viewManagerModel.firePropertyChanged();
+                    taskNameInputField.setText("");
+                    supervisorInputField.setText("");
+                    memberEmailsInputField.setText("");
+                    deadlineInputField.setText("");
+                    commentsInputField.setText("");
                 }
             }
         });
@@ -79,6 +86,11 @@ public class CreateTaskView extends JPanel implements ActionListener, PropertyCh
                             createTaskController.execute(projectName, taskName, supervisor, workingMembers, deadline, comments);
                             if (createTaskViewModel.getState().getCreateTaskError() == null) {
                                 JOptionPane.showMessageDialog(CreateTaskView.this, "created task successfully");
+                                taskNameInputField.setText("");
+                                supervisorInputField.setText("");
+                                memberEmailsInputField.setText("");
+                                deadlineInputField.setText("");
+                                commentsInputField.setText("");
                             } else {
                                 JOptionPane.showMessageDialog(CreateTaskView.this, createTaskViewModel.getState().getCreateTaskError());
                             }
@@ -195,6 +207,7 @@ public class CreateTaskView extends JPanel implements ActionListener, PropertyCh
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+
 
     }
 }

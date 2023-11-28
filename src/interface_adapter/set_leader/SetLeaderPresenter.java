@@ -1,5 +1,7 @@
 package interface_adapter.set_leader;
 
+import interface_adapter.ViewManagerModel;
+import interface_adapter.main_page.MainPageViewModel;
 import use_case.set_leader.SetLeaderOutputBoundary;
 import interface_adapter.set_leader.SetLeaderState;
 import interface_adapter.set_leader.SetLeaderViewModel;
@@ -11,6 +13,8 @@ import interface_adapter.set_leader.SetLeaderViewModel;
  */
 public class SetLeaderPresenter implements SetLeaderOutputBoundary {
     private SetLeaderViewModel viewModel;
+    private ViewManagerModel viewManagerModel;
+    private MainPageViewModel mainPageViewModel;
 
     /**
      * Constructs a {@code SetLeaderPresenter} with the specified view model.
@@ -18,8 +22,12 @@ public class SetLeaderPresenter implements SetLeaderOutputBoundary {
      * @param viewModel The view model that this presenter will update based on the outcome
      *                  of the set leader use case
      */
-    public SetLeaderPresenter(SetLeaderViewModel viewModel) {
+    public SetLeaderPresenter(SetLeaderViewModel viewModel, ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel) {
+
         this.viewModel = viewModel;
+        this.viewManagerModel = viewManagerModel;
+        this.mainPageViewModel = mainPageViewModel;
+
     }
 
     /**
@@ -29,6 +37,7 @@ public class SetLeaderPresenter implements SetLeaderOutputBoundary {
      */
     @Override
     public void prepareSuccessView() {
+        
         viewModel.firePropertyChanged();
     }
 

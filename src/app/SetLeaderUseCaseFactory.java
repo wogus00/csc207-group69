@@ -39,7 +39,7 @@ public class SetLeaderUseCaseFactory {
 
         try {
             SetLeaderController setLeaderController = SetLeaderUseCase(viewManagerModel, setLeaderViewModel, setLeaderDataAccessObject);
-            return new SetLeaderView(setLeaderController, setLeaderViewModel);
+            return new SetLeaderView(setLeaderController, setLeaderViewModel, viewManagerModel);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error initializing Set Leader feature.");
         }

@@ -52,6 +52,7 @@ public class CompleteTaskView extends JPanel implements ActionListener, Property
                 if (e.getSource().equals(cancel)) {
                     viewManagerModel.setActiveView("Main Page");
                     viewManagerModel.firePropertyChanged();
+                    taskNameInputField.setText("");
                 }
             }
         });
@@ -92,6 +93,7 @@ public class CompleteTaskView extends JPanel implements ActionListener, Property
                                 JOptionPane.showMessageDialog(CompleteTaskView.this, "completed task successfully");
                                 viewManagerModel.setActiveView("Main Page");
                                 viewManagerModel.firePropertyChanged();
+                                taskNameInputField.setText("");
                             } else {
                                 JOptionPane.showMessageDialog(CompleteTaskView.this, currentState.getTaskNameError());
                             }

@@ -39,7 +39,7 @@ public class RemoveEmailUseCaseFactory {
 
         try {
             RemoveEmailController removeEmailController = RemoveEmailUseCase(viewManagerModel, removeEmailViewModel, removeEmailDataAccessObject);
-            return new RemoveEmailView(removeEmailController, removeEmailViewModel);
+            return new RemoveEmailView(removeEmailController, removeEmailViewModel, viewManagerModel);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error initializing Remove Email feature.");
         }

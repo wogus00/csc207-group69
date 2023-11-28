@@ -57,6 +57,11 @@ public class ModifyTaskView extends JPanel implements ActionListener, PropertyCh
                 if (e.getSource().equals(cancel)) {
                     viewManagerModel.setActiveView("Main Page");
                     viewManagerModel.firePropertyChanged();
+                    taskNameInputField.setText("");
+                    supervisorInputField.setText("");
+                    memberEmailsInputField.setText("");
+                    deadlineInputField.setText("");
+                    commentsInputField.setText("");
                 }
             }
         });
@@ -82,6 +87,11 @@ public class ModifyTaskView extends JPanel implements ActionListener, PropertyCh
                                 JOptionPane.showMessageDialog(ModifyTaskView.this, "modified task successfully");
                                 viewManagerModel.setActiveView("Main Page");
                                 viewManagerModel.firePropertyChanged();
+                                taskNameInputField.setText("");
+                                supervisorInputField.setText("");
+                                memberEmailsInputField.setText("");
+                                deadlineInputField.setText("");
+                                commentsInputField.setText("");
                             } else if (currentState.getTaskNameError() != null) {
                                 JOptionPane.showMessageDialog(ModifyTaskView.this, modifyTaskViewModel.getState().getTaskNameError());
                             } else {

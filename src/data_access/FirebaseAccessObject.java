@@ -155,7 +155,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
                 throw new IllegalArgumentException("Email " + email + " already exists in the project.");
             } else {
                 // If not, add the email to the memberEmails list
-                if (memberEmails == null) memberEmails = new ArrayList<>();
+                if (memberEmails == null) {memberEmails = new ArrayList<>();}
                 memberEmails.add(email);
                 t.update(docRef, "memberEmails", memberEmails);
             }
@@ -186,7 +186,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
                 throw new IllegalStateException("Project with name " + projectName + " does not exist!");
             }
 
-            // Retrieve the memberEmails list
+            // Retrieve the memberEmails0 list
             ArrayList<String> memberEmails = (ArrayList<String>) snapshot.get("memberEmails");
             if (memberEmails == null || memberEmails.isEmpty()) {
                 // If the list is empty or null, throw an exception or handle accordingly

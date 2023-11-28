@@ -40,7 +40,7 @@ public class AddEmailUseCaseFactory {
 
         try {
             AddEmailController deleteAnnouncementController = AddEmailUseCase(viewManagerModel, addEmailViewModel, addEmailDataAccessObject);
-            return new AddEmailView(deleteAnnouncementController, addEmailViewModel);
+            return new AddEmailView(deleteAnnouncementController, addEmailViewModel, viewManagerModel);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error initializing Add Email feature.");
         }

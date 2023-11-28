@@ -74,10 +74,6 @@ public class Main {
         CompleteTaskView completeTaskView = CompleteTaskUseCaseFactory.completeTaskView(viewManagerModel, completeTaskViewModel, firebaseAccessObject, gmailDataAccessObject, mainPageViewModel);
         views.add(completeTaskView, completeTaskView.viewName);
 
-        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel, createTaskViewModel, completeTaskViewModel, modifyTaskViewModel);
-        views.add(mainPageView, mainPageView.viewName);
-
-
         AddEmailViewModel addEmailViewModel = new AddEmailViewModel();
         AddEmailView addEmailView = AddEmailUseCaseFactory.addEmailView(viewManagerModel,  addEmailViewModel, firebaseAccessObject);
         views.add(addEmailView, addEmailView.viewName);
@@ -89,6 +85,9 @@ public class Main {
         SetLeaderViewModel setLeaderViewModel = new SetLeaderViewModel();
         SetLeaderView setLeaderView = SetLeaderUseCaseFactory.setLeaderView(viewManagerModel,  setLeaderViewModel, firebaseAccessObject);
         views.add(setLeaderView, setLeaderView.viewName);
+
+        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel, createTaskViewModel, completeTaskViewModel, modifyTaskViewModel, addEmailViewModel, removeEmailViewModel, setLeaderViewModel);
+        views.add(mainPageView, mainPageView.viewName);
 
         viewManagerModel.setActiveView(loginView.viewName);
 

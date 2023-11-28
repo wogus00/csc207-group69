@@ -1,6 +1,8 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.add_email.AddEmailState;
+import interface_adapter.add_email.AddEmailViewModel;
 import interface_adapter.complete_task.CompleteTaskState;
 import interface_adapter.complete_task.CompleteTaskViewModel;
 import interface_adapter.create_task.CreateTaskState;
@@ -11,6 +13,10 @@ import interface_adapter.main_page.MainPageState;
 import interface_adapter.main_page.MainPageViewModel;
 import interface_adapter.modify_task.ModifyTaskState;
 import interface_adapter.modify_task.ModifyTaskViewModel;
+import interface_adapter.remove_email.RemoveEmailState;
+import interface_adapter.remove_email.RemoveEmailViewModel;
+import interface_adapter.set_leader.SetLeaderState;
+import interface_adapter.set_leader.SetLeaderViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,6 +46,11 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
     CreateTaskViewModel createTaskViewModel;
     CompleteTaskViewModel completeTaskViewModel;
     ModifyTaskViewModel modifyTaskViewModel;
+    RemoveEmailViewModel removeEmailViewModel;
+    SetLeaderViewModel setLeaderViewModel;
+
+    AddEmailViewModel addEmailViewModel;
+    CreateAnnouncementView createAnnouncementView;
 
     JLabel titleLabel;
     JLabel leaderEmailInfo = new JLabel();
@@ -63,13 +74,19 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
      * @param mainPageViewModel The view model for the main page view, manages the state and behavior of the main page view
      * @param loginViewModel The view model for the login view, manages the state and behavior of the login view
      */
-    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel, LoginViewModel loginViewModel, CreateTaskViewModel createTaskViewModel, CompleteTaskViewModel completeTaskViewModel, ModifyTaskViewModel modifyTaskViewModel) {
+    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel, LoginViewModel loginViewModel,
+                        CreateTaskViewModel createTaskViewModel, CompleteTaskViewModel completeTaskViewModel,
+                        ModifyTaskViewModel modifyTaskViewModel, AddEmailViewModel addEmailViewModel,
+                        RemoveEmailViewModel removeEmailViewModel, SetLeaderViewModel setLeaderViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.mainPageViewModel = mainPageViewModel;
         this.loginViewModel = loginViewModel;
         this.createTaskViewModel = createTaskViewModel;
         this.completeTaskViewModel = completeTaskViewModel;
         this.modifyTaskViewModel = modifyTaskViewModel;
+        this.addEmailViewModel = addEmailViewModel;
+        this.removeEmailViewModel = removeEmailViewModel;
+        this.setLeaderViewModel = setLeaderViewModel;
         this.mainPageViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BorderLayout());
@@ -222,7 +239,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
 
         JButton buttonP1 = new JButton("add member");
         JButton buttonP2 = new JButton("remove member");
-        JButton buttonP3 = new JButton("change supervisor");
+        JButton buttonP3 = new JButton("change leader");
         projectPanelExtension.add(buttonP1);
         projectPanelExtension.add(buttonP2);
         projectPanelExtension.add(buttonP3);
@@ -382,6 +399,8 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonA1.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+
                     }
                 }
         );
@@ -389,6 +408,13 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonP1.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        AddEmailState addEmailState = addEmailViewModel.getState();
+                        addEmailState.setProjectName(mainPageState.getProjectName());
+                        addEmailViewModel.setState(addEmailState);
+                        addEmailViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Add Email");
+                        viewManagerModel.firePropertyChanged();
                     }
                 }
         );
@@ -396,6 +422,13 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonP2.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        RemoveEmailState removeEmailState = removeEmailViewModel.getState();
+                        removeEmailState.setProjectName(mainPageState.getProjectName());
+                        removeEmailViewModel.setState(removeEmailState);
+                        removeEmailViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Remove Email");
+                        viewManagerModel.firePropertyChanged();
                     }
                 }
         );
@@ -403,6 +436,13 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonP3.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        SetLeaderState setLeaderState = setLeaderViewModel.getState();
+                        setLeaderState.setProjectName(mainPageState.getProjectName());
+                        setLeaderViewModel.setState(setLeaderState);
+                        setLeaderViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Set Leader");
+                        viewManagerModel.firePropertyChanged();
                     }
                 }
         );
