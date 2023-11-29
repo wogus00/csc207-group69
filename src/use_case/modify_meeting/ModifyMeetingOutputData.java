@@ -1,15 +1,12 @@
-package use_case.create_meeting;
+package use_case.modify_meeting;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
- * Input Data class representing the data inputted by user for creating a meeting.
- * This class encapsulates the necessary information to create a meeting.
+ * Output Data class representing the data that the user will receive for creating a meeting.
+ * This sends data to be shown to the user through the ModifyMeetingPresenter.
  */
-public class CreateMeetingInputData {
+public class ModifyMeetingOutputData {
     private final String meetingName;
     private final ArrayList<String> participantEmail;
     private final String meetingDate;
@@ -17,23 +14,14 @@ public class CreateMeetingInputData {
     private final String endTime;
     private final String projectName;
 
-    /**
-     * Constructor method that creates new CreateMeetingInputData with specified information needed when creating meeting.
-     *
-     * @param meetingName String representing title of meeting.
-     * @param participantEmail ArrayList of strings representing the email addresses of all participants.
-     * @param meetingDate String representing date of meeting.
-     * @param startTime String representing starting time of meeting.
-     * @param endTime String representing ending time of meeting.
-     * @param projectName String that represents the name of the project that the meeting belongs to.
-     */
-    public CreateMeetingInputData(String meetingName, ArrayList<String> participantEmail, String meetingDate, String startTime, String endTime, String projectName){
-                this.meetingName = meetingName;
-                this.participantEmail = participantEmail;
-                this.meetingDate = meetingDate;
-                this.startTime = startTime;
-                this.endTime = endTime;
-                this.projectName = projectName;
+    public ModifyMeetingOutputData(String meetingName, ArrayList<String> participantEmail, String meetingDate,
+                                   String startTime, String endTime, String projectName) {
+        this.meetingName = meetingName;
+        this.participantEmail = participantEmail;
+        this.meetingDate = meetingDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.projectName = projectName;
     }
 
     /**
@@ -76,3 +64,5 @@ public class CreateMeetingInputData {
      */
     public String getProjectName() {return projectName;}
 }
+
+

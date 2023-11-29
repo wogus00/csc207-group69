@@ -1,4 +1,4 @@
-package use_case.create_meeting;
+package use_case.modify_meeting;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -7,9 +7,9 @@ import java.util.Arrays;
 
 /**
  * Input Data class representing the data inputted by user for creating a meeting.
- * This class encapsulates the necessary information to create a meeting.
+ * This class encapsulates the necessary information to modify a meeting.
  */
-public class CreateMeetingInputData {
+public class ModifyMeetingInputData {
     private final String meetingName;
     private final ArrayList<String> participantEmail;
     private final String meetingDate;
@@ -18,7 +18,7 @@ public class CreateMeetingInputData {
     private final String projectName;
 
     /**
-     * Constructor method that creates new CreateMeetingInputData with specified information needed when creating meeting.
+     * Constructor method that modifys new ModifyMeetingInputData with specified information needed when creating meeting.
      *
      * @param meetingName String representing title of meeting.
      * @param participantEmail ArrayList of strings representing the email addresses of all participants.
@@ -27,13 +27,13 @@ public class CreateMeetingInputData {
      * @param endTime String representing ending time of meeting.
      * @param projectName String that represents the name of the project that the meeting belongs to.
      */
-    public CreateMeetingInputData(String meetingName, ArrayList<String> participantEmail, String meetingDate, String startTime, String endTime, String projectName){
-                this.meetingName = meetingName;
-                this.participantEmail = participantEmail;
-                this.meetingDate = meetingDate;
-                this.startTime = startTime;
-                this.endTime = endTime;
-                this.projectName = projectName;
+    public ModifyMeetingInputData(String meetingName, ArrayList<String> participantEmail, String meetingDate, String startTime, String endTime, String projectName){
+        this.meetingName = meetingName;
+        this.participantEmail = participantEmail;
+        this.meetingDate = meetingDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.projectName = projectName;
     }
 
     /**

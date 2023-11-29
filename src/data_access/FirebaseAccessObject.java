@@ -16,9 +16,8 @@ import entity.Project;
 import entity.ProjectFactory;
 import entity.Task;
 import use_case.add_email.AddEmailDataAccessInterface;
-import use_case.complete_task.CompleteTaskDataAccessInterface;
+import use_case.create_meeting.CreateMeetingDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
-import use_case.create_task.CreateTaskDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 
 import use_case.remove_email.RemoveEmailDataAccessInterface;
@@ -31,6 +30,7 @@ import use_case.create_announcement.CreateAnnouncementDataAccessInterface;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -40,14 +40,14 @@ import java.util.*;
 
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface, RemoveEmailDataAccessInterface, SetLeaderDataAccessInterface {
-
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, AddEmailDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface, RemoveEmailDataAccessInterface, SetLeaderDataAccessInterface, CreateMeetingDataAccessInterface {
 
     Firestore db;
     ProjectFactory projectFactory;
 
     private final Map<String, Integer> headers = new LinkedHashMap<>();
     private final Map<String, Project> projects = new HashMap<>();
+
     // Load Firebase Admin SDK credentials
     public FirebaseAccessObject() {
         try {
@@ -77,9 +77,9 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
     }
 
     public void save(Project project) {
-            String projectName = project.getProjectName();
-            String leaderEmail = project.getLeaderEmail();
-            ArrayList<String> memberEmails = project.getMemberEmails();
+        String projectName = project.getProjectName();
+        String leaderEmail = project.getLeaderEmail();
+        ArrayList<String> memberEmails = project.getMemberEmails();
 
             DocumentReference docRef = db.collection(projectName).document("projectInfo");
             Map<String, Object> data = new HashMap<>();
@@ -125,7 +125,8 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             throw new RuntimeException(e);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
-        };
+        }
+        ;
         String leaderEmail = projectInfo.getString("leaderEmail");
         ArrayList<String> memberEmails = (ArrayList<String>) projectInfo.get("memberEmails");
         Project project = new CommonProject(projectName, leaderEmail, memberEmails);
@@ -276,6 +277,19 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         return false;
     }
 
+
+    public boolean meetingNameExists(String projectName, String meetingName) throws ExecutionException, InterruptedException {
+        DocumentReference docRef = db.collection(projectName).document("meetingInfo");
+        ApiFuture<DocumentSnapshot> snapshot = docRef.get();
+        DocumentSnapshot document = snapshot.get();
+
+        if (document.exists()) {
+            Map<String, Object> meetingInfo = document.getData();
+            return meetingInfo != null && meetingInfo.containsKey(meetingName);
+        } else {
+            return false;
+        }
+
     @Override
     public void saveTask(String projectName, Task newTask) {
         DocumentReference docRef = db.collection(projectName).document("taskInfo");
@@ -315,17 +329,31 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
             return true;
         }
         return false;
+
     }
 
     @Override
-    public void completeTask(String projectName, String taskName) {
-        // TODO: add methods
+    public void saveMeeting(Meeting meeting) throws ExecutionException, InterruptedException {
+        String meetingName = meeting.getMeetingName();
+        String projectName = meeting.getProjectName();
+        if (!meetingNameExists(projectName, meetingName)){
+            ArrayList<String> participantEmail = meeting.getParticipantEmail();
+            String meetingDate = meeting.getMeetingDate();
+            String startTime = meeting.getStartTime();
+            String endTime = meeting.getEndTime();
+
+            DocumentReference docRefMeeting = db.collection(projectName).document("meetingInfo");
+            Map<String, Object> meetingData = new HashMap<>();
+            meetingData.put("meetingName", meetingName);
+            meetingData.put("participantEmail", participantEmail);
+            meetingData.put("meetingDate", meetingDate);
+            meetingData.put("startTime", startTime);
+            meetingData.put("endTime", endTime);
+            meetingData.put("projectName", projectName);
+            docRefMeeting.set(meetingData);
+        }
     }
 
-    @Override
-    public boolean userHasAccessToTask(String projectName, String taskName, String userEmail) {
-        return false;
-    }
 
     @Override
     public boolean memberExists(String projectName, ArrayList<String> workingMembersList) {
@@ -351,6 +379,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, A
         }
         return true;
     }
+
 
     @Override
     public void save(Announcement announcement) {
