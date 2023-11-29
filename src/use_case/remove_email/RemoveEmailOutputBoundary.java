@@ -13,7 +13,7 @@ public interface RemoveEmailOutputBoundary {
      * This method is called when removing an email from a project has been completed successfully.
      * It should handle the logic for displaying a success message or view to the user.
      */
-    void prepareSuccessView();
+    void prepareSuccessView(String removed);
 
     /**
      * Prepares and presents a failure view with a specified error message.

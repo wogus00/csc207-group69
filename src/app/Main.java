@@ -4,6 +4,7 @@ import data_access.FirebaseAccessObject;
 import data_access.GmailDataAccessObject;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.complete_task.CompleteTaskViewModel;
+import interface_adapter.create_meeting.CreateMeetingViewModel;
 import interface_adapter.create_project.CreateProjectViewModel;
 import interface_adapter.add_email.AddEmailViewModel;
 import interface_adapter.modify_task.ModifyTaskViewModel;
@@ -54,6 +55,7 @@ public class Main {
         CreateTaskViewModel createTaskViewModel = new CreateTaskViewModel();
         CompleteTaskViewModel completeTaskViewModel = new CompleteTaskViewModel();
         ModifyTaskViewModel modifyTaskViewModel = new ModifyTaskViewModel();
+        CreateMeetingViewModel createMeetingViewModel = new CreateMeetingViewModel();
 
         FirebaseAccessObject firebaseAccessObject;
         GmailDataAccessObject gmailDataAccessObject = new GmailDataAccessObject();
@@ -75,18 +77,21 @@ public class Main {
         views.add(completeTaskView, completeTaskView.viewName);
 
         AddEmailViewModel addEmailViewModel = new AddEmailViewModel();
-        AddEmailView addEmailView = AddEmailUseCaseFactory.addEmailView(viewManagerModel,  addEmailViewModel, firebaseAccessObject);
+        AddEmailView addEmailView = AddEmailUseCaseFactory.addEmailView(viewManagerModel,  addEmailViewModel, firebaseAccessObject, mainPageViewModel);
         views.add(addEmailView, addEmailView.viewName);
 
         RemoveEmailViewModel removeEmailViewModel = new RemoveEmailViewModel();
-        RemoveEmailView removeEmailView = RemoveEmailUseCaseFactory.removeEmailView(viewManagerModel,  removeEmailViewModel, firebaseAccessObject);
+        RemoveEmailView removeEmailView = RemoveEmailUseCaseFactory.removeEmailView(viewManagerModel,  removeEmailViewModel, firebaseAccessObject, mainPageViewModel);
         views.add(removeEmailView, removeEmailView.viewName);
 
         SetLeaderViewModel setLeaderViewModel = new SetLeaderViewModel();
         SetLeaderView setLeaderView = SetLeaderUseCaseFactory.setLeaderView(viewManagerModel,  setLeaderViewModel, firebaseAccessObject, mainPageViewModel);
         views.add(setLeaderView, setLeaderView.viewName);
 
-        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel, createTaskViewModel, completeTaskViewModel, modifyTaskViewModel, addEmailViewModel, removeEmailViewModel, setLeaderViewModel);
+        CreateMeetingView createMeetingView =  CreateMeetingUseCaseFactory.createMeetingView(viewManagerModel, createMeetingViewModel, firebaseAccessObject, gmailDataAccessObject, mainPageViewModel);
+        views.add(createMeetingView, createMeetingView.viewName);
+
+        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel, createTaskViewModel, completeTaskViewModel, modifyTaskViewModel, addEmailViewModel, removeEmailViewModel, setLeaderViewModel, createMeetingViewModel);
         views.add(mainPageView, mainPageView.viewName);
 
         viewManagerModel.setActiveView(loginView.viewName);

@@ -69,15 +69,16 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
             Meeting newMeeting = meetingFactory.create(meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
             createMeetingDataAccessObject.saveMeeting(newMeeting);
 
-            for (String toEmail: participantEmail) {
+            for (String toEmail : participantEmail) {
                 try {
                     createMeetingGmailAccessObject.sendMeetingCreationEmail(toEmail, fromEmail, meetingName);
                 } catch (IOException | MessagingException e) {
                     throw new RuntimeException(e);
                 }
+
+                CreateMeetingOutputData createMeetingOutputData = new CreateMeetingOutputData(meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
+                createMeetingPresenter.prepareSuccessView(createMeetingOutputData);
             }
-            CreateMeetingOutputData createMeetingOutputData = new CreateMeetingOutputData(meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
-            createMeetingPresenter.prepareSuccessView(createMeetingOutputData);
         }
     }
 }

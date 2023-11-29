@@ -2,6 +2,7 @@ package app;
 
 import com.google.api.services.gmail.Gmail;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.main_page.MainPageViewModel;
 import interface_adapter.remove_email.RemoveEmailViewModel;
 import interface_adapter.remove_email.RemoveEmailController;
 import interface_adapter.remove_email.RemoveEmailPresenter;
@@ -35,10 +36,11 @@ public class RemoveEmailUseCaseFactory {
     public static RemoveEmailView removeEmailView(
             ViewManagerModel viewManagerModel,
             RemoveEmailViewModel removeEmailViewModel,
-            RemoveEmailDataAccessInterface removeEmailDataAccessObject) {
+            RemoveEmailDataAccessInterface removeEmailDataAccessObject,
+            MainPageViewModel mainPageViewModel) {
 
         try {
-            RemoveEmailController removeEmailController = RemoveEmailUseCase(viewManagerModel, removeEmailViewModel, removeEmailDataAccessObject);
+            RemoveEmailController removeEmailController = RemoveEmailUseCase(viewManagerModel, removeEmailViewModel, removeEmailDataAccessObject, mainPageViewModel);
             return new RemoveEmailView(removeEmailController, removeEmailViewModel, viewManagerModel);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error initializing Remove Email feature.");
@@ -59,9 +61,10 @@ public class RemoveEmailUseCaseFactory {
     private static RemoveEmailController RemoveEmailUseCase(
             ViewManagerModel viewManagerModel,
             RemoveEmailViewModel removeEmailViewModel,
-            RemoveEmailDataAccessInterface removeEmailDataAccessObject) {
+            RemoveEmailDataAccessInterface removeEmailDataAccessObject,
+            MainPageViewModel mainPageViewModel) {
 
-        RemoveEmailOutputBoundary removeEmailOutputBoundary = new RemoveEmailPresenter(removeEmailViewModel);
+        RemoveEmailOutputBoundary removeEmailOutputBoundary = new RemoveEmailPresenter(removeEmailViewModel, viewManagerModel, mainPageViewModel);
 
         RemoveEmailInputBoundary removeEmailInteractor = new RemoveEmailInteractor(
                 removeEmailDataAccessObject, removeEmailOutputBoundary);

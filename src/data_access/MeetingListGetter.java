@@ -6,6 +6,10 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +36,22 @@ public class MeetingListGetter implements InfoListGetter {
         ArrayList<String> keys = new ArrayList<>();
         for (String key: list) {
             Map<String, Object> entry = (Map<String, Object>) fields.get(key);
-            Instant now = Instant.now();
-            Timestamp timestamp = (Timestamp) entry.get("endTime");
-            Instant firestoreInstant = timestamp.toDate().toInstant();
-            if (!firestoreInstant.isBefore(now)) {
+            String dateStr = (String) entry.get("meetingDate");
+            String timeStr = (String) entry.get("endTime");
+            // Define the formatters for parsing
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+            // Parse the date and time separately
+            LocalDate date = LocalDate.parse(dateStr, dateFormatter);
+            LocalTime time = LocalTime.parse(timeStr, timeFormatter);
+
+            // Combine them into a LocalDateTime object
+            LocalDateTime combinedDateTime = LocalDateTime.of(date, time);
+
+            // Get the current LocalDateTime
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            if (!combinedDateTime.isBefore(currentDateTime)) {
                 keys.add(key);
             }
         }

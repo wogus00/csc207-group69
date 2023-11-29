@@ -6,16 +6,11 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
-import entity.CommonProject;
+import entity.*;
 
-import entity.Announcement;
-import entity.CommonAnnouncement;
-
-import entity.Project;
-import entity.ProjectFactory;
-import entity.Task;
 import use_case.add_email.AddEmailDataAccessInterface;
 import use_case.complete_task.CompleteTaskDataAccessInterface;
+import use_case.create_meeting.CreateMeetingDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
 import use_case.create_task.CreateTaskDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
@@ -38,7 +33,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CreateTaskDataAccessInterface, CompleteTaskDataAccessInterface, SetLeaderDataAccessInterface, RemoveEmailDataAccessInterface, AddEmailDataAccessInterface, ModifyTaskDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CompleteTaskDataAccessInterface, SetLeaderDataAccessInterface, RemoveEmailDataAccessInterface, AddEmailDataAccessInterface, ModifyTaskDataAccessInterface, CreateTaskDataAccessInterface, CreateMeetingDataAccessInterface {
 
 
     Firestore db;
@@ -112,6 +107,52 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
             docRefCollection.set(data2);
     }
 
+    @Override
+    public void saveMeeting(Meeting meeting) {
+        String meetingName = meeting.getMeetingName();
+        String projectName = meeting.getProjectName();
+        ArrayList<String> participantEmail = meeting.getParticipantEmail();
+        String meetingDate = meeting.getMeetingDate();
+        String startTime = meeting.getStartTime();
+        String endTime = meeting.getEndTime();
+        DocumentReference docRefMeeting = db.collection(projectName).document("meetingInfo");
+        ApiFuture<DocumentSnapshot> snapShot = docRefMeeting.get();
+        DocumentSnapshot meetingInfo = null;
+        try {
+            meetingInfo = snapShot.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        };
+        Map<String, Object> meetingData = new HashMap<>();
+        Map<String, Object> meetings = meetingInfo.getData();
+        if (meetings == null) {
+            meetings = new HashMap<>();
+        }
+        meetingData.put("meetingName", meetingName);
+        meetingData.put("participantEmail", participantEmail);
+        meetingData.put("meetingDate", meetingDate);
+        meetingData.put("startTime", startTime);
+        meetingData.put("endTime", endTime);
+        meetingData.put("projectName", projectName);
+        meetings.put(meetingName,meetingData);
+        docRefMeeting.set(meetings);
+    }
+
+
+    public boolean meetingNameExists(String projectName, String meetingName) throws ExecutionException, InterruptedException {
+        DocumentReference docRef = db.collection(projectName).document("meetingInfo");
+        ApiFuture<DocumentSnapshot> snapshot = docRef.get();
+        DocumentSnapshot document = snapshot.get();
+
+        if (document.exists()) {
+            Map<String, Object> meetingInfo = document.getData();
+            return meetingInfo != null && meetingInfo.containsKey(meetingName);
+        } else {
+            return false;
+        }
+    }
 
     public Project getProjectInfo(String projectName) {
         DocumentReference docRef = db.collection(projectName).document("projectInfo");

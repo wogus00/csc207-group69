@@ -7,6 +7,7 @@ import interface_adapter.add_email.AddEmailController;
 import interface_adapter.add_email.AddEmailPresenter;
 import interface_adapter.add_email.AddEmailViewModel;
 
+import interface_adapter.main_page.MainPageViewModel;
 import use_case.add_email.AddEmailDataAccessInterface;
 import use_case.add_email.AddEmailInputBoundary;
 import use_case.add_email.AddEmailInteractor;
@@ -36,10 +37,11 @@ public class AddEmailUseCaseFactory {
     public static AddEmailView addEmailView(
             ViewManagerModel viewManagerModel,
             AddEmailViewModel addEmailViewModel,
-            AddEmailDataAccessInterface addEmailDataAccessObject) {
+            AddEmailDataAccessInterface addEmailDataAccessObject,
+            MainPageViewModel mainPageViewModel) {
 
         try {
-            AddEmailController deleteAnnouncementController = AddEmailUseCase(viewManagerModel, addEmailViewModel, addEmailDataAccessObject);
+            AddEmailController deleteAnnouncementController = AddEmailUseCase(viewManagerModel, addEmailViewModel, addEmailDataAccessObject, mainPageViewModel);
             return new AddEmailView(deleteAnnouncementController, addEmailViewModel, viewManagerModel);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error initializing Add Email feature.");
@@ -60,9 +62,10 @@ public class AddEmailUseCaseFactory {
     private static AddEmailController AddEmailUseCase(
             ViewManagerModel viewManagerModel,
             AddEmailViewModel addEmailViewModel,
-            AddEmailDataAccessInterface addEmailDataAccessObject) {
+            AddEmailDataAccessInterface addEmailDataAccessObject,
+            MainPageViewModel mainPageViewModel) {
 
-        AddEmailOutputBoundary addEmailOutputBoundary = new AddEmailPresenter(addEmailViewModel);
+        AddEmailOutputBoundary addEmailOutputBoundary = new AddEmailPresenter(addEmailViewModel, viewManagerModel, mainPageViewModel);
 
         AddEmailInputBoundary addEmailInteractor = new AddEmailInteractor(
                 addEmailDataAccessObject, addEmailOutputBoundary);

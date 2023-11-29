@@ -18,6 +18,8 @@ import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
 import use_case.complete_task.CompleteTaskDataAccessInterface;
 import use_case.complete_task.CompleteTaskGmailDataAccessInterface;
+import use_case.create_meeting.CreateMeetingDataAccessInterface;
+import use_case.create_meeting.CreateMeetingGmailDataAccessInterface;
 import use_case.create_project.CreateProjectGmailDataAccessInterface;
 import use_case.create_task.CreateTaskGmailDataAccessInterface;
 import use_case.modify_task.ModifyTaskGmailDataAccessInterface;
@@ -34,7 +36,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
-public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, CompleteTaskGmailDataAccessInterface, ModifyTaskGmailDataAccessInterface {
+public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, CompleteTaskGmailDataAccessInterface, ModifyTaskGmailDataAccessInterface, CreateMeetingGmailDataAccessInterface {
 
     private static final String APPLICATION_NAME = "group-project";
 
@@ -106,6 +108,26 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
         }
         return null;
     }
+
+    @Override
+    public Message sendMeetingCreationEmail(String fromEmail, String toEmail, String meetingName) throws MessagingException, IOException {
+        String messageSubject =  "You are invited to meeting: " + meetingName;
+        String bodyText = fromEmail + "has invited you to" + meetingName + "\nPlease check your meeting list for details.";
+        Message message = mimeEncoder(fromEmail, toEmail, messageSubject, bodyText);
+        try {
+            message = service.users().messages().send("me", message).execute();
+            return message;
+        } catch (GoogleJsonResponseException e) {
+            GoogleJsonError error = e.getDetails();
+            if (error.getCode() == 403) {
+                System.err.println("Unable to send message: " + e.getDetails());
+            } else {
+                throw e;
+            }
+        }
+        return null;
+    }
+
 
     @Override
     public Message sendTaskCreationEmail(String fromEmail, String toEmail, String taskName) throws MessagingException, IOException {
