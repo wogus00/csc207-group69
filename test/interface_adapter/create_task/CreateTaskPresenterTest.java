@@ -2,6 +2,7 @@ package interface_adapter.create_task;
 
 import interface_adapter.create_task.CreateTaskPresenter;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.main_page.MainPageViewModel;
 import use_case.create_task.CreateTaskOutputData;
 import interface_adapter.create_task.CreateTaskViewModel;
 import org.junit.jupiter.api.Test;
@@ -10,41 +11,28 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.mock;
 
 public class CreateTaskPresenterTest {
+    @Test
+    public void testPrepareFailViewUpdatesViewModelWithError() {
+        // Arrange
+        ViewManagerModel mockViewManagerModel = Mockito.mock(ViewManagerModel.class);
+        CreateTaskViewModel mockCreateTaskViewModel = Mockito.mock(CreateTaskViewModel.class);
+        MainPageViewModel mockMainPageViewModel = Mockito.mock(MainPageViewModel.class);
+        CreateTaskPresenter presenter = new CreateTaskPresenter(mockViewManagerModel, mockCreateTaskViewModel, mockMainPageViewModel);
 
-//    @Test
-//    public void testPrepareFailView() {
-//        // Mocking dependencies
-//        ViewManagerModel mockViewManager = mock(ViewManagerModel.class);
-//        CreateTaskViewModel mockViewModel = mock(CreateTaskViewModel.class); // Assuming this is the correct type
-//
-//        // Instantiating the presenter with mocks
-//        CreateTaskPresenter presenter = new CreateTaskPresenter(mockViewManager, mockViewModel);
-//
-//        // Simulating a failure scenario
-//        String error = "Network Error";
-//        presenter.prepareFailView(error);
-//
-//        // Verify interactions with mock objects
-//        verify(mockViewModel).firePropertyChanged(); // Assuming this is how the presenter communicates failure
-//        verify(mockViewManager).setActiveView("ErrorView"); // Assuming this is how the presenter updates the view
-//    }
-//
-//    @Test
-//    public void testPrepareSuccessView() {
-//        // Mocking dependencies
-//        ViewManagerModel mockViewManager = mock(ViewManagerModel.class);
-//        CreateTaskViewModel mockViewModel = mock(CreateTaskViewModel.class); // Assuming this is the correct type
-//
-//        // Instantiating the presenter with mocks
-//        CreateTaskPresenter presenter = new CreateTaskPresenter(mockViewManager, mockViewModel);
-//
-//        // Simulating a success scenario
-//        CreateTaskOutputData outputData = new CreateTaskOutputData(); // Assuming default constructor
-//        presenter.prepareSuccessView(outputData);
-//
-//        // Verify interactions with mock objects
-//        verify(mockViewModel).firePropertyChanged(); // Assuming this is how the presenter communicates success
-//        verify(mockViewManager).setActiveView("SuccessView"); // Assuming this is how the presenter updates the view
-//    }
+        // Setup mockCreateTaskViewModel to return a non-null CreateTaskState
+        CreateTaskState mockCreateTaskState = new CreateTaskState();
+        Mockito.when(mockCreateTaskViewModel.getState()).thenReturn(mockCreateTaskState);
+
+        String errorMessage = "Error occurred";
+
+        // Act
+        presenter.prepareFailView(errorMessage);
+
+        // Assert
+        Mockito.verify(mockCreateTaskViewModel).setState(Mockito.argThat(state -> state.getCreateTaskError().equals(errorMessage)));
+        Mockito.verify(mockCreateTaskViewModel).firePropertyChanged();
+    }
+
+
 }
 

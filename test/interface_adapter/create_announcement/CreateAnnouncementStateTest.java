@@ -22,12 +22,14 @@ public class CreateAnnouncementStateTest {
         original.setMessage("Message");
         original.setAuthor("Author");
         original.setId("Id");
+        original.setAnnouncementTitleError("same announcement!");
 
         CreateAnnouncementState copy = new CreateAnnouncementState(original);
         assertEquals("Title", copy.getAnnouncementTitle());
         assertEquals("Message", copy.getMessage());
         assertEquals("Author", copy.getAuthor());
         assertEquals("Id", copy.getId());
+        assertEquals("same announcement!", copy.getAnnouncementTitleError());
     }
 
 }

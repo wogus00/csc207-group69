@@ -41,18 +41,18 @@ public class CreateAnnouncementUseCaseFactory {
                                                                 CreateAnnouncementDataAccessInterface announcementDataAccessObject,
                                                                 CreateAnnouncementGmailDataAccessInterface gmailDataAccessObject,
                                                                 MainPageViewModel mainPageViewModel) {
-        try {
-            CreateAnnouncementController createAnnouncementController = createAnnouncementUseCase(
-                    viewManagerModel,
-                    createAnnouncementViewModel,
-                    announcementDataAccessObject,
-                    gmailDataAccessObject,
-                    mainPageViewModel);
-            return new CreateAnnouncementView(createAnnouncementController, createAnnouncementViewModel);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Invalid announcement");
-        }
-        return null;
+
+        CreateAnnouncementController createAnnouncementController = createAnnouncementUseCase(
+                viewManagerModel,
+                createAnnouncementViewModel,
+                announcementDataAccessObject,
+                gmailDataAccessObject,
+                mainPageViewModel);
+        return new CreateAnnouncementView(createAnnouncementController, createAnnouncementViewModel);
+//        } catch (IOException e) {
+//            JOptionPane.showMessageDialog(null, "Invalid announcement");
+//        }
+//        return null;
     }
 
 
@@ -72,7 +72,7 @@ public class CreateAnnouncementUseCaseFactory {
                                                                           CreateAnnouncementViewModel createAnnouncementViewModel,
                                                                           CreateAnnouncementDataAccessInterface announcementDataAccessObject,
                                                                           CreateAnnouncementGmailDataAccessInterface gmailDataAccessObject,
-                                                                          MainPageViewModel mainPageViewModel) throws IOException {
+                                                                          MainPageViewModel mainPageViewModel)  {
         CreateAnnouncementOutputBoundary createAnnouncementOutputBoundary = new CreateAnnouncementPresenter(viewManagerModel, createAnnouncementViewModel, mainPageViewModel);
 
         AnnouncementFactory announcementFactory = new CommonAnnouncementFactory();
