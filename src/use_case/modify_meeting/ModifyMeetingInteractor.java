@@ -60,9 +60,10 @@ public class ModifyMeetingInteractor implements ModifyMeetingInputBoundary {
         String startTime = modifyMeetingInputData.getStartTime();
         String endTime = modifyMeetingInputData.getEndTime();
         String projectName = modifyMeetingInputData.getProjectName();
+        System.out.println("reached modify meeting interactor");
 
-        if (modifyMeetingDataAccessObject.meetingNameExists(projectName, meetingName)) {
-            modifyMeetingPresenter.prepareFailView("Meeting name is already taken");
+        if (!modifyMeetingDataAccessObject.meetingNameExists(projectName, meetingName)) {
+            modifyMeetingPresenter.prepareFailView("Meeting does not exist");
         } else if (!modifyMeetingDataAccessObject.memberExists(projectName, participantEmail)) {
             modifyMeetingPresenter.prepareFailView("Member does not exist");
         } else {
@@ -76,6 +77,7 @@ public class ModifyMeetingInteractor implements ModifyMeetingInputBoundary {
                     throw new RuntimeException(e);
                 }
             }
+
             ModifyMeetingOutputData modifyMeetingOutputData = new ModifyMeetingOutputData(meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
             modifyMeetingPresenter.prepareSuccessView(modifyMeetingOutputData);
         }

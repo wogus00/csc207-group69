@@ -7,6 +7,7 @@ import interface_adapter.complete_task.CompleteTaskViewModel;
 import interface_adapter.create_meeting.CreateMeetingViewModel;
 import interface_adapter.create_project.CreateProjectViewModel;
 import interface_adapter.add_email.AddEmailViewModel;
+import interface_adapter.modify_meeting.ModifyMeetingViewModel;
 import interface_adapter.modify_task.ModifyTaskViewModel;
 import interface_adapter.remove_email.RemoveEmailViewModel;
 import interface_adapter.set_leader.SetLeaderViewModel;
@@ -56,6 +57,7 @@ public class Main {
         CompleteTaskViewModel completeTaskViewModel = new CompleteTaskViewModel();
         ModifyTaskViewModel modifyTaskViewModel = new ModifyTaskViewModel();
         CreateMeetingViewModel createMeetingViewModel = new CreateMeetingViewModel();
+        ModifyMeetingViewModel modifyMeetingViewModel = new ModifyMeetingViewModel();
 
         FirebaseAccessObject firebaseAccessObject;
         GmailDataAccessObject gmailDataAccessObject = new GmailDataAccessObject();
@@ -91,7 +93,10 @@ public class Main {
         CreateMeetingView createMeetingView =  CreateMeetingUseCaseFactory.createMeetingView(viewManagerModel, createMeetingViewModel, firebaseAccessObject, gmailDataAccessObject, mainPageViewModel);
         views.add(createMeetingView, createMeetingView.viewName);
 
-        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel, createTaskViewModel, completeTaskViewModel, modifyTaskViewModel, addEmailViewModel, removeEmailViewModel, setLeaderViewModel, createMeetingViewModel);
+        ModifyMeetingView modifyMeetingView = ModifyMeetingUseCaseFactory.modifyMeetingView(viewManagerModel, modifyMeetingViewModel, firebaseAccessObject, gmailDataAccessObject, mainPageViewModel);
+        views.add(modifyMeetingView, modifyMeetingView.viewName);
+
+        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel, createTaskViewModel, completeTaskViewModel, modifyTaskViewModel, addEmailViewModel, removeEmailViewModel, setLeaderViewModel, createMeetingViewModel, modifyMeetingViewModel);
         views.add(mainPageView, mainPageView.viewName);
 
         viewManagerModel.setActiveView(loginView.viewName);

@@ -1,4 +1,5 @@
 package data_access;
+import app.ModifyMeetingUseCaseFactory;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.Timestamp;
@@ -15,6 +16,7 @@ import use_case.create_project.CreateProjectDataAccessInterface;
 import use_case.create_task.CreateTaskDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 
+import use_case.modify_meeting.ModifyMeetingDataAccessInterface;
 import use_case.modify_task.ModifyTaskDataAccessInterface;
 import use_case.remove_email.RemoveEmailDataAccessInterface;
 import use_case.set_leader.SetLeaderDataAccessInterface;
@@ -33,7 +35,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
-public class FirebaseAccessObject implements CreateProjectDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CompleteTaskDataAccessInterface, SetLeaderDataAccessInterface, RemoveEmailDataAccessInterface, AddEmailDataAccessInterface, ModifyTaskDataAccessInterface, CreateTaskDataAccessInterface, CreateMeetingDataAccessInterface {
+public class FirebaseAccessObject implements CreateProjectDataAccessInterface, CreateAnnouncementDataAccessInterface, DeleteAnnouncementDataAccessInterface, LoginDataAccessInterface, CompleteTaskDataAccessInterface, SetLeaderDataAccessInterface, RemoveEmailDataAccessInterface, AddEmailDataAccessInterface, ModifyTaskDataAccessInterface, CreateTaskDataAccessInterface, CreateMeetingDataAccessInterface, ModifyMeetingDataAccessInterface {
 
 
     Firestore db;
@@ -145,14 +147,15 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         DocumentReference docRef = db.collection(projectName).document("meetingInfo");
         ApiFuture<DocumentSnapshot> snapshot = docRef.get();
         DocumentSnapshot document = snapshot.get();
-
-        if (document.exists()) {
-            Map<String, Object> meetingInfo = document.getData();
-            return meetingInfo != null && meetingInfo.containsKey(meetingName);
-        } else {
-            return false;
+        Map<String, Object> meetings = document.getData();
+        ArrayList<String> keySet = new ArrayList<>();
+        keySet.addAll(meetings.keySet());
+        if (keySet.contains(meetingName)) {
+            return true;
         }
+        return false;
     }
+
 
     public Project getProjectInfo(String projectName) {
         DocumentReference docRef = db.collection(projectName).document("projectInfo");

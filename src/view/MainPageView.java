@@ -14,6 +14,8 @@ import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageState;
 import interface_adapter.main_page.MainPageViewModel;
+import interface_adapter.modify_meeting.ModifyMeetingState;
+import interface_adapter.modify_meeting.ModifyMeetingViewModel;
 import interface_adapter.modify_task.ModifyTaskState;
 import interface_adapter.modify_task.ModifyTaskViewModel;
 import interface_adapter.remove_email.RemoveEmailState;
@@ -53,6 +55,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
     SetLeaderViewModel setLeaderViewModel;
     CreateMeetingViewModel createMeetingViewModel;
     AddEmailViewModel addEmailViewModel;
+    ModifyMeetingViewModel modifyMeetingViewModel;
     CreateAnnouncementViewModel createAnnouncementViewModel;
 
     JLabel titleLabel;
@@ -82,7 +85,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
                         CreateTaskViewModel createTaskViewModel, CompleteTaskViewModel completeTaskViewModel,
                         ModifyTaskViewModel modifyTaskViewModel, AddEmailViewModel addEmailViewModel,
                         RemoveEmailViewModel removeEmailViewModel, SetLeaderViewModel setLeaderViewModel,
-                        CreateMeetingViewModel createMeetingViewModel) {
+                        CreateMeetingViewModel createMeetingViewModel, ModifyMeetingViewModel modifyMeetingViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.mainPageViewModel = mainPageViewModel;
         this.loginViewModel = loginViewModel;
@@ -93,6 +96,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         this.removeEmailViewModel = removeEmailViewModel;
         this.setLeaderViewModel = setLeaderViewModel;
         this.createMeetingViewModel = createMeetingViewModel;
+        this.modifyMeetingViewModel = modifyMeetingViewModel;
         this.mainPageViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BorderLayout());
@@ -226,7 +230,9 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         meetingPanelExtension.setVisible(false);
 
         JButton buttonM1 = new JButton("create meeting");
+        JButton buttonM2 = new JButton("modify meeting");
         meetingPanelExtension.add(buttonM1);
+        meetingPanelExtension.add(buttonM2);
         buttonPanel.add(meetingPanelExtension);
         buttonList.add(meetingPanelExtension);
 
@@ -404,6 +410,20 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
                         createMeetingViewModel.setState(createMeetingState);
                         createMeetingViewModel.firePropertyChanged();
                         viewManagerModel.setActiveView("create meeting");
+                        viewManagerModel.firePropertyChanged();
+                    }
+                }
+        );
+
+        buttonM2.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        ModifyMeetingState modifyMeetingState = modifyMeetingViewModel.getState();
+                        modifyMeetingState.setProjectName(mainPageState.getProjectName());
+                        modifyMeetingViewModel.setState(modifyMeetingState);
+                        modifyMeetingViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Modify Meeting");
                         viewManagerModel.firePropertyChanged();
                     }
                 }

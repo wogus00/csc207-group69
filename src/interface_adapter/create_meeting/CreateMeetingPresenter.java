@@ -42,7 +42,7 @@ public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
      */
     @Override
     public void prepareSuccessView(CreateMeetingOutputData response) {
-        MainPageState mainPageState = new MainPageState();
+        MainPageState mainPageState = mainPageViewModel.getState();
         ArrayList<String> meetingList = mainPageState.getMeetingList();
         meetingList.add(response.getMeetingName());
         mainPageState.setMeetingList(meetingList);
@@ -60,6 +60,7 @@ public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
     public void prepareFailView(String error) {
         CreateMeetingState createMeetingState = createMeetingViewModel.getState();
         createMeetingState.setMeetingNameError(error);
+        createMeetingViewModel.setState(createMeetingState);
         createMeetingViewModel.firePropertyChanged();
     }
 }

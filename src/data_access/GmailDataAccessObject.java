@@ -22,6 +22,7 @@ import use_case.create_meeting.CreateMeetingDataAccessInterface;
 import use_case.create_meeting.CreateMeetingGmailDataAccessInterface;
 import use_case.create_project.CreateProjectGmailDataAccessInterface;
 import use_case.create_task.CreateTaskGmailDataAccessInterface;
+import use_case.modify_meeting.ModifyMeetingGmailDataAccessInterface;
 import use_case.modify_task.ModifyTaskGmailDataAccessInterface;
 
 import java.io.*;
@@ -36,7 +37,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
-public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, CompleteTaskGmailDataAccessInterface, ModifyTaskGmailDataAccessInterface, CreateMeetingGmailDataAccessInterface {
+public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, CompleteTaskGmailDataAccessInterface, ModifyTaskGmailDataAccessInterface, CreateMeetingGmailDataAccessInterface, ModifyMeetingGmailDataAccessInterface {
 
     private static final String APPLICATION_NAME = "group-project";
 
@@ -171,6 +172,11 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
 
     @Override
     public Message sendTaskCompletionEmail(String fromEmail, String toEmail, String taskName) {
+        return null;
+    }
+
+    @Override
+    public Message sendMeetingModificationEmail(String toEmail, String fromEmail, String meetingName) throws MessagingException, IOException {
         return null;
     }
 }

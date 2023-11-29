@@ -39,7 +39,7 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
         this.viewManagerModel = viewManagerModel;
         this.createMeetingController = createMeetingController;
         this.createMeetingViewModel = createMeetingViewModel;
-        createMeetingViewModel.addPropertyChangeListener(this);
+        this.createMeetingViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(CreateMeetingViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
