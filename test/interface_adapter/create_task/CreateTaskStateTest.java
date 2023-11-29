@@ -2,7 +2,12 @@ package interface_adapter.create_task;
 
 import interface_adapter.create_task.CreateTaskState;
 import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CreateTaskStateTest {
@@ -57,10 +62,56 @@ public class CreateTaskStateTest {
         state.setComments("More Comments");
         assertEquals("More Comments", state.getComments(), "Comments were not set correctly");
 
-//        state.setTaskNameError("Error in task name");
-//        assertEquals("Error in task name", state.getTaskNameError(), "Task name error was not set correctly");
-//
-//        state.setWorkingMembersError("Error in working members");
-//        assertEquals("Error in working members", state.getWorkingMembersError(), "Working members error was not set correctly");
+
     }
+
+    @Test
+    public void testSetAndGetCreateTaskError() {
+        CreateTaskState state = new CreateTaskState();
+        String error = "Error message";
+        state.setCreateTaskError(error);
+        assertEquals(error, state.getCreateTaskError(), "Create task error was not set or retrieved correctly");
+    }
+
+    @Test
+    public void testDefaultValues() {
+        CreateTaskState state = new CreateTaskState();
+
+        assertEquals("", state.getProjectName(), "Default project name should be an empty string");
+        assertEquals("", state.getTaskName(), "Default task name should be an empty string");
+        assertEquals("", state.getSupervisor(), "Default supervisor should be an empty string");
+        assertEquals("", state.getWorkingMembersList(), "Default working members list should be an empty string");
+        assertNull(state.getDeadline(), "Default deadline should be null");
+        assertEquals("", state.getComments(), "Default comments should be an empty string");
+        assertNull(state.getCreateTaskError(), "Default create task error should be null");
+    }
+
+    @Test
+    public void testStrToArrayList() throws Exception {
+        CreateTaskState state = new CreateTaskState();
+        Method method = CreateTaskState.class.getDeclaredMethod("strToArrayList", String.class);
+        method.setAccessible(true);
+
+        String input = "Member1,Member2,Member3";
+        ArrayList<String> expected = new ArrayList<>();
+        expected.add("Member1");
+        expected.add("Member2");
+        expected.add("Member3");
+
+        ArrayList<String> result = (ArrayList<String>) method.invoke(state, input);
+        assertEquals(expected, result, "strToArrayList did not convert string to ArrayList correctly");
+
+    }
+
+    @Test
+    public void testStrToArrayListWithNullInput() throws Exception {
+        CreateTaskState state = new CreateTaskState();
+        Method method = CreateTaskState.class.getDeclaredMethod("strToArrayList", String.class);
+        method.setAccessible(true);
+
+        // Test with null input
+        Exception exception = assertThrows(InvocationTargetException.class, () -> method.invoke(state, new Object[]{null}));
+        assertTrue(exception.getCause() instanceof NullPointerException, "strToArrayList should throw NullPointerException for null input");
+    }
+
 }
