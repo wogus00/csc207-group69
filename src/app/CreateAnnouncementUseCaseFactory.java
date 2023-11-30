@@ -26,7 +26,7 @@ public class CreateAnnouncementUseCaseFactory {
                                                                 MainPageViewModel mainPageViewModel) {
         try {
             CreateAnnouncementController createAnnouncementController = createAnnouncementUseCase(viewManagerModel, createAnnouncementViewModel, announcementDataAccessObject, mainPageViewModel);
-            return new CreateAnnouncementView(createAnnouncementController, createAnnouncementViewModel);
+            return new CreateAnnouncementView(createAnnouncementController, createAnnouncementViewModel, viewManagerModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Invalid announcement");
         }

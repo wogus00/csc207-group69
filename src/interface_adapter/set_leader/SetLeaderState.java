@@ -9,6 +9,7 @@ import interface_adapter.set_leader.SetLeaderState;
  */
 public class SetLeaderState {
     private String error;
+    private String projectName;
 
     /**
      * Constructs a copy of an existing {@code SetLeaderState}.
@@ -18,6 +19,7 @@ public class SetLeaderState {
      * @param copy The {@code SetLeaderState} object to copy from
      */
     public SetLeaderState(SetLeaderState copy) {
+        this.projectName = copy.projectName;
         this.error = copy.error;
     }
 
@@ -39,4 +41,8 @@ public class SetLeaderState {
         this.error = error;
     }
     public String error(){return error;}
+
+    public void setProjectName(String projectName) {this.projectName = projectName;}
+
+    public String getProjectName() {return this.projectName;}
 }

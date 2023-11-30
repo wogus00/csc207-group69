@@ -3,8 +3,12 @@ package interface_adapter.delete_announcement;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.create_announcement.CreateAnnouncementState;
 import interface_adapter.create_announcement.CreateAnnouncementViewModel;
+import interface_adapter.main_page.MainPageState;
+import interface_adapter.main_page.MainPageViewModel;
 import use_case.delete_announcement.DeleteAnnouncementOutputBoundary;
 import use_case.delete_announcement.DeleteAnnouncementOutputData;
+
+import java.util.ArrayList;
 
 /**
  * Presenter for the Delete Announcement feature.
@@ -15,22 +19,26 @@ public class DeleteAnnouncementPresenter implements DeleteAnnouncementOutputBoun
     private final DeleteAnnouncementViewModel deleteAnnouncementViewModel;
 
     private ViewManagerModel viewManagerModel;
+    private MainPageViewModel mainPageViewModel;
 
     private final CreateAnnouncementViewModel createAnnouncementViewModel;
 
     /**
      * Constructs a DeleteAnnouncementPresenter with the necessary view models and manager.
      *
+     * @param mainPageViewModel               The view model for main page.
      * @param deleteAnnouncementViewModel     The view model for deleting announcements.
      * @param createAnnouncementViewModel     The view model for creating announcements.
      * @param viewManagerModel                The model managing the views.
      */
     public DeleteAnnouncementPresenter(DeleteAnnouncementViewModel deleteAnnouncementViewModel,
                                        CreateAnnouncementViewModel createAnnouncementViewModel,
-                                       ViewManagerModel viewManagerModel){
+                                       ViewManagerModel viewManagerModel,
+                                       MainPageViewModel mainPageViewModel){
         this.deleteAnnouncementViewModel = deleteAnnouncementViewModel;
         this.viewManagerModel = viewManagerModel;
         this.createAnnouncementViewModel = createAnnouncementViewModel;
+        this.mainPageViewModel = mainPageViewModel;
     }
 
     /**
@@ -103,8 +111,16 @@ public class DeleteAnnouncementPresenter implements DeleteAnnouncementOutputBoun
         deleteAnnouncementState.setAnnouncement(deleteAnnouncementOutputData.getAnnouncement());
         deleteAnnouncementViewModel.firePropertyChanged();
 
-        this.viewManagerModel.setActiveView(createAnnouncementViewModel.getViewName());
-        deleteAnnouncementViewModel.firePropertyChanged();
+        MainPageState mainPageState = mainPageViewModel.getState();
+        ArrayList<String> messages = mainPageState.getAnnouncements();
+        if (messages.contains(deleteAnnouncementOutputData.getAnnouncement().getMessage())) {
+            messages.remove(deleteAnnouncementOutputData.getAnnouncement().getMessage());
+        }
+        mainPageState.setAnnouncements(messages);
+        mainPageViewModel.setState(mainPageState);
+        mainPageViewModel.firePropertyChanged();
+        this.viewManagerModel.setActiveView("Main Page");
+        viewManagerModel.firePropertyChanged();
     }
 
     /**
@@ -116,6 +132,7 @@ public class DeleteAnnouncementPresenter implements DeleteAnnouncementOutputBoun
     public void prepareFailView(String error){
         DeleteAnnouncementState deleteAnnouncementState = deleteAnnouncementViewModel.getState();
         deleteAnnouncementState.setAnnouncementError(error);
+        deleteAnnouncementViewModel.setState(deleteAnnouncementState);
         deleteAnnouncementViewModel.firePropertyChanged();;
     }
 }

@@ -9,6 +9,7 @@ import interface_adapter.add_email.AddEmailState;
  */
 public class RemoveEmailState {
     private String error = null;
+    private String projectName = "";
 
     /**
      * Constructs a copy of an existing {@code RemoveEmailState}.
@@ -18,6 +19,7 @@ public class RemoveEmailState {
      * @param copy The {@code RemoveEmailState} object to copy from
      */
     public RemoveEmailState(RemoveEmailState copy) {
+        this.projectName = copy.projectName;
         this.error = copy.error;
     }
 
@@ -39,4 +41,8 @@ public class RemoveEmailState {
         this.error = error;
     }
     public String error(){return error;}
+
+    public void setProjectName(String projectName) {this.projectName = projectName;}
+
+    public String getProjectName() {return this.projectName;}
 }

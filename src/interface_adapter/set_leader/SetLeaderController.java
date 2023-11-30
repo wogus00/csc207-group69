@@ -1,6 +1,7 @@
 package interface_adapter.set_leader;
 
 import use_case.set_leader.SetLeaderInputBoundary;
+import use_case.set_leader.SetLeaderInputData;
 
 /**
  * The {@code SetLeaderController} class acts as a controller within the Model-View-Controller (MVC) architecture
@@ -19,5 +20,10 @@ public class SetLeaderController {
      */
     public SetLeaderController(SetLeaderInputBoundary setLeaderUseCaseInteractor) {
         this.setLeaderUseCaseInteractor = setLeaderUseCaseInteractor;
+    }
+
+    public void updateProjectDetails(String projectName, String newLeader) {
+        SetLeaderInputData setLeaderInputData = new SetLeaderInputData(projectName, newLeader);
+        setLeaderUseCaseInteractor.updateProjectDetails(setLeaderInputData);
     }
 }

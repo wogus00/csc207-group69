@@ -12,10 +12,8 @@ import java.beans.PropertyChangeSupport;
  * This class also defines static constants to be used as labels in the view for consistency and ease of modification.
  */
 public class SetLeaderViewModel extends ViewModel {
-    public static final String CREATE_BUTTON_LABEL = "Create Project";
+    public static final String SET_BUTTON_LABEL = "Set Leader";
     public static final String TITLE_LABEL = "Create Project View";
-    public static final String PROJECTNAME_LABEL = "Enter project name";
-    public static final String LEADER_EMAIL_LABEL = "Enter leader's email";
     public static final String MEMBER_EMAIL_LABEL = "Enter all members' email";
     public final String CANCEL_BUTTON_LABEL = "Cancel";
     public final String SET_LEADER_LABEL = "Enter new leader";

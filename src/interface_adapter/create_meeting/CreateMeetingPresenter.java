@@ -8,6 +8,8 @@ import interface_adapter.create_meeting.CreateMeetingState;
 import use_case.create_meeting.CreateMeetingOutputBoundary;
 import use_case.create_meeting.CreateMeetingOutputData;
 
+import java.util.ArrayList;
+
 /**
  * Presenter class for Create Meeting use case.
  * This class updates the view model and state based on whether the meeting was successfully created or not.
@@ -40,10 +42,13 @@ public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
      */
     @Override
     public void prepareSuccessView(CreateMeetingOutputData response) {
-        MainPageState mainPageState = new MainPageState();
-        mainPageState.addAnnouncement(response.getMeetingName());
+        MainPageState mainPageState = mainPageViewModel.getState();
+        ArrayList<String> meetingList = mainPageState.getMeetingList();
+        meetingList.add(response.getMeetingName());
+        mainPageState.setMeetingList(meetingList);
         mainPageViewModel.setState(mainPageState);
-        viewManagerModel.setActiveView(createMeetingViewModel.getViewName());
+        mainPageViewModel.firePropertyChanged();
+        viewManagerModel.setActiveView("Main Page");
         viewManagerModel.firePropertyChanged();
     }
     /**
@@ -55,6 +60,7 @@ public class CreateMeetingPresenter implements CreateMeetingOutputBoundary {
     public void prepareFailView(String error) {
         CreateMeetingState createMeetingState = createMeetingViewModel.getState();
         createMeetingState.setMeetingNameError(error);
+        createMeetingViewModel.setState(createMeetingState);
         createMeetingViewModel.firePropertyChanged();
     }
 }

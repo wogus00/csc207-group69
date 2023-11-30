@@ -29,7 +29,6 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
     private final JTextField meetingDateInputField = new JTextField(15);
     private final JTextField startTimeInputField = new JTextField(15);
     private final JTextField endTimeInputField = new JTextField(15);
-    private final JTextField projectNameInputField = new JTextField(15);
     private final ModifyMeetingController modifyMeetingController;
     private final JButton modify;
     private final JButton cancel;
@@ -37,6 +36,7 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
         this.viewManagerModel = viewManagerModel;
         this.modifyMeetingController = modifyMeetingController;
         this.modifyMeetingViewModel = modifyMeetingViewModel;
+        this.modifyMeetingViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(ModifyMeetingViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -51,8 +51,6 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
                 new JLabel(ModifyMeetingViewModel.START_TIME_LABEL), startTimeInputField);
         LabelTextPanel endTimeInfo = new LabelTextPanel(
                 new JLabel(ModifyMeetingViewModel.END_TIME_LABEL), endTimeInputField);
-        LabelTextPanel projectNameInfo = new LabelTextPanel(
-                new JLabel(ModifyMeetingViewModel.PROJECT_NAME_LABEL), projectNameInputField);
 
         JPanel buttons = new JPanel();
         modify = new JButton(ModifyMeetingViewModel.MODIFY_BUTTON_LABEL);
@@ -66,6 +64,11 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
                 if (e.getSource().equals(cancel)) {
                     viewManagerModel.setActiveView("Main Page");
                     viewManagerModel.firePropertyChanged();
+                    meetingNameInputField.setText("");
+                    participantEmailInputField.setText("");
+                    meetingDateInputField.setText("");
+                    startTimeInputField.setText("");
+                    endTimeInputField.setText("");
                 }
             }
         });
@@ -75,12 +78,8 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(modify)) {
                             ModifyMeetingState currentState = modifyMeetingViewModel.getState();
-                            String meetingName = currentState.getMeetingName();
-                            ArrayList<String> participantEmail = currentState.getParticipantEmail();
-                            String meetingDate = currentState.getMeetingDate();
-                            String startTime = currentState.getStartTime();
-                            String endTime = currentState.getEndTime();
-                            String projectName = currentState.getProjectName();
+                            System.out.println("try project name at modify meeting view");
+                            System.out.println(currentState.getProjectName());
                             try {
                                 modifyMeetingController.execute(
                                         currentState.getMeetingName(),
@@ -98,9 +97,14 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
                             currentState = modifyMeetingViewModel.getState();
                             if (currentState.getMeetingNameError() == null) {
                                 JOptionPane.showMessageDialog(ModifyMeetingView.this,
-                                        "modifyd meeting successfully");
+                                        "modified meeting successfully");
                                 viewManagerModel.setActiveView("Main Page");
                                 viewManagerModel.firePropertyChanged();
+                                meetingNameInputField.setText("");
+                                participantEmailInputField.setText("");
+                                meetingDateInputField.setText("");
+                                startTimeInputField.setText("");
+                                endTimeInputField.setText("");
                             }
                         }
                     }
@@ -223,7 +227,6 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
         this.add(meetingDateInfo);
         this.add(startTimeInfo);
         this.add(endTimeInfo);
-        this.add(projectNameInfo);
         this.add(buttons);
     }
 

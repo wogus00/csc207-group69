@@ -1,5 +1,7 @@
 package interface_adapter.modify_task;
 
+import interface_adapter.ViewModel;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -7,7 +9,7 @@ import java.beans.PropertyChangeSupport;
  * ViewModel for Modify Task Use Case.
  * It contains the current state of the task creation process and manages property change listeners.
  */
-public class ModifyTaskViewModel {
+public class ModifyTaskViewModel extends ViewModel {
 
     public static final String MODIFY_BUTTON_LABEL = "Modify Task";
     public static final String TITLE_LABEL = "Modify Task View";
@@ -18,6 +20,10 @@ public class ModifyTaskViewModel {
     public static final String COMMENT_LABEL = "Additional Comments";
     public static final String CANCEL_BUTTON_LABEL = "Cancel";
     private ModifyTaskState state = new ModifyTaskState();
+
+    public ModifyTaskViewModel() {
+        super("Modify Task");
+    }
 
     /**
      * Setter method that updates the current state of the creation task process.
