@@ -20,7 +20,8 @@ public class CreateTaskInteractorTest {
         CommonTaskFactory mockTaskFactory = mock(CommonTaskFactory.class);
 
         // Configure mocks
-        when(mockDataAccess.taskNameExists("Project X", "Task Y")).thenReturn(false); // Task name exists
+//        when(mockDataAccess.taskNameExists("Project X", "Task Y")).thenReturn(false); // Task name exists
+        when(mockDataAccess.taskNameExists("Project X", "Task Y")).thenReturn(true); // Task name exists
 
         // Create interactor with mocks
         CreateTaskInteractor interactor = new CreateTaskInteractor(mockDataAccess, mockGmailAccess, mockPresenter, mockTaskFactory);
@@ -44,7 +45,7 @@ public class CreateTaskInteractorTest {
         CommonTaskFactory mockTaskFactory = mock(CommonTaskFactory.class);
 
         // Configure mocks
-        when(mockDataAccess.taskNameExists("Project X", "Task Y")).thenReturn(true); // Task name does not exist
+        when(mockDataAccess.taskNameExists("Project X", "Task Y")).thenReturn(false); // Task name does not exist
         when(mockDataAccess.memberExists("Project X", new ArrayList<>(Arrays.asList("member1@example.com", "member2@example.com")))).thenReturn(false); // Member does not exist
 
         // Create interactor with mocks
@@ -69,8 +70,9 @@ public class CreateTaskInteractorTest {
         CommonTaskFactory mockTaskFactory = mock(CommonTaskFactory.class);
 
         // Configure mocks
-        when(mockDataAccess.taskNameExists("Project X", "Task Y")).thenReturn(true); // Task name does not exist
+        when(mockDataAccess.taskNameExists("Project X", "Task Y")).thenReturn(false); // Task name does not exist
         when(mockDataAccess.memberExists("Project X", new ArrayList<>(Arrays.asList("member1@example.com", "member2@example.com")))).thenReturn(true); // Member exists
+
 
         CommonTask mockTask = mock(CommonTask.class);
         when(mockTaskFactory.create(anyString(), anyString(), anyString(), Mockito.<ArrayList<String>>any(), any(LocalDate.class), anyString(), anyBoolean())).thenReturn(mockTask);
