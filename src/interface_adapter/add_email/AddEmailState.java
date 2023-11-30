@@ -10,6 +10,8 @@ import interface_adapter.create_announcement.CreateAnnouncementState;
 public class AddEmailState {
     private String error;
 
+    private String projectName = "";
+
     /**
      * Constructs a copy of an existing {@code AddEmailState}.
      * This constructor is useful for creating a new state based on the current state,
@@ -18,6 +20,7 @@ public class AddEmailState {
      * @param copy The {@code AddEmailState} object to copy from
      */
     public AddEmailState(AddEmailState copy) {
+        this.projectName = copy.projectName;
         this.error = copy.error;
     }
     /**
@@ -38,4 +41,9 @@ public class AddEmailState {
         this.error = error;
     }
     public String error(){return error;}
+
+    public void setProjectName(String projectName) {this.projectName = projectName;}
+
+    public String getProjectName() {return this.projectName;}
+
 }

@@ -6,9 +6,14 @@ package use_case.complete_task;
  */
 public class CompleteTaskOutputData {
 
+    String taskName;
+
     /**
      * Constructor method that creates new CompleteTaskOutputData.
      */
-    public CompleteTaskOutputData(){
+    public CompleteTaskOutputData(String taskName) {
+        this.taskName = taskName;
     }
+
+    public String getTaskName(){return taskName;}
 }

@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.Map;
 import java.util.HashMap;
 
-public class TaskListRetrieveStrategyTest {
+public class TaskListGetterTest {
 
     @Mock
     private FirebaseAccessObject mockFirebaseAccessObject;
@@ -35,7 +35,7 @@ public class TaskListRetrieveStrategyTest {
     private CollectionReference mockCollectionReference;
 
 
-    private TaskListRetrieveStrategy strategy;
+    private TaskListGetter strategy;
 
 
     @Before
@@ -46,7 +46,7 @@ public class TaskListRetrieveStrategyTest {
         when(mockCollectionReference.document(anyString())).thenReturn(mockDocumentReference);
         when(mockDocumentReference.get()).thenReturn(mockApiFuture);
         when(mockApiFuture.get()).thenReturn(mockDocumentSnapshot);
-        strategy = new TaskListRetrieveStrategy();
+        strategy = new TaskListGetter();
     }
 
     @Test

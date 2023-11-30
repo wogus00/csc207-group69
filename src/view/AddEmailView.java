@@ -1,4 +1,5 @@
 package view;
+import interface_adapter.ViewManagerModel;
 import interface_adapter.add_email.AddEmailController;
 import interface_adapter.add_email.AddEmailState;
 import interface_adapter.add_email.AddEmailViewModel;
@@ -30,36 +31,59 @@ public class AddEmailView extends JPanel implements ActionListener, PropertyChan
      */
     private final AddEmailViewModel addEmailViewModel;
 
-    private final JTextField titleInputField = new JTextField(15);
-
-    private final JTextField messageInputFiled = new JTextField(15);
-
+    private final JTextField addEmailInputField = new JTextField(15);
     private final AddEmailController addEmailController;
 
     private final JButton cancel;
+    private final JButton add;
+
+    private ViewManagerModel viewManagerModel;
 
     public AddEmailView(AddEmailController controller,
-                        AddEmailViewModel addEmailViewModel) {
+                        AddEmailViewModel addEmailViewModel,
+                        ViewManagerModel viewManagerModel) {
 
         this.addEmailController = controller;
         this.addEmailViewModel = addEmailViewModel;
-        addEmailViewModel.addPropertyChangeListener(this);
+        this.addEmailViewModel.addPropertyChangeListener(this);
+        this.viewManagerModel = viewManagerModel;
 
         LabelTextPanel addEmailInfo = new LabelTextPanel(
-                new JLabel(addEmailViewModel.ADD_EMAIL_LABEL), titleInputField);
+                new JLabel(addEmailViewModel.ADD_EMAIL_LABEL), addEmailInputField);
 
         JPanel buttons = new JPanel();
+        add = new JButton(addEmailViewModel.ADD_BUTTON_LABEL);
+        buttons.add(add);
         cancel = new JButton(addEmailViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
-        cancel.addActionListener(this);
 
-        titleInputField.addKeyListener(
+
+        add.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        addEmailController.addProjectDetails(addEmailViewModel.getState().getProjectName(),
+                                addEmailInputField.getText());
+                    }
+                }
+        );
+
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource().equals(cancel)) {
+                    viewManagerModel.setActiveView("Main Page");
+                    viewManagerModel.firePropertyChanged();
+                    addEmailInputField.setText("");
+                }
+            }
+        });
+
+        addEmailInputField.addKeyListener(
                 new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
-                        AddEmailState currentState = addEmailViewModel.getState();
-                        String text = titleInputField.getText() + e.getKeyChar();
-                        addEmailViewModel.setState(currentState);
+
                     }
 
                     @Override
@@ -74,27 +98,6 @@ public class AddEmailView extends JPanel implements ActionListener, PropertyChan
                 }
         );
 
-        messageInputFiled.addKeyListener(
-                new KeyListener() {
-                    @Override
-                    public void keyTyped(KeyEvent e) {
-                        AddEmailState currentState = addEmailViewModel.getState();
-                        String text = messageInputFiled.getText() + e.getKeyChar();
-
-                        addEmailViewModel.setState(currentState);
-                    }
-
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-
-                    }
-
-                    @Override
-                    public void keyReleased(KeyEvent e) {
-
-                    }
-                }
-        );
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

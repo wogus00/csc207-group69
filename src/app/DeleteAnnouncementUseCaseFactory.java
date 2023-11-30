@@ -7,6 +7,7 @@ import interface_adapter.create_announcement.CreateAnnouncementViewModel;
 import interface_adapter.delete_announcement.DeleteAnnouncementController;
 import interface_adapter.delete_announcement.DeleteAnnouncementPresenter;
 import interface_adapter.delete_announcement.DeleteAnnouncementViewModel;
+import interface_adapter.main_page.MainPageViewModel;
 import use_case.delete_announcement.DeleteAnnouncementDataAccessInterface;
 import use_case.delete_announcement.DeleteAnnouncementInputBoundary;
 import use_case.delete_announcement.DeleteAnnouncementInteractor;
@@ -24,11 +25,12 @@ public class DeleteAnnouncementUseCaseFactory {
             ViewManagerModel viewManagerModel,
             DeleteAnnouncementViewModel deleteAnnouncementViewModel,
             DeleteAnnouncementDataAccessInterface deleteAnnouncementDataAccessObject,
-            CreateAnnouncementViewModel createAnnouncementViewModel) {
+            CreateAnnouncementViewModel createAnnouncementViewModel,
+            MainPageViewModel mainPageViewModel) {
 
         try {
-            DeleteAnnouncementController deleteAnnouncementController = DeleteAnnouncementUseCase(viewManagerModel, deleteAnnouncementViewModel, deleteAnnouncementDataAccessObject, createAnnouncementViewModel);
-            return new DeleteAnnouncementView(deleteAnnouncementController, deleteAnnouncementViewModel);
+            DeleteAnnouncementController deleteAnnouncementController = DeleteAnnouncementUseCase(viewManagerModel, deleteAnnouncementViewModel, deleteAnnouncementDataAccessObject, createAnnouncementViewModel, mainPageViewModel);
+            return new DeleteAnnouncementView(deleteAnnouncementController, deleteAnnouncementViewModel, viewManagerModel);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error initializing Delete Announcement feature.");
         }
@@ -40,9 +42,10 @@ public class DeleteAnnouncementUseCaseFactory {
             ViewManagerModel viewManagerModel,
             DeleteAnnouncementViewModel deleteAnnouncementViewModel,
             DeleteAnnouncementDataAccessInterface deleteAnnouncementDataAccessObject,
-            CreateAnnouncementViewModel createAnnouncementViewModel) {
+            CreateAnnouncementViewModel createAnnouncementViewModel,
+            MainPageViewModel mainPageViewModel) {
 
-        DeleteAnnouncementOutputBoundary deleteAnnouncementOutputBoundary = new DeleteAnnouncementPresenter(deleteAnnouncementViewModel, createAnnouncementViewModel,viewManagerModel);
+        DeleteAnnouncementOutputBoundary deleteAnnouncementOutputBoundary = new DeleteAnnouncementPresenter(deleteAnnouncementViewModel, createAnnouncementViewModel,viewManagerModel, mainPageViewModel);
 
         DeleteAnnouncementInputBoundary deleteAnnouncementInteractor = new DeleteAnnouncementInteractor(
                 deleteAnnouncementDataAccessObject, deleteAnnouncementOutputBoundary);

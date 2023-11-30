@@ -8,6 +8,12 @@ import use_case.modify_meeting.ModifyMeetingOutputBoundary;
 import use_case.modify_meeting.ModifyMeetingOutputBoundary;
 import use_case.modify_meeting.ModifyMeetingOutputData;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
 /**
  * Presenter class for Modify Meeting use case.
  * This class updates the view model and state based on whether the meeting was successfully modifyd or not.
@@ -39,10 +45,30 @@ public class ModifyMeetingPresenter implements ModifyMeetingOutputBoundary {
      */
     @Override
     public void prepareSuccessView(ModifyMeetingOutputData response) {
-        MainPageState mainPageState = new MainPageState();
-        mainPageState.addAnnouncement(response.getMeetingName());
+        MainPageState mainPageState = mainPageViewModel.getState();
+        String dateStr = response.getMeetingDate();
+        String timeStr = response.getEndTime();
+        // Define the formatters for parsing
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        // Parse the date and time separately
+        LocalDate date = LocalDate.parse(dateStr, dateFormatter);
+        LocalTime time = LocalTime.parse(timeStr, timeFormatter);
+
+        // Combine them into a LocalDateTime object
+        LocalDateTime combinedDateTime = LocalDateTime.of(date, time);
+
+        // Get the current LocalDateTime
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        ArrayList<String> meetingList = mainPageState.getMeetingList();
+        if (!combinedDateTime.isBefore(currentDateTime) && !meetingList.contains(response.getMeetingName())) {
+            meetingList.add(response.getMeetingName());
+            mainPageState.setMeetingList(meetingList);
+        }
         mainPageViewModel.setState(mainPageState);
-        viewManagerModel.setActiveView(modifyMeetingViewModel.getViewName());
+        mainPageViewModel.firePropertyChanged();
+        viewManagerModel.setActiveView("Main Page");
         viewManagerModel.firePropertyChanged();
     }
     /**
@@ -54,6 +80,7 @@ public class ModifyMeetingPresenter implements ModifyMeetingOutputBoundary {
     public void prepareFailView(String error) {
         ModifyMeetingState modifyMeetingState = modifyMeetingViewModel.getState();
         modifyMeetingState.setMeetingNameError(error);
+        modifyMeetingViewModel.setState(modifyMeetingState);
         modifyMeetingViewModel.firePropertyChanged();
     }
 }

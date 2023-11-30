@@ -12,7 +12,7 @@ public interface SetLeaderOutputBoundary {
      * This method should be invoked when the change of leadership has been completed
      * successfully and the user interface needs to reflect this success.
      */
-    void prepareSuccessView();
+    void prepareSuccessView(String new_leader);
 
     /**
      * Prepares the view to display an error message indicating that setting a new project leader

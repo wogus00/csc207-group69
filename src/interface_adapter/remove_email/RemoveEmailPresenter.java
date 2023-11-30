@@ -1,8 +1,14 @@
 package interface_adapter.remove_email;
 
+import interface_adapter.ViewManagerModel;
+import interface_adapter.main_page.MainPageState;
+import interface_adapter.main_page.MainPageViewModel;
 import interface_adapter.remove_email.RemoveEmailState;
 import interface_adapter.remove_email.RemoveEmailViewModel;
 import use_case.remove_email.RemoveEmailOutputBoundary;
+
+import javax.swing.text.View;
+import java.util.ArrayList;
 
 /**
  * The {@code RemoveEmailPresenter} class implements the {@code RemoveEmailOutputBoundary} interface.
@@ -11,6 +17,8 @@ import use_case.remove_email.RemoveEmailOutputBoundary;
  */
 public class RemoveEmailPresenter implements RemoveEmailOutputBoundary {
     private RemoveEmailViewModel viewModel;
+    private ViewManagerModel viewManagerModel;
+    private MainPageViewModel mainPageViewModel;
 
     /**
      * Constructs a {@code RemoveEmailPresenter} with the specified view model.
@@ -18,8 +26,11 @@ public class RemoveEmailPresenter implements RemoveEmailOutputBoundary {
      * @param viewModel The view model that this presenter will update based on the outcome
      *                  of the remove email use case
      */
-    public RemoveEmailPresenter(RemoveEmailViewModel viewModel) {
+    public RemoveEmailPresenter(RemoveEmailViewModel viewModel, ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel) {
+
         this.viewModel = viewModel;
+        this.mainPageViewModel = mainPageViewModel;
+        this.viewManagerModel = viewManagerModel;
     }
 
     /**
@@ -28,7 +39,13 @@ public class RemoveEmailPresenter implements RemoveEmailOutputBoundary {
      * triggering any observers that the view model state has changed.
      */
     @Override
-    public void prepareSuccessView() {
+    public void prepareSuccessView(String removedMember) {
+        MainPageState mainPageState = mainPageViewModel.getState();
+        ArrayList<String> memberList = mainPageState.getMemberEmail();
+        memberList.remove(removedMember);
+        mainPageState.setMemberEmail(memberList);
+        mainPageViewModel.setState(mainPageState);
+        mainPageViewModel.firePropertyChanged();
         viewModel.firePropertyChanged();
     }
 

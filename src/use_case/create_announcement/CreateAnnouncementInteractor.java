@@ -58,7 +58,7 @@ public class CreateAnnouncementInteractor implements CreateAnnouncementInputBoun
 
         // Save the announcement to Firebase
         try {
-            createAnnouncementDataAccessObject.save(announcement);
+            createAnnouncementDataAccessObject.save(createAnnouncementInputData.getProjectName(), announcement);
             CreateAnnouncementOutputData createAnnouncementOutputData = new CreateAnnouncementOutputData(
                     announcement.getAnnouncementTitle(),
                     announcement.getMessage(),

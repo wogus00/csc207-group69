@@ -27,14 +27,15 @@ public class CreateAnnouncementController {
     /**
      * Executes the process of creating a new announcement.
      *
+     * @param  projectName The name of the project that will be storing the announcement.
      * @param announcementTitle The title of the announcement to be created.
      * @param message           The message of the announcement.
      * @param author            The author of the announcement.
      * @throws IOException       If there is a failure in the input/output operations.
      * @throws AddressException  If there is an error in the email address processing.
      */
-    public void execute(String announcementTitle, String message, String author) throws IOException, AddressException {
-        CreateAnnouncementInputData createAnnouncementInputData = new CreateAnnouncementInputData(announcementTitle, message, author);
+    public void execute(String projectName, String announcementTitle, String message, String author) throws IOException, AddressException {
+        CreateAnnouncementInputData createAnnouncementInputData = new CreateAnnouncementInputData(projectName, announcementTitle, message, author);
         createAnnouncementUseCaseInteractor.execute(createAnnouncementInputData);
     }
 }

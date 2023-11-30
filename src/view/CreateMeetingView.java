@@ -27,7 +27,6 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
     private final JTextField meetingDateInputField = new JTextField(15);
     private final JTextField startTimeInputField = new JTextField(15);
     private final JTextField endTimeInputField = new JTextField(15);
-    private final JTextField projectNameInputField = new JTextField(15);
     private final CreateMeetingController createMeetingController;
     private final JButton create;
     private final JButton cancel;
@@ -40,7 +39,7 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
         this.viewManagerModel = viewManagerModel;
         this.createMeetingController = createMeetingController;
         this.createMeetingViewModel = createMeetingViewModel;
-        createMeetingViewModel.addPropertyChangeListener(this);
+        this.createMeetingViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(CreateMeetingViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -55,8 +54,6 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
                 new JLabel(CreateMeetingViewModel.START_TIME_LABEL), startTimeInputField);
         LabelTextPanel endTimeInfo = new LabelTextPanel(
                 new JLabel(CreateMeetingViewModel.END_TIME_LABEL), endTimeInputField);
-        LabelTextPanel projectNameInfo = new LabelTextPanel(
-                new JLabel(CreateMeetingViewModel.PROJECT_NAME_LABEL), projectNameInputField);
 
         JPanel buttons = new JPanel();
         create = new JButton(CreateMeetingViewModel.CREATE_BUTTON_LABEL);
@@ -70,6 +67,11 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
                 if (e.getSource().equals(cancel)) {
                     viewManagerModel.setActiveView("Main Page");
                     viewManagerModel.firePropertyChanged();
+                    meetingNameInputField.setText("");
+                    participantEmailInputField.setText("");
+                    meetingDateInputField.setText("");
+                    startTimeInputField.setText("");
+                    endTimeInputField.setText("");
                 }
             }
         });
@@ -86,6 +88,8 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
                             String startTime = currentState.getStartTime();
                             String endTime = currentState.getEndTime();
                             String projectName = currentState.getProjectName();
+                            currentState.setMeetingNameError(null);
+                            createMeetingViewModel.setState(currentState);
                             try {
                                 createMeetingController.execute(
                                         currentState.getMeetingName(),
@@ -106,6 +110,11 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
                                         "created meeting successfully");
                                 viewManagerModel.setActiveView("Main Page");
                                 viewManagerModel.firePropertyChanged();
+                                meetingNameInputField.setText("");
+                                participantEmailInputField.setText("");
+                                meetingDateInputField.setText("");
+                                startTimeInputField.setText("");
+                                endTimeInputField.setText("");
                             }
                         }
                     }
@@ -228,7 +237,6 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
         this.add(meetingDateInfo);
         this.add(startTimeInfo);
         this.add(endTimeInfo);
-        this.add(projectNameInfo);
         this.add(buttons);
     }
 
