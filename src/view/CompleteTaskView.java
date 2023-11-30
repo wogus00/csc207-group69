@@ -20,12 +20,12 @@ public class CompleteTaskView extends JPanel implements ActionListener, Property
     public final String viewName = "Complete Task";
     private ViewManagerModel viewManagerModel;
     private final CompleteTaskViewModel completeTaskViewModel;
-    private final JTextField taskNameInputField = new JTextField(15);
+    final JTextField taskNameInputField = new JTextField(15);
 
     private final CompleteTaskController completeTaskController;
 
-    private final JButton complete;
-    private final JButton cancel;
+    final JButton complete;
+    final JButton cancel;
 
 
     public CompleteTaskView(ViewManagerModel viewManagerModel, CompleteTaskController completeTaskController, CompleteTaskViewModel completeTaskViewModel) {

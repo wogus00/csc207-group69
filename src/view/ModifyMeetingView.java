@@ -24,14 +24,14 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
     public final String viewName = "Modify Meeting";
     private ViewManagerModel viewManagerModel;
     private final ModifyMeetingViewModel modifyMeetingViewModel;
-    private final JTextField meetingNameInputField = new JTextField(15);
-    private final JTextField participantEmailInputField = new JTextField(15);
-    private final JTextField meetingDateInputField = new JTextField(15);
-    private final JTextField startTimeInputField = new JTextField(15);
-    private final JTextField endTimeInputField = new JTextField(15);
+    final JTextField meetingNameInputField = new JTextField(15);
+    final JTextField participantEmailInputField = new JTextField(15);
+    final JTextField meetingDateInputField = new JTextField(15);
+    final JTextField startTimeInputField = new JTextField(15);
+    final JTextField endTimeInputField = new JTextField(15);
     private final ModifyMeetingController modifyMeetingController;
-    private final JButton modify;
-    private final JButton cancel;
+    final JButton modify;
+    final JButton cancel;
     public ModifyMeetingView(ViewManagerModel viewManagerModel, ModifyMeetingController modifyMeetingController, ModifyMeetingViewModel modifyMeetingViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.modifyMeetingController = modifyMeetingController;

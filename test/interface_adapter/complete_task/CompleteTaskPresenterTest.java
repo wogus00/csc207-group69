@@ -1,22 +1,18 @@
 package interface_adapter.complete_task;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.complete_task.CompleteTaskPresenter;
-import interface_adapter.complete_task.CompleteTaskViewModel;
+import interface_adapter.complete_task.CompleteTaskState;
 import interface_adapter.main_page.MainPageState;
 import interface_adapter.main_page.MainPageViewModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import use_case.complete_task.CompleteTaskOutputData;
-import use_case.create_meeting.CreateMeetingOutputData;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class CompleteTaskPresenterTest {
 
@@ -31,36 +27,49 @@ public class CompleteTaskPresenterTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        mockViewManagerModel = mock(ViewManagerModel.class);
+        mockCompleteTaskViewModel = mock(CompleteTaskViewModel.class);
+        mockMainPageViewModel = mock(MainPageViewModel.class);
         presenter = new CompleteTaskPresenter(mockViewManagerModel, mockCompleteTaskViewModel, mockMainPageViewModel);
-    }
 
-    @Test
-    public void testPrepareSuccessView() {
-        // Arrange
-        String taskName = "task";
-        CompleteTaskOutputData response = new CompleteTaskOutputData(taskName);
-
-        // Act
-        presenter.prepareSuccessView(response);
-
-
-        // Assert
-        verify(mockMainPageViewModel).setState(any(MainPageState.class));
-        verify(mockViewManagerModel).setActiveView(mockCompleteTaskViewModel.getViewName());
-        verify(mockViewManagerModel).firePropertyChanged();
+        // Ensure that the state is initialized
+        when(mockCompleteTaskViewModel.getState()).thenReturn(new CompleteTaskState());
     }
 
     @Test
     public void testPrepareFailView() {
         // Arrange
-        String error = "Error message";
+        String errorMessage = "Error message";
 
         // Act
-        presenter.prepareFailView(error);
+        presenter.prepareFailView(errorMessage);
 
         // Assert
-        verify(mockCompleteTaskViewModel).getState().setTaskNameError(error);
+        assertEquals(errorMessage, mockCompleteTaskViewModel.getState().getTaskNameError());
         verify(mockCompleteTaskViewModel).firePropertyChanged();
+        // Add more assertions based on your actual implementation
+    }
+
+    @Test
+    public void testPrepareSuccessView() {
+        // Arrange
+        CompleteTaskOutputData outputData = new CompleteTaskOutputData("TaskName");
+
+        // Mock the main page state
+        MainPageState mockMainPageState = mock(MainPageState.class);
+        when(mockMainPageViewModel.getState()).thenReturn(mockMainPageState);
+        when(mockMainPageState.getTaskList()).thenReturn(new ArrayList<>());
+
+        // Act
+        presenter.prepareSuccessView(outputData);
+
+        // Assert
+        verify(mockMainPageViewModel).firePropertyChanged();
+        verify(mockViewManagerModel).setActiveView(mockMainPageViewModel.getViewName());
+        verify(mockViewManagerModel).firePropertyChanged();
+
+        // Additional assertions depending on your implementation
+        verify(mockMainPageState).getTaskList();
+        // Add more assertions based on your actual implementation
     }
 }
