@@ -1,4 +1,5 @@
 package view;
+import interface_adapter.ViewManagerModel;
 import interface_adapter.create_announcement.CreateAnnouncementController;
 import interface_adapter.create_announcement.CreateAnnouncementState;
 import interface_adapter.create_announcement.CreateAnnouncementViewModel;
@@ -33,6 +34,8 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
 
     private final JButton cancel;
 
+    private ViewManagerModel viewManagerModel;
+
     /**
      * Constructs a CreateAnnouncementView with the specified controller and view model.
      *
@@ -41,11 +44,13 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
      */
 
     public CreateAnnouncementView(CreateAnnouncementController controller,
-                                  CreateAnnouncementViewModel createAnnouncementViewModel) {
+                                  CreateAnnouncementViewModel createAnnouncementViewModel,
+                                  ViewManagerModel viewManagerModel) {
 
         this.createAnnouncementController = controller;
         this.createAnnouncementViewModel = createAnnouncementViewModel;
-        createAnnouncementViewModel.addPropertyChangeListener(this);
+        this.viewManagerModel = viewManagerModel;
+        this.createAnnouncementViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(createAnnouncementViewModel.ANNOUNCEMENT_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -69,16 +74,21 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
                             CreateAnnouncementState currentState = createAnnouncementViewModel.getState();
 
                             try{
+                                String projectName = currentState.getProject();
                                 String currentTitle = currentState.getAnnouncementTitle();
                                 String currentMessage = currentState.getMessage();
                                 String author = currentState.getAuthor();
-                                createAnnouncementController.execute(currentTitle, currentMessage, author);
+                                createAnnouncementController.execute(projectName, currentTitle, currentMessage, author);
                             } catch (IOException | AddressException e) {
                                 throw new RuntimeException(e);
                             }
                             currentState = createAnnouncementViewModel.getState();
                             if (currentState.getAnnouncementTitleError() == null) {
                                 JOptionPane.showMessageDialog(CreateAnnouncementView.this, "create announcement successfully");
+                                viewManagerModel.setActiveView("Main Page");
+                                viewManagerModel.firePropertyChanged();
+                                titleInputField.setText("");
+                                messageInputFiled.setText("");
                             }
 
 
@@ -87,7 +97,19 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
                     }
                 }
         );
-        cancel.addActionListener(this);
+
+        cancel.addActionListener(
+                new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource().equals(cancel)) {
+                    viewManagerModel.setActiveView("Main Page");
+                    viewManagerModel.firePropertyChanged();
+                    titleInputField.setText("");
+                    messageInputFiled.setText("");
+                }
+            }
+        });
 
         titleInputField.addKeyListener(
                 new KeyListener() {

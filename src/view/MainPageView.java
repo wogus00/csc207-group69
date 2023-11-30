@@ -5,6 +5,7 @@ import interface_adapter.add_email.AddEmailState;
 import interface_adapter.add_email.AddEmailViewModel;
 import interface_adapter.complete_task.CompleteTaskState;
 import interface_adapter.complete_task.CompleteTaskViewModel;
+import interface_adapter.create_announcement.CreateAnnouncementState;
 import interface_adapter.create_announcement.CreateAnnouncementViewModel;
 import interface_adapter.create_meeting.CreateMeetingState;
 import interface_adapter.create_meeting.CreateMeetingViewModel;
@@ -85,7 +86,8 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
                         CreateTaskViewModel createTaskViewModel, CompleteTaskViewModel completeTaskViewModel,
                         ModifyTaskViewModel modifyTaskViewModel, AddEmailViewModel addEmailViewModel,
                         RemoveEmailViewModel removeEmailViewModel, SetLeaderViewModel setLeaderViewModel,
-                        CreateMeetingViewModel createMeetingViewModel, ModifyMeetingViewModel modifyMeetingViewModel) {
+                        CreateMeetingViewModel createMeetingViewModel, ModifyMeetingViewModel modifyMeetingViewModel,
+                        CreateAnnouncementViewModel createAnnouncementViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.mainPageViewModel = mainPageViewModel;
         this.loginViewModel = loginViewModel;
@@ -97,6 +99,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         this.setLeaderViewModel = setLeaderViewModel;
         this.createMeetingViewModel = createMeetingViewModel;
         this.modifyMeetingViewModel = modifyMeetingViewModel;
+        this.createAnnouncementViewModel = createAnnouncementViewModel;
         this.mainPageViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BorderLayout());
@@ -433,6 +436,13 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         MainPageState mainPageState = mainPageViewModel.getState();
+                        CreateAnnouncementState createAnnouncementState = createAnnouncementViewModel.getState();
+                        createAnnouncementState.setAuthor(mainPageState.getUserEmail());
+                        createAnnouncementState.setProject(mainPageState.getProjectName());
+                        createAnnouncementViewModel.setState(createAnnouncementState);
+                        createAnnouncementViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Create announcement");
+                        viewManagerModel.firePropertyChanged();
 
                     }
                 }

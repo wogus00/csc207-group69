@@ -54,7 +54,7 @@ public class LoginInteractor implements LoginInputBoundary {
             } else {
                 ArrayList<String> taskList = userDataAccessObject.getInfoList(projectName, new TaskListGetter());
                 ArrayList<String> meetingList = userDataAccessObject.getInfoList(projectName, new MeetingListGetter());
-                ArrayList<String> announcements = userDataAccessObject.getInfoList(projectName, new AnnouncementListGetter());
+                ArrayList<String> announcements = userDataAccessObject.getInfoList(projectName, new AnnouncementMessageListGetter());
                 LoginOutputData loginOutputData = new LoginOutputData(projectName, userEmail, leaderEmail, memberEmails, taskList, meetingList, announcements, false);
                 loginPresenter.prepareSuccessView(loginOutputData);
             }

@@ -7,6 +7,8 @@ import interface_adapter.main_page.MainPageViewModel;
 import use_case.create_announcement.CreateAnnouncementOutputBoundary;
 import use_case.create_announcement.CreateAnnouncementOutputData;
 
+import java.util.ArrayList;
+
 /**
  * Presenter for the Create Announcement feature.
  * It takes the response from the use case and updates the view model and view state accordingly.
@@ -42,10 +44,13 @@ public class CreateAnnouncementPresenter implements CreateAnnouncementOutputBoun
     @Override
     public void prepareSuccessView(CreateAnnouncementOutputData response) {
         // on Success, switch to the dashboard
-        MainPageState mainPageState = new MainPageState();
-        mainPageState.addAnnouncement(response.getAnnouncementTitle());
+        MainPageState mainPageState = mainPageViewModel.getState();
+        ArrayList<String> announcements = mainPageState.getAnnouncements();
+        announcements.add(response.getMessage());
+        mainPageState.setAnnouncements(announcements);
         mainPageViewModel.setState(mainPageState);
-        viewManagerModel.setActiveView(createAnnouncementViewModel.getViewName());
+        mainPageViewModel.firePropertyChanged();
+        viewManagerModel.setActiveView("Main Page");
         viewManagerModel.firePropertyChanged();
     }
 
@@ -58,6 +63,7 @@ public class CreateAnnouncementPresenter implements CreateAnnouncementOutputBoun
     public void prepareFailView(String error) {
         CreateAnnouncementState createAnnouncementState = createAnnouncementViewModel.getState();
         createAnnouncementState.setAnnouncementTitleError(error);
+        createAnnouncementViewModel.setState(createAnnouncementState);
         createAnnouncementViewModel.firePropertyChanged();
     }
 }

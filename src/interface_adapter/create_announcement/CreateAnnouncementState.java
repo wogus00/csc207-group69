@@ -15,6 +15,7 @@ public class CreateAnnouncementState {
     private String author = "";
 
     private String id = "";
+    private String project = "";
 
     /**
      * Constructs a new state by copying data from another state instance.
@@ -27,6 +28,7 @@ public class CreateAnnouncementState {
         announcementTitleError = copy.announcementTitleError;
         author = copy.author;
         id = copy.id;
+        project = copy.project;
     }
 
     /**
@@ -62,6 +64,15 @@ public class CreateAnnouncementState {
      */
     public String getAuthor() {
         return author;
+    }
+
+    /**
+     * Gets the name of project that the announcement belongs to.
+     *
+     * @return the name of project.
+     */
+    public String getProject() {
+        return project;
     }
 
     /**
@@ -111,4 +122,15 @@ public class CreateAnnouncementState {
     public void setId(String id) {
         this.id = id;
     }
+
+
+    /**
+     * Sets the name of the project that the announcement belongs to.
+     *
+     * @param project the name of the project.
+     */
+    public void setProject(String project) {
+        this.project = project;
+    }
+
 }

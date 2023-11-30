@@ -1,5 +1,4 @@
 package data_access;
-import app.ModifyMeetingUseCaseFactory;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.Timestamp;
@@ -447,33 +446,42 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
     }
 
     @Override
-    public void save(Announcement announcement) {
-        // Initialize Firestore if not already done
-        if (db == null) {
-            // Initialize Firestore
+    public void save(String projectName, Announcement announcement) {
+        // Reference to the Firestore document where announcements are stored
+        DocumentReference docRef = db.collection("announcements").document(announcement.getId());
+
+        // Get the current snapshot of the document
+        ApiFuture<DocumentSnapshot> snapShot = docRef.get();
+        DocumentSnapshot announcementInfo = null;
+        try {
+            announcementInfo = snapShot.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
         }
 
-        // Generate a unique ID for the announcement
-//        String announcementId = UUID.randomUUID().toString();
-
-        // Convert LocalDateTime to a Firebase compatible format
-        String formattedCreationTime = announcement.getCreationTime()
-                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-
-        // Create a Map to hold announcement data
+        // Prepare announcement data for saving
         Map<String, Object> announcementData = new HashMap<>();
-        announcementData.put("id", announcement.getId()); // Add the generated ID
+        announcementData.put("id", announcement.getId());
         announcementData.put("title", announcement.getAnnouncementTitle());
         announcementData.put("message", announcement.getMessage());
-        announcementData.put("creationTime", formattedCreationTime);
-        announcementData.put("author", announcement.getAuthor());
 
-        // Use the generated ID as the document ID in Firestore
-        ApiFuture<WriteResult> addedDocRef = db.collection("announcements")
-                .document(announcement.getId())
-                .set(announcementData);
-        // Handle completion of the future
+        // Convert LocalDateTime to Timestamp
+        Timestamp creationTime = Timestamp.of(java.sql.Timestamp.valueOf(announcement.getCreationTime()));
+        announcementData.put("creationTime", creationTime);
+
+        announcementData.put("author", announcement.getAuthor());
+        announcementData.put("projectName", projectName);
+
+        // Check if the document already exists and update it
+        if (announcementInfo.exists()) {
+            // If the document already exists, update it
+            docRef.update(announcementData);
+        } else {
+            // If the document does not exist, create a new one
+            docRef.set(announcementData);
+        }
     }
+
 
     @Override
     public boolean deleteAnnouncement(String announcementId) {
@@ -488,6 +496,8 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
             return false; // Return false if an exception occurs
         }
     }
+
+
 
     @Override
     public CommonAnnouncement getAnnouncementById(String announcementId) {

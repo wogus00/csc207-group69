@@ -33,7 +33,7 @@ public class DeleteAnnouncementView extends JPanel implements ActionListener, Pr
                                   DeleteAnnouncementViewModel deleteAnnouncementViewModel) {
         this.deleteAnnouncementController = controller;
         this.deleteAnnouncementViewModel = deleteAnnouncementViewModel;
-        deleteAnnouncementViewModel.addPropertyChangeListener(this);
+        this.deleteAnnouncementViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(deleteAnnouncementViewModel.DELETE_ANNOUNCEMENT_BUTTON_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
