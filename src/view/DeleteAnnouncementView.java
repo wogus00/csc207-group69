@@ -25,12 +25,12 @@ public class DeleteAnnouncementView extends JPanel implements ActionListener, Pr
     private final String viewName = "Delete announcement";
 
     private DeleteAnnouncementViewModel deleteAnnouncementViewModel;
-    private final JTextField announcementIdInputField = new JTextField(15);
+    final JTextField announcementIdInputField = new JTextField(15);
 
 //    private final JTextField currentUserInputField = new JTextField(15);
     private DeleteAnnouncementController deleteAnnouncementController;
-    private JButton deleteAnnouncementButton;
-    private JButton cancel;
+    JButton deleteAnnouncementButton;
+    JButton cancel;
 
     /**
      * Constructs a new DeleteAnnouncementView with a given controller and view model.

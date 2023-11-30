@@ -34,28 +34,7 @@ public class CreateTaskUseCaseFactoryTest {
         // Additional assertions can be added to verify the correct use of dependencies
     }
 
-//    @Test
-//    public void testCreateTaskViewIOException() {
-//        ViewManagerModel mockViewManagerModel = mock(ViewManagerModel.class);
-//        CreateTaskViewModel mockCreateTaskViewModel = mock(CreateTaskViewModel.class);
-//        CreateTaskDataAccessInterface mockUserDataAccessObject = mock(CreateTaskDataAccessInterface.class);
-//        CreateTaskGmailDataAccessInterface mockGmailDataAccessObject = mock(CreateTaskGmailDataAccessInterface.class);
-//        MainPageViewModel mockMainPageViewModel = mock(MainPageViewModel.class);
-//
-//        // Mock behavior to throw IOException
-//        // Assuming one of the methods in one of the interfaces throws IOException
-//        doThrow(IOException.class).when(mockUserDataAccessObject).someMethodThatCanThrowIOException();
-//
-//        try (MockedStatic<JOptionPane> mockedStatic = Mockito.mockStatic(JOptionPane.class)) {
-//            CreateTaskView result = CreateTaskUseCaseFactory.createTaskView(mockViewManagerModel, mockCreateTaskViewModel, mockUserDataAccessObject, mockGmailDataAccessObject, mockMainPageViewModel);
-//
-//            assertNull(result, "CreateTaskView should be null when IOException is thrown");
-//            mockedStatic.verify(() -> JOptionPane.showMessageDialog(null, "Invalid File"), times(1));
-//        }
-//    }
-
-
-
+    // Did not write a test case for exception handling because we cannot force to throw IOException.
 
 }
 

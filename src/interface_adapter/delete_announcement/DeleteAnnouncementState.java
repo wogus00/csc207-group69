@@ -84,13 +84,4 @@ public class DeleteAnnouncementState {
         this.announcementID = announcementID;
     }
 
-    /**
-     * Provides a string representation of the state, primarily the announcement title.
-     *
-     * @return The title of the announcement in the state.
-     */
-    @Override
-    public String toString(){
-        return announcement.getAnnouncementTitle();
-    }
 }
