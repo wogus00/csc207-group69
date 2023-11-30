@@ -45,6 +45,7 @@ public class DeleteAnnouncementInteractor implements DeleteAnnouncementInputBoun
 
             if (announcement == null) {
                 // Announcement not found
+                System.out.println("reached");
                 deleteAnnouncementPresenter.prepareNotFoundView(announcementId);
                 return;
             }

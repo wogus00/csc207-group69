@@ -510,11 +510,11 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
                 String title = document.getString("title");
                 String message = document.getString("message");
                 String author = document.getString("author");
-                String creationTimeString = document.getString("creationTime");
+                Timestamp creationTimeStamp = (Timestamp) document.get("creationTime");
                 String id = document.getId();
 
                 // Assuming creationTime is stored in ISO_LOCAL_DATE_TIME format
-                LocalDateTime creationTime = LocalDateTime.parse(creationTimeString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                LocalDateTime creationTime = creationTimeStamp.toSqlTimestamp().toLocalDateTime();
 
                 return new CommonAnnouncement(title, message, creationTime, author, id);
             } else {

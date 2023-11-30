@@ -11,6 +11,7 @@ public class CreateAnnouncementState {
     private String message = "";
 
     private String announcementTitleError = null;
+    private String response = null;
 
     private String author = "";
 
@@ -29,6 +30,7 @@ public class CreateAnnouncementState {
         author = copy.author;
         id = copy.id;
         project = copy.project;
+        response = copy.response;
     }
 
     /**
@@ -73,6 +75,15 @@ public class CreateAnnouncementState {
      */
     public String getProject() {
         return project;
+    }
+
+    /**
+     * Gets the response of create announcement action;
+     *
+     * @return the response of action.
+     */
+    public String getResponse() {
+        return response;
     }
 
     /**
@@ -131,6 +142,15 @@ public class CreateAnnouncementState {
      */
     public void setProject(String project) {
         this.project = project;
+    }
+
+    /**
+     * Sets the response of create announcement action;
+     *
+     * @param response the response of action.
+     */
+    public void setResponse(String response) {
+        this.response = response;
     }
 
 }

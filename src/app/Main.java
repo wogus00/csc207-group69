@@ -8,6 +8,7 @@ import interface_adapter.create_announcement.CreateAnnouncementViewModel;
 import interface_adapter.create_meeting.CreateMeetingViewModel;
 import interface_adapter.create_project.CreateProjectViewModel;
 import interface_adapter.add_email.AddEmailViewModel;
+import interface_adapter.delete_announcement.DeleteAnnouncementViewModel;
 import interface_adapter.modify_meeting.ModifyMeetingViewModel;
 import interface_adapter.modify_task.ModifyTaskViewModel;
 import interface_adapter.remove_email.RemoveEmailViewModel;
@@ -60,6 +61,7 @@ public class Main {
         CreateMeetingViewModel createMeetingViewModel = new CreateMeetingViewModel();
         ModifyMeetingViewModel modifyMeetingViewModel = new ModifyMeetingViewModel();
         CreateAnnouncementViewModel createAnnouncementViewModel =  new CreateAnnouncementViewModel();
+        DeleteAnnouncementViewModel deleteAnnouncementViewModel = new DeleteAnnouncementViewModel();
 
         FirebaseAccessObject firebaseAccessObject;
         GmailDataAccessObject gmailDataAccessObject = new GmailDataAccessObject();
@@ -101,7 +103,10 @@ public class Main {
         CreateAnnouncementView createAnnouncementView = CreateAnnouncementUseCaseFactory.createAnnouncementView(viewManagerModel, createAnnouncementViewModel, firebaseAccessObject, mainPageViewModel);
         views.add(createAnnouncementView, createAnnouncementView.viewName);
 
-        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel, createTaskViewModel, completeTaskViewModel, modifyTaskViewModel, addEmailViewModel, removeEmailViewModel, setLeaderViewModel, createMeetingViewModel, modifyMeetingViewModel, createAnnouncementViewModel);
+        DeleteAnnouncementView deleteAnnouncementView = DeleteAnnouncementUseCaseFactory.createDeleteAnnouncementView(viewManagerModel,deleteAnnouncementViewModel, firebaseAccessObject, createAnnouncementViewModel, mainPageViewModel);
+        views.add(deleteAnnouncementView, deleteAnnouncementView.viewName);
+
+        MainPageView mainPageView = new MainPageView(viewManagerModel, mainPageViewModel, loginViewModel, createTaskViewModel, completeTaskViewModel, modifyTaskViewModel, addEmailViewModel, removeEmailViewModel, setLeaderViewModel, createMeetingViewModel, modifyMeetingViewModel, createAnnouncementViewModel, deleteAnnouncementViewModel);
         views.add(mainPageView, mainPageView.viewName);
 
         viewManagerModel.setActiveView(loginView.viewName);

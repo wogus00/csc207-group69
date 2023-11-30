@@ -82,16 +82,6 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
                             } catch (IOException | AddressException e) {
                                 throw new RuntimeException(e);
                             }
-                            currentState = createAnnouncementViewModel.getState();
-                            if (currentState.getAnnouncementTitleError() == null) {
-                                JOptionPane.showMessageDialog(CreateAnnouncementView.this, "create announcement successfully");
-                                viewManagerModel.setActiveView("Main Page");
-                                viewManagerModel.firePropertyChanged();
-                                titleInputField.setText("");
-                                messageInputFiled.setText("");
-                            }
-
-
 
                         }
                     }
@@ -173,7 +163,7 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Cancel not implemented yet.");
+
     }
 
     /**
@@ -186,6 +176,13 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
         CreateAnnouncementState state = (CreateAnnouncementState) evt.getNewValue();
         if (state.getAnnouncementTitleError() != null) {
             JOptionPane.showMessageDialog(this, state.getAnnouncementTitleError());
+        } if (state.getResponse() != null) {
+            CreateAnnouncementState createAnnouncementState = createAnnouncementViewModel.getState();
+            JOptionPane.showMessageDialog(CreateAnnouncementView.this, "create announcement successfully\nThe id of the announcement you've created is " + createAnnouncementState.getResponse());
+            viewManagerModel.setActiveView("Main Page");
+            viewManagerModel.firePropertyChanged();
+            titleInputField.setText("");
+            messageInputFiled.setText("");
         }
     }
 }

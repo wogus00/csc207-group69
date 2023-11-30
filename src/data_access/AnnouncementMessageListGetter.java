@@ -1,6 +1,7 @@
 package data_access;
 
 import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
@@ -29,8 +30,8 @@ public class AnnouncementMessageListGetter implements InfoListGetter {
         Map<String, String> Time_to_Message = new HashMap<>();
         for (QueryDocumentSnapshot document : documents) {;
             String message = document.getString("message");
-            String creationTime = document.getString("creationTime");
-            Time_to_Message.put(creationTime, message);
+            Timestamp creationTime = (Timestamp) document.get("creationTime");
+            Time_to_Message.put(String.valueOf(creationTime), message);
         }
         ArrayList<String> timeList = new ArrayList<>();
         timeList.addAll(Time_to_Message.keySet());

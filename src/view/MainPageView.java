@@ -11,6 +11,8 @@ import interface_adapter.create_meeting.CreateMeetingState;
 import interface_adapter.create_meeting.CreateMeetingViewModel;
 import interface_adapter.create_task.CreateTaskState;
 import interface_adapter.create_task.CreateTaskViewModel;
+import interface_adapter.delete_announcement.DeleteAnnouncementState;
+import interface_adapter.delete_announcement.DeleteAnnouncementViewModel;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageState;
@@ -58,6 +60,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
     AddEmailViewModel addEmailViewModel;
     ModifyMeetingViewModel modifyMeetingViewModel;
     CreateAnnouncementViewModel createAnnouncementViewModel;
+    DeleteAnnouncementViewModel deleteAnnouncementViewModel;
 
     JLabel titleLabel;
     JLabel leaderEmailInfo = new JLabel();
@@ -87,7 +90,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
                         ModifyTaskViewModel modifyTaskViewModel, AddEmailViewModel addEmailViewModel,
                         RemoveEmailViewModel removeEmailViewModel, SetLeaderViewModel setLeaderViewModel,
                         CreateMeetingViewModel createMeetingViewModel, ModifyMeetingViewModel modifyMeetingViewModel,
-                        CreateAnnouncementViewModel createAnnouncementViewModel) {
+                        CreateAnnouncementViewModel createAnnouncementViewModel, DeleteAnnouncementViewModel deleteAnnouncementViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.mainPageViewModel = mainPageViewModel;
         this.loginViewModel = loginViewModel;
@@ -100,6 +103,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         this.createMeetingViewModel = createMeetingViewModel;
         this.modifyMeetingViewModel = modifyMeetingViewModel;
         this.createAnnouncementViewModel = createAnnouncementViewModel;
+        this.deleteAnnouncementViewModel = deleteAnnouncementViewModel;
         this.mainPageViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BorderLayout());
@@ -244,7 +248,9 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         announcementPanelExtension.setVisible(false);
 
         JButton buttonA1 = new JButton("create announcement");
+        JButton buttonA2 = new JButton("delete announcement");
         announcementPanelExtension.add(buttonA1);
+        announcementPanelExtension.add(buttonA2);
         buttonPanel.add(announcementPanelExtension);
         buttonList.add(announcementPanelExtension);
 
@@ -442,6 +448,21 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
                         createAnnouncementViewModel.setState(createAnnouncementState);
                         createAnnouncementViewModel.firePropertyChanged();
                         viewManagerModel.setActiveView("Create announcement");
+                        viewManagerModel.firePropertyChanged();
+
+                    }
+                }
+        );
+
+        buttonA2.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        DeleteAnnouncementState deleteAnnouncementState = deleteAnnouncementViewModel.getState();
+                        deleteAnnouncementState.setUserEmail(mainPageState.getUserEmail());
+                        deleteAnnouncementViewModel.setState(deleteAnnouncementState);
+                        deleteAnnouncementViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Delete announcement");
                         viewManagerModel.firePropertyChanged();
 
                     }

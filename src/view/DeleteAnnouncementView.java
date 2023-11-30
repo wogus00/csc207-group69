@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.delete_announcement.DeleteAnnouncementController;
 import interface_adapter.delete_announcement.DeleteAnnouncementState;
 import interface_adapter.delete_announcement.DeleteAnnouncementViewModel;
@@ -19,9 +20,10 @@ import java.io.IOException;
  * It provides user interface elements for users to select and delete announcements.
  */
 public class DeleteAnnouncementView extends JPanel implements ActionListener, PropertyChangeListener {
-    private final String viewName = "Delete announcement";
+    public final String viewName = "Delete announcement";
 
     private DeleteAnnouncementViewModel deleteAnnouncementViewModel;
+    ViewManagerModel viewManagerModel;
     private final JTextField announcementIdInputField = new JTextField(15);
 
 //    private final JTextField currentUserInputField = new JTextField(15);
@@ -30,9 +32,11 @@ public class DeleteAnnouncementView extends JPanel implements ActionListener, Pr
     private JButton cancel;
 
     public DeleteAnnouncementView(DeleteAnnouncementController controller,
-                                  DeleteAnnouncementViewModel deleteAnnouncementViewModel) {
+                                  DeleteAnnouncementViewModel deleteAnnouncementViewModel,
+                                  ViewManagerModel viewManagerModel) {
         this.deleteAnnouncementController = controller;
         this.deleteAnnouncementViewModel = deleteAnnouncementViewModel;
+        this.viewManagerModel = viewManagerModel;
         this.deleteAnnouncementViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(deleteAnnouncementViewModel.DELETE_ANNOUNCEMENT_BUTTON_LABEL);
@@ -42,9 +46,6 @@ public class DeleteAnnouncementView extends JPanel implements ActionListener, Pr
                 new JLabel(deleteAnnouncementViewModel.DELETE_ANNOUNCEMENT_BUTTON_LABEL), announcementIdInputField
         );
 
-//        LabelTextPanel announcementCurrentUserinfo = new LabelTextPanel(
-//                new JLabel(deleteAnnouncementViewModel.CURRENT_USER), currentUserInputField
-//        );
 
         JPanel buttons = new JPanel();
         deleteAnnouncementButton = new JButton(deleteAnnouncementViewModel.DELETE_ANNOUNCEMENT_BUTTON_LABEL);
@@ -60,19 +61,31 @@ public class DeleteAnnouncementView extends JPanel implements ActionListener, Pr
                             DeleteAnnouncementState currentState = deleteAnnouncementViewModel.getState();
 
                             String currentID = currentState.getAnnouncementID();
-                            String currentUser = null; //TODO here, i would like to extract the current logged in user.
+                            String currentUser = currentState.getUserEmail(); //TODO here, i would like to extract the current logged in user.
 
                             deleteAnnouncementController.execute(currentID, currentUser);
                             currentState = deleteAnnouncementViewModel.getState();
                             if(currentState.getAnnouncementError() == null) {
                                 JOptionPane.showMessageDialog(DeleteAnnouncementView.this, "delete announcement successfully");
-
+                                viewManagerModel.setActiveView("Main Page");
+                                viewManagerModel.firePropertyChanged();
+                                announcementIdInputField.setText("");
                             }
                         }
                     }
                 }
         );
-        cancel.addActionListener(this);
+        cancel.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource().equals(cancel)) {
+                            viewManagerModel.setActiveView("Main Page");
+                            viewManagerModel.firePropertyChanged();
+                            announcementIdInputField.setText("");
+                        }
+                    }
+                });
 
         announcementIdInputField.addKeyListener(
                 new KeyListener(){
@@ -104,7 +117,7 @@ public class DeleteAnnouncementView extends JPanel implements ActionListener, Pr
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Cancel not implemented yet.");
+
     }
 
     @Override
