@@ -1,8 +1,10 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.create_announcement.CreateAnnouncementController;
 import interface_adapter.create_announcement.CreateAnnouncementState;
 import interface_adapter.create_announcement.CreateAnnouncementViewModel;
+import interface_adapter.main_page.MainPageViewModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -27,12 +29,15 @@ public class CreateAnnouncementViewTest {
     @Mock
     private CreateAnnouncementState mockCreateAnnouncementState;
 
+    @Mock
+    private ViewManagerModel viewManagerModel;
+
     private CreateAnnouncementView createAnnouncementView;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        createAnnouncementView = new CreateAnnouncementView(mockCreateAnnouncementController, mockCreateAnnouncementViewModel);
+        createAnnouncementView = new CreateAnnouncementView(mockCreateAnnouncementController, mockCreateAnnouncementViewModel, viewManagerModel);
         when(mockCreateAnnouncementViewModel.getState()).thenReturn(mockCreateAnnouncementState);
     }
 
@@ -100,7 +105,7 @@ public class CreateAnnouncementViewTest {
 
         ActionEvent event = new ActionEvent(createAnnouncementView.announcementSent, ActionEvent.ACTION_PERFORMED, "");
         createAnnouncementView.announcementSent.getActionListeners()[0].actionPerformed(event);
-        verify(mockCreateAnnouncementController).execute("Test Title", "Test Message", "Test Author");
+        verify(mockCreateAnnouncementController).execute("project name","Test Title", "Test Message", "Test Author");
     }
 
     @Test

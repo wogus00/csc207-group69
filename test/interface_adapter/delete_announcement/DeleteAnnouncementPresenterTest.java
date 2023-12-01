@@ -4,6 +4,7 @@ import entity.Announcement;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.create_announcement.CreateAnnouncementState;
 import interface_adapter.create_announcement.CreateAnnouncementViewModel;
+import interface_adapter.main_page.MainPageViewModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -21,12 +22,15 @@ class DeleteAnnouncementPresenterTest {
     @Mock
     private ViewManagerModel viewManagerModel;
 
+    @Mock
+    private MainPageViewModel mainPageViewModel;
+
     private DeleteAnnouncementPresenter presenter;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        presenter = new DeleteAnnouncementPresenter(deleteAnnouncementViewModel, createAnnouncementViewModel, viewManagerModel);
+        presenter = new DeleteAnnouncementPresenter(deleteAnnouncementViewModel, createAnnouncementViewModel, viewManagerModel, mainPageViewModel);
     }
 
     @Test
