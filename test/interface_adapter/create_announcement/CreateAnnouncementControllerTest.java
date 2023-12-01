@@ -28,12 +28,13 @@ public class CreateAnnouncementControllerTest {
     @Test
     public void testExecute_Successful() throws Exception {
         // Arrange
+        String projectName = "project name";
         String title = "Test Title";
         String message = "Test Message";
         String author = "Test Author";
 
         // Act
-        controller.execute(title, message, author);
+        controller.execute(projectName, title, message, author);
 
         // Assert
         verify(mockInteractor).execute(any(CreateAnnouncementInputData.class));

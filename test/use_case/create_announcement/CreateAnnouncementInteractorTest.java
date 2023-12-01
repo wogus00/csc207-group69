@@ -40,7 +40,7 @@ class CreateAnnouncementInteractorTest {
 
     @Test
     void testSuccessfulAnnouncementCreation() {
-        CreateAnnouncementInputData inputData = new CreateAnnouncementInputData("Title", "Message", "Author");
+        CreateAnnouncementInputData inputData = new CreateAnnouncementInputData("project name","Title", "Message", "Author");
         CommonAnnouncement mockAnnouncement = new CommonAnnouncement("Title", "Message", LocalDateTime.now(), "Author", "ID");
 
         when(factory.create(eq(inputData.getAnnouncementTitle()), eq(inputData.getMessage()),
@@ -52,28 +52,28 @@ class CreateAnnouncementInteractorTest {
         verify(factory).create(eq(inputData.getAnnouncementTitle()), eq(inputData.getMessage()),
                 any(LocalDateTime.class), eq(inputData.getAuthor()),
                 eq(inputData.getAnnouncementId()));
-        verify(dataAccessObject).save(mockAnnouncement);
+        verify(dataAccessObject).save("project name", mockAnnouncement);
         verify(presenter).prepareSuccessView(any(CreateAnnouncementOutputData.class));
     }
 
 
     @Test
     void testFailedAnnouncementCreation() {
-        CreateAnnouncementInputData inputData = new CreateAnnouncementInputData("Title", "Message", "Author");
+        CreateAnnouncementInputData inputData = new CreateAnnouncementInputData("project name","Title", "Message", "Author");
         CommonAnnouncement mockAnnouncement = new CommonAnnouncement("Title", "Message", LocalDateTime.now(), "Author", "ID");
 
         when(factory.create(eq(inputData.getAnnouncementTitle()), eq(inputData.getMessage()),
                 any(LocalDateTime.class), eq(inputData.getAuthor()),
                 eq(inputData.getAnnouncementId()))).thenReturn(mockAnnouncement);
 
-        doThrow(new RuntimeException("Database error")).when(dataAccessObject).save(mockAnnouncement);
+        doThrow(new RuntimeException("Database error")).when(dataAccessObject).save("project name", mockAnnouncement);
 
         interactor.execute(inputData);
 
         verify(factory).create(eq(inputData.getAnnouncementTitle()), eq(inputData.getMessage()),
                 any(LocalDateTime.class), eq(inputData.getAuthor()),
                 eq(inputData.getAnnouncementId()));
-        verify(dataAccessObject).save(mockAnnouncement);
+        verify(dataAccessObject).save("project name", mockAnnouncement);
         verify(presenter).prepareFailView(anyString());
     }
 
@@ -84,14 +84,12 @@ class CreateAnnouncementInteractorTest {
         Project mockProject = mock(Project.class);
         when(mockProject.getMemberEmails()).thenReturn(memberEmails);
 
-        CreateAnnouncementInputData inputData = new CreateAnnouncementInputData("Title", "Message", "Author");
+        CreateAnnouncementInputData inputData = new CreateAnnouncementInputData("project name","Title", "Message", "Author");
         CommonAnnouncement mockAnnouncement = new CommonAnnouncement("Title", "Message", LocalDateTime.now(), "Author", "ID");
 
         when(factory.create(eq(inputData.getAnnouncementTitle()), eq(inputData.getMessage()),
                 any(LocalDateTime.class), eq(inputData.getAuthor()),
                 eq(inputData.getAnnouncementId()))).thenReturn(mockAnnouncement);
-        when(dataAccessObject.getProjectNameFromAnnouncementId(inputData.getAnnouncementId())).thenReturn(projectName);
-        when(dataAccessObject.getProjectInfo(projectName)).thenReturn(mockProject);
 
         interactor.execute(inputData);
 

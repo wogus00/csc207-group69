@@ -41,13 +41,8 @@ public class CreateAnnouncementUseCaseFactory {
                                                                 CreateAnnouncementDataAccessInterface announcementDataAccessObject,
                                                                 CreateAnnouncementGmailDataAccessInterface gmailDataAccessObject,
                                                                 MainPageViewModel mainPageViewModel) {
-        try {
-            CreateAnnouncementController createAnnouncementController = createAnnouncementUseCase(viewManagerModel, createAnnouncementViewModel, announcementDataAccessObject, mainPageViewModel);
-            return new CreateAnnouncementView(createAnnouncementController, createAnnouncementViewModel, viewManagerModel);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Invalid announcement");
-        }
-        return null;
+        CreateAnnouncementController createAnnouncementController = createAnnouncementUseCase(viewManagerModel, createAnnouncementViewModel, announcementDataAccessObject, gmailDataAccessObject,mainPageViewModel);
+        return new CreateAnnouncementView(createAnnouncementController, createAnnouncementViewModel, viewManagerModel);
     }
 
 
