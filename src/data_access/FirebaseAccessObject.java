@@ -502,7 +502,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
      * Deletes an announcement from the Firestore database based on the given announcement ID.
      *
      * @param announcementId The ID of the announcement to be deleted.
-     * @return true if the deletion was successful, false if it failed or an exception occurred.
+     * @return True if the deletion was successful, false if it failed or an exception occurred.
      */
     @Override
     public boolean deleteAnnouncement(String announcementId) {
