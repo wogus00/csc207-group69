@@ -8,12 +8,19 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import entity.*;
 
+import entity.Announcement;
+import entity.CommonAnnouncement;
+
+import entity.Project;
+import entity.ProjectFactory;
+import entity.Task;
 import use_case.add_email.AddEmailDataAccessInterface;
 import use_case.complete_task.CompleteTaskDataAccessInterface;
 import use_case.create_meeting.CreateMeetingDataAccessInterface;
 import use_case.create_project.CreateProjectDataAccessInterface;
 import use_case.create_task.CreateTaskDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
+
 
 import use_case.modify_meeting.ModifyMeetingDataAccessInterface;
 import use_case.modify_task.ModifyTaskDataAccessInterface;
@@ -22,7 +29,8 @@ import use_case.set_leader.SetLeaderDataAccessInterface;
 
 import use_case.delete_announcement.DeleteAnnouncementDataAccessInterface;
 import use_case.create_announcement.CreateAnnouncementDataAccessInterface;
-
+import use_case.remove_email.RemoveEmailDataAccessInterface;
+import use_case.set_leader.SetLeaderDataAccessInterface;
 
 
 import java.io.FileInputStream;
@@ -445,6 +453,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         return true;
     }
 
+
     @Override
     public void save(String projectName, Announcement announcement) {
         // Reference to the Firestore document where announcements are stored
@@ -482,7 +491,6 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         }
     }
 
-
     @Override
     public boolean deleteAnnouncement(String announcementId) {
         // Assuming that the Firestore database has already been initialized in the constructor
@@ -500,7 +508,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
 
 
     @Override
-    public CommonAnnouncement getAnnouncementById(String announcementId) {
+    public Announcement getAnnouncementById(String announcementId) {
         DocumentReference docRef = db.collection("announcements").document(announcementId);
         ApiFuture<DocumentSnapshot> future = docRef.get();
         try {

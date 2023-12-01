@@ -1,5 +1,7 @@
 package interface_adapter.create_announcement;
 
+import java.util.ArrayList;
+
 /**
  * Represents the state of the announcement creation process.
  * This state object stores data related to the creation of an announcement
@@ -17,6 +19,8 @@ public class CreateAnnouncementState {
 
     private String id = "";
     private String project = "";
+
+    private ArrayList<String> emailsSent = null;
 
     /**
      * Constructs a new state by copying data from another state instance.
@@ -133,7 +137,6 @@ public class CreateAnnouncementState {
     public void setId(String id) {
         this.id = id;
     }
-
 
     /**
      * Sets the name of the project that the announcement belongs to.

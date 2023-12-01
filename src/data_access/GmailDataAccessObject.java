@@ -13,19 +13,27 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.Base64;
 import com.google.api.client.util.store.FileDataStoreFactory;
+import com.google.api.core.ApiFuture;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import use_case.complete_task.CompleteTaskDataAccessInterface;
 import use_case.complete_task.CompleteTaskGmailDataAccessInterface;
+
+import use_case.create_announcement.CreateAnnouncementGmailDataAccessInterface;
+
 import use_case.create_meeting.CreateMeetingDataAccessInterface;
 import use_case.create_meeting.CreateMeetingGmailDataAccessInterface;
+
 import use_case.create_project.CreateProjectGmailDataAccessInterface;
 import use_case.create_task.CreateTaskGmailDataAccessInterface;
 import use_case.modify_meeting.ModifyMeetingGmailDataAccessInterface;
 import use_case.modify_task.ModifyTaskGmailDataAccessInterface;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Properties;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -36,8 +44,10 @@ import javax.mail.internet.MimeMessage;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, CompleteTaskGmailDataAccessInterface, ModifyTaskGmailDataAccessInterface, CreateMeetingGmailDataAccessInterface, ModifyMeetingGmailDataAccessInterface {
+
+public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, CompleteTaskGmailDataAccessInterface, ModifyTaskGmailDataAccessInterface, CreateAnnouncementGmailDataAccessInterface, CreateMeetingGmailDataAccessInterface, ModifyMeetingGmailDataAccessInterface {
 
     private static final String APPLICATION_NAME = "group-project";
 
@@ -136,6 +146,30 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
         String bodyText = "You are assigned with task: " + taskName + "\nPlease check your task list.";
         Message message = mimeEncoder(fromEmail, toEmail, messageSubject, bodyText);
         try {
+            message = service.users().messages().send("me", message).execute();
+            return message;
+        } catch (GoogleJsonResponseException e) {
+            GoogleJsonError error = e.getDetails();
+            if (error.getCode() == 403) {
+                System.err.println("Unable to send message: " + e.getDetails());
+            } else {
+                throw e;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Message sendAnnouncementCreationEmail(String author, String toEmail, String announcementTitle) throws MessagingException, IOException {
+        // Set the subject and body text of the email
+        String messageSubject = "New Announcement: " + announcementTitle;
+        String bodyText = "You have a new announcement from " + author + " titled: " + announcementTitle + ".\nPlease check for further details.";
+
+        // Create a MIME message
+        Message message = mimeEncoder(author, toEmail, messageSubject, bodyText);
+
+        try {
+            // Use the Gmail API to send the message
             message = service.users().messages().send("me", message).execute();
             return message;
         } catch (GoogleJsonResponseException e) {

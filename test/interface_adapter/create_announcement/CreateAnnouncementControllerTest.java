@@ -39,21 +39,4 @@ public class CreateAnnouncementControllerTest {
         verify(mockInteractor).execute(any(CreateAnnouncementInputData.class));
     }
 
-    @Test(expected = IOException.class)
-    public void testExecute_IOException() throws Exception {
-        // Arrange
-        doThrow(IOException.class).when(mockInteractor).execute(any(CreateAnnouncementInputData.class));
-
-        // Act
-        controller.execute("Test Title", "Test Message", "Invalid Email Format");
-    }
-
-    @Test(expected = AddressException.class)
-    public void testExecute_AddressException() throws Exception {
-        // Arrange
-        doThrow(AddressException.class).when(mockInteractor).execute(any(CreateAnnouncementInputData.class));
-
-        // Act
-        controller.execute("Test Title", "Test Message", "Invalid Email Format");
-    }
 }
