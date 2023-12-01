@@ -24,15 +24,15 @@ public class CreateAnnouncementView extends JPanel implements ActionListener, Pr
 
     private final CreateAnnouncementViewModel createAnnouncementViewModel;
 
-    private final JTextField titleInputField = new JTextField(15);
+    final JTextField titleInputField = new JTextField(15);
 
-    private final JTextField messageInputFiled = new JTextField(15);
+    final JTextField messageInputFiled = new JTextField(15);
 
     private final CreateAnnouncementController createAnnouncementController;
 
-    private final JButton announcementSent;
+    final JButton announcementSent;
 
-    private final JButton cancel;
+    final JButton cancel;
 
     private ViewManagerModel viewManagerModel;
 
