@@ -454,6 +454,13 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
     }
 
 
+    /**
+     * Saves an announcement to the Firestore database. If the announcement already exists, it updates the existing one; otherwise, it creates a new document.
+     *
+     * @param projectName The name of the project associated with the announcement.
+     * @param announcement The announcement object to be saved or updated.
+     * @throws RuntimeException If an InterruptedException or ExecutionException occurs during the Firestore operation.
+     */
     @Override
     public void save(String projectName, Announcement announcement) {
         // Reference to the Firestore document where announcements are stored
@@ -491,6 +498,12 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         }
     }
 
+    /**
+     * Deletes an announcement from the Firestore database based on the given announcement ID.
+     *
+     * @param announcementId The ID of the announcement to be deleted.
+     * @return true if the deletion was successful, false if it failed or an exception occurred.
+     */
     @Override
     public boolean deleteAnnouncement(String announcementId) {
         // Assuming that the Firestore database has already been initialized in the constructor
@@ -507,6 +520,12 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
 
 
 
+    /**
+     * Retrieves an announcement from the Firestore database using the provided announcement ID.
+     *
+     * @param announcementId The ID of the announcement to be retrieved.
+     * @return An Announcement object if it exists, or null if it does not exist or if an exception occurs.
+     */
     @Override
     public Announcement getAnnouncementById(String announcementId) {
         DocumentReference docRef = db.collection("announcements").document(announcementId);

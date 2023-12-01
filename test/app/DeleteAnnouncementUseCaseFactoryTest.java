@@ -3,6 +3,7 @@ package app;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.create_announcement.CreateAnnouncementViewModel;
 import interface_adapter.delete_announcement.DeleteAnnouncementViewModel;
+import interface_adapter.main_page.MainPageViewModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -25,6 +26,9 @@ class DeleteAnnouncementUseCaseFactoryTest {
     @Mock
     private CreateAnnouncementViewModel createAnnouncementViewModel;
 
+    @Mock
+    private MainPageViewModel mainPageViewModel;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -35,7 +39,7 @@ class DeleteAnnouncementUseCaseFactoryTest {
 
         // Act
         DeleteAnnouncementView view = DeleteAnnouncementUseCaseFactory.createDeleteAnnouncementView(viewManagerModel,
-                deleteAnnouncementViewModel, deleteAnnouncementDataAccessObject, createAnnouncementViewModel);
+                deleteAnnouncementViewModel, deleteAnnouncementDataAccessObject, createAnnouncementViewModel, mainPageViewModel);
 
         // Assert
         assertNotNull(view);

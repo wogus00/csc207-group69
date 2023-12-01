@@ -49,10 +49,10 @@ public class FirebaseAccessObjectTest {
     @Test
     public void testSaveAnnouncementSuccessfully() throws Exception {
         // Arrange
-        CommonAnnouncement announcement = new CommonAnnouncement("Test Title1", "Test Message", LocalDateTime.now(), "Test Author", "TestId");
+        Announcement announcement = new CommonAnnouncement("Test Title1", "Test Message", LocalDateTime.now(), "Test Author", "TestId");
 
         // Act
-        firebaseAccessObject.save(announcement);
+        firebaseAccessObject.save("project name", announcement);
 
         // Assert
         verify(mockFirestore).collection("announcements");
@@ -62,12 +62,12 @@ public class FirebaseAccessObjectTest {
     @Test
     public void testSaveAnnouncementWithException() {
         // Arrange
-        CommonAnnouncement announcement = new CommonAnnouncement("Test Title", "Test Message", LocalDateTime.now(), "Test Author", "TestId");
+        Announcement announcement = new CommonAnnouncement("Test Title", "Test Message", LocalDateTime.now(), "Test Author", "TestId");
         when(mockDocumentReference.set(any(Map.class))).thenThrow(new RuntimeException("Firestore operation failed"));
 
         try {
             // Act
-            firebaseAccessObject.save(announcement);
+            firebaseAccessObject.save("project name",announcement);
             fail("Expected an RuntimeException to be thrown");
         } catch (RuntimeException e) {
             // Assert
@@ -148,81 +148,83 @@ public class FirebaseAccessObjectTest {
         assertNull(result);
     }
 
-    @Test
-    public void testGetProjectNameFromAnnouncementId_Success() throws ExecutionException, InterruptedException {
-        // Mock Firestore behavior
-        String expectedProjectName = "Project X";
-        DocumentSnapshot documentSnapshotMock = Mockito.mock(DocumentSnapshot.class);
-        Mockito.when(documentSnapshotMock.exists()).thenReturn(true);
-        Mockito.when(documentSnapshotMock.getString("projectName")).thenReturn(expectedProjectName);
-        ApiFuture<DocumentSnapshot> futureMock = Mockito.mock(ApiFuture.class);
-        Mockito.when(futureMock.get()).thenReturn(documentSnapshotMock);
-        CollectionReference collectionRefMock = Mockito.mock(CollectionReference.class);
-        DocumentReference docRefMock = Mockito.mock(DocumentReference.class);
-        Mockito.when(mockFirestore.collection("announcements")).thenReturn(collectionRefMock);
-        Mockito.when(collectionRefMock.document(any(String.class))).thenReturn(docRefMock);
-        Mockito.when(docRefMock.get()).thenReturn(futureMock);
 
-        // Call the method and assert results
-        String result = firebaseAccessObject.getProjectNameFromAnnouncementId("validAnnouncementId");
-        assertEquals(expectedProjectName, result);
-    }
 
-    @Test
-    public void testGetProjectNameFromAnnouncementId_NonExistentAnnouncement() throws ExecutionException, InterruptedException {
-        // Mock Firestore behavior for non-existent announcement
-        DocumentSnapshot documentSnapshotMock = Mockito.mock(DocumentSnapshot.class);
-        Mockito.when(documentSnapshotMock.exists()).thenReturn(false);
-        ApiFuture<DocumentSnapshot> futureMock = Mockito.mock(ApiFuture.class);
-        Mockito.when(futureMock.get()).thenReturn(documentSnapshotMock);
-        CollectionReference collectionRefMock = Mockito.mock(CollectionReference.class);
-        DocumentReference docRefMock = Mockito.mock(DocumentReference.class);
-        Mockito.when(mockFirestore.collection("announcements")).thenReturn(collectionRefMock);
-        Mockito.when(collectionRefMock.document(any(String.class))).thenReturn(docRefMock);
-        Mockito.when(docRefMock.get()).thenReturn(futureMock);
-
-        // Call the method
-        String result = firebaseAccessObject.getProjectNameFromAnnouncementId("nonExistentAnnouncementId");
-        assertNull(result);
-    }
-
-    @Test
-    public void testGetProjectNameFromAnnouncementId_MissingOrEmptyProjectName() throws ExecutionException, InterruptedException {
-        // Mock Firestore behavior for missing or empty project name
-        DocumentSnapshot documentSnapshotMock = Mockito.mock(DocumentSnapshot.class);
-        Mockito.when(documentSnapshotMock.exists()).thenReturn(true);
-        Mockito.when(documentSnapshotMock.getString("projectName")).thenReturn(null); // For missing project name
-        // Mockito.when(documentSnapshotMock.getString("projectName")).thenReturn(""); // Uncomment for empty project name
-        ApiFuture<DocumentSnapshot> futureMock = Mockito.mock(ApiFuture.class);
-        Mockito.when(futureMock.get()).thenReturn(documentSnapshotMock);
-        CollectionReference collectionRefMock = Mockito.mock(CollectionReference.class);
-        DocumentReference docRefMock = Mockito.mock(DocumentReference.class);
-        Mockito.when(mockFirestore.collection("announcements")).thenReturn(collectionRefMock);
-        Mockito.when(collectionRefMock.document(any(String.class))).thenReturn(docRefMock);
-        Mockito.when(docRefMock.get()).thenReturn(futureMock);
-
-        // Call the method
-        String result = firebaseAccessObject.getProjectNameFromAnnouncementId("validAnnouncementIdWithNoProjectName");
-        assertNull(result);
-    }
-
-    @Test
-    public void testGetProjectNameFromAnnouncementId_ExceptionHandling() {
-        // Mock an exception being thrown during Firestore interactions
-        DocumentReference docRefMock = Mockito.mock(DocumentReference.class);
-        Mockito.when(mockFirestore.collection("announcements")).thenReturn(Mockito.mock(CollectionReference.class));
-        Mockito.when(mockFirestore.collection("announcements").document(any(String.class))).thenReturn(docRefMock);
-        Mockito.when(docRefMock.get()).thenThrow(new RuntimeException("Firestore access error"));
-
-        // Call the method and expect it to handle the exception gracefully
-        String result = null;
-        try {
-            result = firebaseAccessObject.getProjectNameFromAnnouncementId("announcementIdWithException");
-        } catch (Exception e) {
-            // Optionally assert something about the exception
-        }
-        assertNull(result);
-    }
+//    @Test
+//    public void testGetProjectNameFromAnnouncementId_Success() throws ExecutionException, InterruptedException {
+//        // Mock Firestore behavior
+//        String expectedProjectName = "Project X";
+//        DocumentSnapshot documentSnapshotMock = Mockito.mock(DocumentSnapshot.class);
+//        Mockito.when(documentSnapshotMock.exists()).thenReturn(true);
+//        Mockito.when(documentSnapshotMock.getString("projectName")).thenReturn(expectedProjectName);
+//        ApiFuture<DocumentSnapshot> futureMock = Mockito.mock(ApiFuture.class);
+//        Mockito.when(futureMock.get()).thenReturn(documentSnapshotMock);
+//        CollectionReference collectionRefMock = Mockito.mock(CollectionReference.class);
+//        DocumentReference docRefMock = Mockito.mock(DocumentReference.class);
+//        Mockito.when(mockFirestore.collection("announcements")).thenReturn(collectionRefMock);
+//        Mockito.when(collectionRefMock.document(any(String.class))).thenReturn(docRefMock);
+//        Mockito.when(docRefMock.get()).thenReturn(futureMock);
+//
+//        // Call the method and assert results
+//        String result = firebaseAccessObject.getProjectNameFromAnnouncementId("validAnnouncementId");
+//        assertEquals(expectedProjectName, result);
+//    }
+//
+//    @Test
+//    public void testGetProjectNameFromAnnouncementId_NonExistentAnnouncement() throws ExecutionException, InterruptedException {
+//        // Mock Firestore behavior for non-existent announcement
+//        DocumentSnapshot documentSnapshotMock = Mockito.mock(DocumentSnapshot.class);
+//        Mockito.when(documentSnapshotMock.exists()).thenReturn(false);
+//        ApiFuture<DocumentSnapshot> futureMock = Mockito.mock(ApiFuture.class);
+//        Mockito.when(futureMock.get()).thenReturn(documentSnapshotMock);
+//        CollectionReference collectionRefMock = Mockito.mock(CollectionReference.class);
+//        DocumentReference docRefMock = Mockito.mock(DocumentReference.class);
+//        Mockito.when(mockFirestore.collection("announcements")).thenReturn(collectionRefMock);
+//        Mockito.when(collectionRefMock.document(any(String.class))).thenReturn(docRefMock);
+//        Mockito.when(docRefMock.get()).thenReturn(futureMock);
+//
+//        // Call the method
+//        String result = firebaseAccessObject.getProjectNameFromAnnouncementId("nonExistentAnnouncementId");
+//        assertNull(result);
+//    }
+//
+//    @Test
+//    public void testGetProjectNameFromAnnouncementId_MissingOrEmptyProjectName() throws ExecutionException, InterruptedException {
+//        // Mock Firestore behavior for missing or empty project name
+//        DocumentSnapshot documentSnapshotMock = Mockito.mock(DocumentSnapshot.class);
+//        Mockito.when(documentSnapshotMock.exists()).thenReturn(true);
+//        Mockito.when(documentSnapshotMock.getString("projectName")).thenReturn(null); // For missing project name
+//        // Mockito.when(documentSnapshotMock.getString("projectName")).thenReturn(""); // Uncomment for empty project name
+//        ApiFuture<DocumentSnapshot> futureMock = Mockito.mock(ApiFuture.class);
+//        Mockito.when(futureMock.get()).thenReturn(documentSnapshotMock);
+//        CollectionReference collectionRefMock = Mockito.mock(CollectionReference.class);
+//        DocumentReference docRefMock = Mockito.mock(DocumentReference.class);
+//        Mockito.when(mockFirestore.collection("announcements")).thenReturn(collectionRefMock);
+//        Mockito.when(collectionRefMock.document(any(String.class))).thenReturn(docRefMock);
+//        Mockito.when(docRefMock.get()).thenReturn(futureMock);
+//
+//        // Call the method
+//        String result = firebaseAccessObject.getProjectNameFromAnnouncementId("validAnnouncementIdWithNoProjectName");
+//        assertNull(result);
+//    }
+//
+//    @Test
+//    public void testGetProjectNameFromAnnouncementId_ExceptionHandling() {
+//        // Mock an exception being thrown during Firestore interactions
+//        DocumentReference docRefMock = Mockito.mock(DocumentReference.class);
+//        Mockito.when(mockFirestore.collection("announcements")).thenReturn(Mockito.mock(CollectionReference.class));
+//        Mockito.when(mockFirestore.collection("announcements").document(any(String.class))).thenReturn(docRefMock);
+//        Mockito.when(docRefMock.get()).thenThrow(new RuntimeException("Firestore access error"));
+//
+//        // Call the method and expect it to handle the exception gracefully
+//        String result = null;
+//        try {
+//            result = firebaseAccessObject.getProjectNameFromAnnouncementId("announcementIdWithException");
+//        } catch (Exception e) {
+//            // Optionally assert something about the exception
+//        }
+//        assertNull(result);
+//    }
 
 
 

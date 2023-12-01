@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.delete_announcement.DeleteAnnouncementController;
 import interface_adapter.delete_announcement.DeleteAnnouncementState;
 import interface_adapter.delete_announcement.DeleteAnnouncementViewModel;
@@ -26,12 +27,15 @@ public class DeleteAnnouncementViewTest {
     @Mock
     private DeleteAnnouncementState mockDeleteAnnouncementState;
 
+    @Mock
+    private ViewManagerModel viewManagerModel;
+
     private DeleteAnnouncementView deleteAnnouncementView;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        deleteAnnouncementView = new DeleteAnnouncementView(mockDeleteAnnouncementController, mockDeleteAnnouncementViewModel);
+        deleteAnnouncementView = new DeleteAnnouncementView(mockDeleteAnnouncementController, mockDeleteAnnouncementViewModel, viewManagerModel);
         when(mockDeleteAnnouncementViewModel.getState()).thenReturn(mockDeleteAnnouncementState);
     }
 

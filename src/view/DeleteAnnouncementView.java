@@ -29,7 +29,7 @@ public class DeleteAnnouncementView extends JPanel implements ActionListener, Pr
 
 
     ViewManagerModel viewManagerModel;
-    private final JTextField announcementIdInputField = new JTextField(15);
+    final JTextField announcementIdInputField = new JTextField(15);
 
 
 //    private final JTextField currentUserInputField = new JTextField(15);
