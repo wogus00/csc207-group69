@@ -49,7 +49,7 @@ public class FirebaseAccessObjectTest {
         CommonAnnouncement announcement = new CommonAnnouncement("Test Title1", "Test Message", LocalDateTime.now(), "Test Author", "TestId");
 
         // Act
-        // firebaseAccessObject.save(announcement);
+        firebaseAccessObject.save(announcement);
 
         // Assert
         verify(mockFirestore).collection("announcements");
@@ -64,7 +64,7 @@ public class FirebaseAccessObjectTest {
 
         try {
             // Act
-            // firebaseAccessObject.save(announcement);
+            firebaseAccessObject.save(announcement);
             fail("Expected an RuntimeException to be thrown");
         } catch (RuntimeException e) {
             // Assert
