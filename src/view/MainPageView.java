@@ -1,12 +1,30 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.add_email.AddEmailState;
+import interface_adapter.add_email.AddEmailViewModel;
+import interface_adapter.complete_task.CompleteTaskState;
+import interface_adapter.complete_task.CompleteTaskViewModel;
+import interface_adapter.create_announcement.CreateAnnouncementState;
+import interface_adapter.create_announcement.CreateAnnouncementViewModel;
+import interface_adapter.create_meeting.CreateMeetingState;
+import interface_adapter.create_meeting.CreateMeetingViewModel;
 import interface_adapter.create_task.CreateTaskState;
 import interface_adapter.create_task.CreateTaskViewModel;
+import interface_adapter.delete_announcement.DeleteAnnouncementState;
+import interface_adapter.delete_announcement.DeleteAnnouncementViewModel;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.main_page.MainPageState;
 import interface_adapter.main_page.MainPageViewModel;
+import interface_adapter.modify_meeting.ModifyMeetingState;
+import interface_adapter.modify_meeting.ModifyMeetingViewModel;
+import interface_adapter.modify_task.ModifyTaskState;
+import interface_adapter.modify_task.ModifyTaskViewModel;
+import interface_adapter.remove_email.RemoveEmailState;
+import interface_adapter.remove_email.RemoveEmailViewModel;
+import interface_adapter.set_leader.SetLeaderState;
+import interface_adapter.set_leader.SetLeaderViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +52,15 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
 
     final LoginViewModel loginViewModel;
     CreateTaskViewModel createTaskViewModel;
+    CompleteTaskViewModel completeTaskViewModel;
+    ModifyTaskViewModel modifyTaskViewModel;
+    RemoveEmailViewModel removeEmailViewModel;
+    SetLeaderViewModel setLeaderViewModel;
+    CreateMeetingViewModel createMeetingViewModel;
+    AddEmailViewModel addEmailViewModel;
+    ModifyMeetingViewModel modifyMeetingViewModel;
+    CreateAnnouncementViewModel createAnnouncementViewModel;
+    DeleteAnnouncementViewModel deleteAnnouncementViewModel;
 
     JLabel titleLabel;
     JLabel leaderEmailInfo = new JLabel();
@@ -47,6 +74,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
     JLabel announcementLabel;
     JButton recentAnnouncement;
     JLabel recentAnnouncementInfo = new JLabel();
+    private JPanel projectPanelExtension;
 
     /**
      * Constructs a new MainPageView class with specific models
@@ -57,11 +85,25 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
      * @param mainPageViewModel The view model for the main page view, manages the state and behavior of the main page view
      * @param loginViewModel The view model for the login view, manages the state and behavior of the login view
      */
-    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel, LoginViewModel loginViewModel, CreateTaskViewModel createTaskViewModel) {
+    public MainPageView(ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel, LoginViewModel loginViewModel,
+                        CreateTaskViewModel createTaskViewModel, CompleteTaskViewModel completeTaskViewModel,
+                        ModifyTaskViewModel modifyTaskViewModel, AddEmailViewModel addEmailViewModel,
+                        RemoveEmailViewModel removeEmailViewModel, SetLeaderViewModel setLeaderViewModel,
+                        CreateMeetingViewModel createMeetingViewModel, ModifyMeetingViewModel modifyMeetingViewModel,
+                        CreateAnnouncementViewModel createAnnouncementViewModel, DeleteAnnouncementViewModel deleteAnnouncementViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.mainPageViewModel = mainPageViewModel;
         this.loginViewModel = loginViewModel;
         this.createTaskViewModel = createTaskViewModel;
+        this.completeTaskViewModel = completeTaskViewModel;
+        this.modifyTaskViewModel = modifyTaskViewModel;
+        this.addEmailViewModel = addEmailViewModel;
+        this.removeEmailViewModel = removeEmailViewModel;
+        this.setLeaderViewModel = setLeaderViewModel;
+        this.createMeetingViewModel = createMeetingViewModel;
+        this.modifyMeetingViewModel = modifyMeetingViewModel;
+        this.createAnnouncementViewModel = createAnnouncementViewModel;
+        this.deleteAnnouncementViewModel = deleteAnnouncementViewModel;
         this.mainPageViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BorderLayout());
@@ -195,7 +237,9 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         meetingPanelExtension.setVisible(false);
 
         JButton buttonM1 = new JButton("create meeting");
+        JButton buttonM2 = new JButton("modify meeting");
         meetingPanelExtension.add(buttonM1);
+        meetingPanelExtension.add(buttonM2);
         buttonPanel.add(meetingPanelExtension);
         buttonList.add(meetingPanelExtension);
 
@@ -204,17 +248,19 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         announcementPanelExtension.setVisible(false);
 
         JButton buttonA1 = new JButton("create announcement");
+        JButton buttonA2 = new JButton("delete announcement");
         announcementPanelExtension.add(buttonA1);
+        announcementPanelExtension.add(buttonA2);
         buttonPanel.add(announcementPanelExtension);
         buttonList.add(announcementPanelExtension);
 
-        JPanel projectPanelExtension = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        projectPanelExtension = new JPanel(new FlowLayout(FlowLayout.LEFT));
         projectPanelExtension.setName("Project Extension");
         projectPanelExtension.setVisible(false);
 
         JButton buttonP1 = new JButton("add member");
         JButton buttonP2 = new JButton("remove member");
-        JButton buttonP3 = new JButton("change supervisor");
+        JButton buttonP3 = new JButton("change leader");
         projectPanelExtension.add(buttonP1);
         projectPanelExtension.add(buttonP2);
         projectPanelExtension.add(buttonP3);
@@ -338,6 +384,13 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonT2.addActionListener(                // This creates an anonymous subclass of ActionListener and instantiates it.
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        ModifyTaskState modifyTaskState = modifyTaskViewModel.getState();
+                        modifyTaskState.setProjectName(mainPageState.getProjectName());
+                        modifyTaskViewModel.setState(modifyTaskState);
+                        modifyTaskViewModel .firePropertyChanged();
+                        viewManagerModel.setActiveView("Modify Task");
+                        viewManagerModel.firePropertyChanged();
                     }
                 }
         );
@@ -345,6 +398,14 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonT3.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        CompleteTaskState completeTaskState = completeTaskViewModel.getState();
+                        completeTaskState.setProjectName(mainPageState.getProjectName());
+                        completeTaskState.setUserEmail(mainPageState.getUserEmail());
+                        completeTaskViewModel.setState(completeTaskState);
+                        completeTaskViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Complete Task");
+                        viewManagerModel.firePropertyChanged();
                     }
                 }
         );
@@ -352,6 +413,27 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonM1.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        CreateMeetingState createMeetingState = createMeetingViewModel.getState();
+                        createMeetingState.setProjectName(mainPageState.getProjectName());
+                        createMeetingViewModel.setState(createMeetingState);
+                        createMeetingViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("create meeting");
+                        viewManagerModel.firePropertyChanged();
+                    }
+                }
+        );
+
+        buttonM2.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        ModifyMeetingState modifyMeetingState = modifyMeetingViewModel.getState();
+                        modifyMeetingState.setProjectName(mainPageState.getProjectName());
+                        modifyMeetingViewModel.setState(modifyMeetingState);
+                        modifyMeetingViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Modify Meeting");
+                        viewManagerModel.firePropertyChanged();
                     }
                 }
         );
@@ -359,6 +441,30 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonA1.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        CreateAnnouncementState createAnnouncementState = createAnnouncementViewModel.getState();
+                        createAnnouncementState.setAuthor(mainPageState.getUserEmail());
+                        createAnnouncementState.setProject(mainPageState.getProjectName());
+                        createAnnouncementViewModel.setState(createAnnouncementState);
+                        createAnnouncementViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Create announcement");
+                        viewManagerModel.firePropertyChanged();
+
+                    }
+                }
+        );
+
+        buttonA2.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        DeleteAnnouncementState deleteAnnouncementState = deleteAnnouncementViewModel.getState();
+                        deleteAnnouncementState.setUserEmail(mainPageState.getUserEmail());
+                        deleteAnnouncementViewModel.setState(deleteAnnouncementState);
+                        deleteAnnouncementViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Delete announcement");
+                        viewManagerModel.firePropertyChanged();
+
                     }
                 }
         );
@@ -366,6 +472,13 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonP1.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        AddEmailState addEmailState = addEmailViewModel.getState();
+                        addEmailState.setProjectName(mainPageState.getProjectName());
+                        addEmailViewModel.setState(addEmailState);
+                        addEmailViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Add Email");
+                        viewManagerModel.firePropertyChanged();
                     }
                 }
         );
@@ -373,6 +486,13 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonP2.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        RemoveEmailState removeEmailState = removeEmailViewModel.getState();
+                        removeEmailState.setProjectName(mainPageState.getProjectName());
+                        removeEmailViewModel.setState(removeEmailState);
+                        removeEmailViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Remove Email");
+                        viewManagerModel.firePropertyChanged();
                     }
                 }
         );
@@ -380,6 +500,13 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonP3.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
+                        MainPageState mainPageState = mainPageViewModel.getState();
+                        SetLeaderState setLeaderState = setLeaderViewModel.getState();
+                        setLeaderState.setProjectName(mainPageState.getProjectName());
+                        setLeaderViewModel.setState(setLeaderState);
+                        setLeaderViewModel.firePropertyChanged();
+                        viewManagerModel.setActiveView("Set Leader");
+                        viewManagerModel.firePropertyChanged();
                     }
                 }
         );
@@ -421,6 +548,9 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         showAllInfo.setText(state.getShowAllMessage());
         announcementLabel.setText(state.getAnnouncementLabel());
         recentAnnouncementInfo.setText(state.getRecentAnnouncements());
+        if (!userEmailInfo.getText().equals(leaderEmailInfo.getText())) {
+            projectPanelExtension.setVisible(false);
+        }
 
 
 

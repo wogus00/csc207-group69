@@ -1,15 +1,11 @@
 package interface_adapter.create_task;
 
-import data_access.TaskListRetrieveStrategy;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.main_page.MainPageState;
 import interface_adapter.main_page.MainPageViewModel;
 import use_case.create_task.CreateTaskOutputBoundary;
 import use_case.create_task.CreateTaskOutputData;
-import view.CreateTaskView;
-import view.MainPageView;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 /**

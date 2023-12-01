@@ -1,6 +1,12 @@
 package interface_adapter.add_email;
 
+import app.Main;
+import interface_adapter.ViewManagerModel;
+import interface_adapter.main_page.MainPageState;
+import interface_adapter.main_page.MainPageViewModel;
 import use_case.add_email.AddEmailOutputBoundary;
+
+import java.util.ArrayList;
 
 /**
  * The {@code AddEmailPresenter} class implements the {@code AddEmailOutputBoundary} interface.
@@ -9,6 +15,8 @@ import use_case.add_email.AddEmailOutputBoundary;
  */
 public class AddEmailPresenter implements AddEmailOutputBoundary {
     private AddEmailViewModel viewModel;
+    private ViewManagerModel viewManagerModel;
+    private MainPageViewModel mainPageViewModel;
 
     /**
      * Constructs an {@code AddEmailPresenter} with the specified view model.
@@ -16,7 +24,9 @@ public class AddEmailPresenter implements AddEmailOutputBoundary {
      * @param viewModel The view model that this presenter will update based on the outcome
      *                  of the add email use case
      */
-    public AddEmailPresenter(AddEmailViewModel viewModel) {
+    public AddEmailPresenter(AddEmailViewModel viewModel, ViewManagerModel viewManagerModel, MainPageViewModel mainPageViewModel) {
+        this.mainPageViewModel = mainPageViewModel;
+        this.viewManagerModel = viewManagerModel;
         this.viewModel = viewModel;
     }
 
@@ -26,7 +36,14 @@ public class AddEmailPresenter implements AddEmailOutputBoundary {
      * triggering any observers that the view model state has changed.
      */
     @Override
-    public void prepareSuccessView() {
+    public void prepareSuccessView(String newMember) {
+        MainPageState mainPageState = mainPageViewModel.getState();
+        ArrayList<String> memberList = mainPageState.getMemberEmail();
+        memberList.add(newMember);
+        mainPageState.setMemberEmail(memberList);
+        mainPageViewModel.setState(mainPageState);
+        mainPageViewModel.firePropertyChanged();
+        viewModel.firePropertyChanged();
         viewModel.firePropertyChanged();
     }
 

@@ -57,6 +57,11 @@ public class ModifyTaskView extends JPanel implements ActionListener, PropertyCh
                 if (e.getSource().equals(cancel)) {
                     viewManagerModel.setActiveView("Main Page");
                     viewManagerModel.firePropertyChanged();
+                    taskNameInputField.setText("");
+                    supervisorInputField.setText("");
+                    memberEmailsInputField.setText("");
+                    deadlineInputField.setText("");
+                    commentsInputField.setText("");
                 }
             }
         });
@@ -73,12 +78,24 @@ public class ModifyTaskView extends JPanel implements ActionListener, PropertyCh
                             String workingMembers = currentState.getWorkingMembersList();
                             String deadline = currentState.getDeadline();
                             String comments = currentState.getComments();
+                            currentState.setWorkingMembersError(null);
+                            currentState.setTaskNameError(null);
+                            modifyTaskViewModel.setState(currentState);
                             modifyTaskController.execute(projectName, taskName, supervisor, workingMembers, deadline, comments);
                             currentState = modifyTaskViewModel.getState();
                             if (currentState.getTaskNameError() == null && currentState.getWorkingMembersError() == null) {
                                 JOptionPane.showMessageDialog(ModifyTaskView.this, "modified task successfully");
                                 viewManagerModel.setActiveView("Main Page");
                                 viewManagerModel.firePropertyChanged();
+                                taskNameInputField.setText("");
+                                supervisorInputField.setText("");
+                                memberEmailsInputField.setText("");
+                                deadlineInputField.setText("");
+                                commentsInputField.setText("");
+                            } else if (currentState.getTaskNameError() != null) {
+                                JOptionPane.showMessageDialog(ModifyTaskView.this, modifyTaskViewModel.getState().getTaskNameError());
+                            } else {
+                                JOptionPane.showMessageDialog(ModifyTaskView.this, modifyTaskViewModel.getState().getWorkingMembersError());
                             }
                         }
                     }

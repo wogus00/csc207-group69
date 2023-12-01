@@ -42,6 +42,6 @@ public class SetLeaderInteractor implements SetLeaderInputBoundary {
         String projectName = removeEmailInputData.getProjectName();
         String email = removeEmailInputData.getEmail();
         setLeaderDataAccessObject.SetLeaderToNewLeader(projectName, email);
-        setLeaderPresenter.prepareSuccessView();
+        setLeaderPresenter.prepareSuccessView(email);
     }
 }

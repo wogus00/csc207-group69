@@ -21,9 +21,16 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import use_case.complete_task.CompleteTaskDataAccessInterface;
 import use_case.complete_task.CompleteTaskGmailDataAccessInterface;
+
 import use_case.create_announcement.CreateAnnouncementGmailDataAccessInterface;
+
+import use_case.create_meeting.CreateMeetingDataAccessInterface;
+import use_case.create_meeting.CreateMeetingGmailDataAccessInterface;
+
 import use_case.create_project.CreateProjectGmailDataAccessInterface;
 import use_case.create_task.CreateTaskGmailDataAccessInterface;
+import use_case.modify_meeting.ModifyMeetingGmailDataAccessInterface;
+import use_case.modify_task.ModifyTaskGmailDataAccessInterface;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -39,7 +46,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, CompleteTaskGmailDataAccessInterface, CreateAnnouncementGmailDataAccessInterface {
+
+public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, CompleteTaskGmailDataAccessInterface, ModifyTaskGmailDataAccessInterface, CreateAnnouncementGmailDataAccessInterface, CreateMeetingGmailDataAccessInterface, ModifyMeetingGmailDataAccessInterface {
 
     private static final String APPLICATION_NAME = "group-project";
 
@@ -113,6 +121,26 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
     }
 
     @Override
+    public Message sendMeetingCreationEmail(String fromEmail, String toEmail, String meetingName) throws MessagingException, IOException {
+        String messageSubject =  "You are invited to meeting: " + meetingName;
+        String bodyText = fromEmail + "has invited you to" + meetingName + "\nPlease check your meeting list for details.";
+        Message message = mimeEncoder(fromEmail, toEmail, messageSubject, bodyText);
+        try {
+            message = service.users().messages().send("me", message).execute();
+            return message;
+        } catch (GoogleJsonResponseException e) {
+            GoogleJsonError error = e.getDetails();
+            if (error.getCode() == 403) {
+                System.err.println("Unable to send message: " + e.getDetails());
+            } else {
+                throw e;
+            }
+        }
+        return null;
+    }
+
+
+    @Override
     public Message sendTaskCreationEmail(String fromEmail, String toEmail, String taskName) throws MessagingException, IOException {
         String messageSubject = fromEmail + " Assigned a Task";
         String bodyText = "You are assigned with task: " + taskName + "\nPlease check your task list.";
@@ -178,6 +206,11 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
 
     @Override
     public Message sendTaskCompletionEmail(String fromEmail, String toEmail, String taskName) {
+        return null;
+    }
+
+    @Override
+    public Message sendMeetingModificationEmail(String toEmail, String fromEmail, String meetingName) throws MessagingException, IOException {
         return null;
     }
 }

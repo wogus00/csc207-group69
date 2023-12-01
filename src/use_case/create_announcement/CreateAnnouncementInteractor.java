@@ -62,25 +62,7 @@ public class CreateAnnouncementInteractor implements CreateAnnouncementInputBoun
                 createAnnouncementInputData.getAnnouncementId());
 
         try {
-            // Save the announcement to Firebase
-            createAnnouncementDataAccessObject.save(announcement);
-
-            // Fetch the project name from the announcement ID
-            String projectName = createAnnouncementDataAccessObject.getProjectNameFromAnnouncementId(createAnnouncementInputData.getAnnouncementId());
-            if (projectName != null) {
-                // Fetch project information to get member emails
-                Project project = createAnnouncementDataAccessObject.getProjectInfo(projectName);
-                ArrayList<String> memberEmails = project.getMemberEmails();
-
-                // Send emails to each project member
-                for (String email : memberEmails) {
-                    // Assuming GmailDataAccessObject is available and properly initialized
-                    // Replace 'gmailDataAccessObject' with your actual GmailDataAccessObject instance
-                    gmailDataAccessObject.sendAnnouncementCreationEmail(createAnnouncementInputData.getAuthor(), email, createAnnouncementInputData.getAnnouncementTitle());
-                }
-            }
-
-            // Prepare success response
+            createAnnouncementDataAccessObject.save(createAnnouncementInputData.getProjectName(), announcement);
             CreateAnnouncementOutputData createAnnouncementOutputData = new CreateAnnouncementOutputData(
                     announcement.getAnnouncementTitle(),
                     announcement.getMessage(),
