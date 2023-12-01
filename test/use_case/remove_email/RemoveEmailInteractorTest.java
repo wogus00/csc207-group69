@@ -10,17 +10,24 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class RemoveEmailInteractorTest {
 
+    private RemoveEmailInteractor interactor;
+    private RemoveEmailDataAccessInterface repository;
+    private RemoveEmailOutputBoundary presenter;
     @Mock
     private FirebaseAccessObject mockFirebaseAccessObject;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        repository = mock(RemoveEmailDataAccessInterface.class);
+        interactor = new RemoveEmailInteractor(repository, presenter);
     }
 
     /**
@@ -35,61 +42,37 @@ class RemoveEmailInteractorTest {
      * and the test verifies that the email is correctly removed.
      */
     @Test
-    void successTest() {
+    void removeNonExistentEmailShouldFailTest() {
+        // Arrange
         String projectName = "TestProject";
         String email = "test@example.com";
-        RemoveEmailInputData inputData = new RemoveEmailInputData(projectName, email);
+        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(null); // Simulate project not existing
 
-        CommonProject project = new CommonProject(projectName, email, new ArrayList<>(Arrays.asList(email)));
-        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
+        // Act & Assert
+        RemoveEmailInputBoundary removeEmailInteractor = null;
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                removeEmailInteractor.updateProjectDetails(new RemoveEmailInputData(projectName, email))
+        );
 
-        RemoveEmailOutputBoundary successPresenter = new RemoveEmailOutputBoundary() {
-            @Override
-            public void prepareSuccessView() {
-                assertTrue(project.getMemberEmails().contains(email));
-            }
+        // Assert the expected exception type
+        assertThat(exception, instanceOf(IllegalArgumentException.class));
 
-            @Override
-            public void prepareFailView(String error) {
-                fail("Removal of email failed unexpectedly.");
-            }
-        };
+        // Verify that `removeMemberFromProject` was never called since the project does not exist
+        verify(mockFirebaseAccessObject, never()).removeMemberFromProject(anyString(), anyString());
 
-        RemoveEmailInputBoundary interactor = new RemoveEmailInteractor(mockFirebaseAccessObject, successPresenter);
-        interactor.updateProjectDetails(inputData);
-
+        // Verify that `getProjectInfo` was called to check if the project exists
         verify(mockFirebaseAccessObject).getProjectInfo(projectName);
     }
 
-    /**
-     * Tests the removal of a non-existent email from a project.
-     * The mock FirebaseAccessObject simulates a project without the specified email,
-     * and the test verifies that this leads to a failure condition.
-     */
     @Test
-    void removeNonExistentEmailTest() {
-        String projectName = "TestProject";
-        String nonExistentEmail = "nonexistent@example.com";
+    public void whenEmailIsRemoved_thenRepositoryShouldUpdate() {
+        // Given
+        RemoveEmailInputData inputData = new RemoveEmailInputData("Test Project" ,"test@example.com");
 
-        CommonProject project = new CommonProject(projectName, nonExistentEmail, new ArrayList<>());
-        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
-
-        RemoveEmailInputData inputData = new RemoveEmailInputData(projectName, nonExistentEmail);
-        RemoveEmailOutputBoundary failurePresenter = new RemoveEmailOutputBoundary() {
-            @Override
-            public void prepareSuccessView() {
-                fail("Removal should not be successful for a non-existent email.");
-            }
-
-            @Override
-            public void prepareFailView(String error) {
-                assertEquals("Email not found in project", error);
-            }
-        };
-
-        RemoveEmailInputBoundary interactor = new RemoveEmailInteractor(mockFirebaseAccessObject, failurePresenter);
+        // When
         interactor.updateProjectDetails(inputData);
 
-        verify(mockFirebaseAccessObject).getProjectInfo(projectName);
+        // Then
+        verify(repository).removeMemberFromProject("Test Project", "test@example.com");
     }
 }

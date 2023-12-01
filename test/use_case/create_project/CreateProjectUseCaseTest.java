@@ -1,24 +1,24 @@
 package use_case.create_project;
 
 import entity.CommonProject;
+import entity.Project;
 import entity.ProjectFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-/**
- * Tests for {@link CreateProjectInteractor}.
- * This class contains unit tests for CreateProjectInteractor, ensuring that it behaves correctly
- * under various scenarios such as project creation, project existence checks, and error handling.
- */
-class CreateProjectInteractorTest {
+class CreateProjectUseCaseTest {
 
     @Mock
     private CreateProjectDataAccessInterface mockProjectDataAccessObject;
@@ -37,6 +37,7 @@ class CreateProjectInteractorTest {
      */
     @BeforeEach
     void setUp() {
+        // Set up for Interactor
         MockitoAnnotations.openMocks(this);
         createProjectInteractor = new CreateProjectInteractor(
                 mockProjectDataAccessObject,
@@ -90,4 +91,60 @@ class CreateProjectInteractorTest {
         // Assert
         verify(mockProjectDataAccessObject).existsByName(newProjectName);
     }
+
+    @Test
+    void testProjectCreationFailsWhenProjectAlreadyExists() throws IOException, AddressException {
+        // Arrange
+        String existingProjectName = "Existing Project";
+        CreateProjectInputData inputData = new CreateProjectInputData(existingProjectName, "leader@example.com", new ArrayList<>());
+        when(mockProjectDataAccessObject.existsByName(existingProjectName)).thenReturn(true);  // Return true to indicate the project exists
+
+        // Act
+        createProjectInteractor.execute(inputData);
+
+        // Assert
+        verify(mockCreateProjectPresenter).prepareFailView("Project already exists.");
+    }
+
+    @Test
+    void testCreateProjectOutputDataHoldsCorrectInformation() {
+        // Arrange
+        String expectedProjectName = "New Project";
+        String expectedLeaderEmail = "leader@example.com";
+        ArrayList<String> expectedMemberEmails = new ArrayList<>(Arrays.asList("member1@example.com", "member2@example.com"));
+        boolean expectedUseCaseFailed = false;
+
+        // Act
+        CreateProjectOutputData outputData = new CreateProjectOutputData(expectedProjectName, expectedLeaderEmail, expectedMemberEmails, expectedUseCaseFailed);
+
+        // Assert
+        assertEquals(expectedProjectName, outputData.getProjectName());
+        assertEquals(expectedLeaderEmail, outputData.getLeaderEmail());
+        assertEquals(expectedMemberEmails, outputData.getMemberEmails());
+    }
+
+    @Test
+    void testProjectCreationProceedsWhenNotExisting() throws IOException, MessagingException, AddressException {
+        // Arrange
+        String projectName = "New Project";
+        String leaderEmail = "leader@example.com";
+        ArrayList<String> memberEmails = new ArrayList<>(Arrays.asList("member1@example.com", "member2@example.com"));
+        CreateProjectInputData inputData = new CreateProjectInputData(projectName, leaderEmail, memberEmails);
+
+        when(mockProjectDataAccessObject.existsByName(projectName)).thenReturn(false); // Project does not exist
+        when(mockProjectFactory.create(projectName, leaderEmail, memberEmails))
+                .thenReturn(new CommonProject(projectName, leaderEmail, memberEmails));
+
+        // Act
+        createProjectInteractor.execute(inputData);
+
+        // Assert
+        verify(mockProjectDataAccessObject).save(any(Project.class)); // Verify the project is saved
+        for (String email : memberEmails) {
+            verify(mockGmailDataAccessObject).sendProjectCreationEmail(leaderEmail, email, projectName); // Verify emails are sent
+        }
+        verify(mockCreateProjectPresenter).prepareSuccessView(any(CreateProjectOutputData.class)); // Verify success view is prepared
+    }
+
+
 }
