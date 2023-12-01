@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.add_email.AddEmailController;
 import interface_adapter.add_email.AddEmailState;
 import interface_adapter.add_email.AddEmailViewModel;
@@ -10,8 +11,11 @@ import org.mockito.MockitoAnnotations;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.awt.event.KeyEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -25,6 +29,7 @@ import static org.mockito.Mockito.*;
  */
 public class AddEmailViewTest {
 
+    @Mock ViewManagerModel mockViewManagerModel;
     @Mock
     private AddEmailController mockAddEmailController;
     @Mock
@@ -40,7 +45,7 @@ public class AddEmailViewTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         when(mockAddEmailViewModel.getState()).thenReturn(new AddEmailState());
-        addEmailView = new AddEmailView(mockAddEmailController, mockAddEmailViewModel);
+        addEmailView = new AddEmailView(mockAddEmailController, mockAddEmailViewModel, mockViewManagerModel);
     }
 
     /**
@@ -66,59 +71,17 @@ public class AddEmailViewTest {
     public void testActionPerformed_CancelButton_Click() {
         // Given: Set up any initial state if necessary.
         // For example, if the cancel button should clear fields, pre-populate them.
-        addEmailView.titleInputField.setText("Some Title");
-        addEmailView.messageInputField.setText("Some message");
+        addEmailView.addEmailInputField.setText("Some email");
 
         // When: Perform the click action on the cancel button.
         addEmailView.cancel.doClick();
 
         // Then: Verify that the fields are cleared after the action (if that's the expected behavior).
-        assertEquals("", addEmailView.titleInputField.getText());
-        assertEquals("", addEmailView.messageInputField.getText());
+        assertEquals("", addEmailView.addEmailInputField.getText());
 
         // If the view is supposed to change, verify that the view change method was called.
         // For example:
         // verify(mockViewManager).changeView("MainView"); // Assuming you have a view manager to handle view changes.
-    }
-
-    /**
-     * Verifies that typing in the title input field updates the view model state.
-     * Simulates the user typing a string into the title field and checks if the state is set at least once.
-     */
-    @Test
-    public void testKeyTyped_TitleInputField() {
-        // Given
-        JTextField titleInputField = addEmailView.titleInputField;
-        titleInputField.setText("Subject");
-
-        // When
-        for (char c : "Subject".toCharArray()) {
-            titleInputField.dispatchEvent(new KeyEvent(
-                    titleInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
-        }
-
-        // Then
-        verify(mockAddEmailViewModel, atLeastOnce()).setState(any(AddEmailState.class));
-    }
-
-    /**
-     * Verifies that typing in the message input field updates the view model state.
-     * Simulates the user typing a string into the message field and checks if the state is set at least once.
-     */
-    @Test
-    public void testKeyTyped_MessageInputField() {
-        // Given
-        JTextField messageInputField = addEmailView.messageInputFiled;
-        messageInputField.setText("Message Body");
-
-        // When
-        for (char c : "Message Body".toCharArray()) {
-            messageInputField.dispatchEvent(new KeyEvent(
-                    messageInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
-        }
-
-        // Then
-        verify(mockAddEmailViewModel, atLeastOnce()).setState(any(AddEmailState.class));
     }
 
     /**
@@ -136,4 +99,64 @@ public class AddEmailViewTest {
         PropertyChangeEvent evt = new PropertyChangeEvent(mockAddEmailViewModel, "state", null, stateWithError);
         addEmailView.propertyChange(evt);
     }
+
+    @Test
+    public void testKeyTyped() {
+        // Given
+        JTextField textField = addEmailView.addEmailInputField;
+        KeyListener keyListener = textField.getKeyListeners()[0];
+        KeyEvent keyEvent = new KeyEvent(textField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, 'a');
+
+        // Simulate the keyTyped event
+        keyListener.keyTyped(keyEvent);
+
+        // Then
+        // Replace "setState" with the actual method that's being called within your keyTyped method.
+        verify(mockAddEmailViewModel).setState(any(AddEmailState.class)); // Use the actual class that's expected
+    }
+
+
+    @Test
+    public void testKeyPressed() {
+        // Given
+        KeyEvent keyEvent = new KeyEvent(addEmailView.addEmailInputField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, 'a');
+
+        // When
+        addEmailView.addEmailInputField.getKeyListeners()[0].keyPressed(keyEvent);
+
+        // Then
+        // Add verifications for keyPressed if there are any side effects
+    }
+
+    @Test
+    public void testKeyReleased() {
+        // Given
+        KeyEvent keyEvent = new KeyEvent(addEmailView.addEmailInputField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_A, 'a');
+
+        // When
+        addEmailView.addEmailInputField.getKeyListeners()[0].keyReleased(keyEvent);
+
+        // Then
+        // Add verifications for keyReleased if there are any side effects
+    }
+
+    @Test
+    public void testActionPerformed_Cancel_NotImplemented() {
+        // Redirect System.out to a ByteArrayOutputStream
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        // Simulate the action event
+        ActionEvent mockEvent = mock(ActionEvent.class);
+        addEmailView.actionPerformed(mockEvent);
+
+        // Reset the standard output to its original stream
+        System.setOut(originalOut);
+
+        // Verify the output contains the expected text
+        String expectedOutput = "Cancel not implemented yet.\n"; // Include newline character because println is used
+        assertEquals(expectedOutput, outContent.toString());
+    }
+
 }

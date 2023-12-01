@@ -1,5 +1,7 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
+import interface_adapter.remove_email.RemoveEmailState;
 import interface_adapter.set_leader.SetLeaderController;
 import interface_adapter.set_leader.SetLeaderState;
 import interface_adapter.set_leader.SetLeaderViewModel;
@@ -10,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 
 import static org.mockito.Mockito.*;
@@ -21,6 +24,8 @@ import static org.mockito.Mockito.*;
  */
 public class SetLeaderViewTest {
 
+    @Mock
+    ViewManagerModel mockViewManagerModel;
     @Mock
     private SetLeaderController mockSetLeaderController;
     @Mock
@@ -36,7 +41,7 @@ public class SetLeaderViewTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         when(mockSetLeaderViewModel.getState()).thenReturn(new SetLeaderState());
-        setLeaderView = new SetLeaderView(mockSetLeaderController, mockSetLeaderViewModel);
+        setLeaderView = new SetLeaderView(mockSetLeaderController, mockSetLeaderViewModel, mockViewManagerModel);
     }
 
     /**
@@ -71,35 +76,15 @@ public class SetLeaderViewTest {
      * the view model's state is updated accordingly.
      */
     @Test
-    public void testKeyTyped_TitleInputField() {
+    public void testKeyTyped_SetLeaderInputField() {
         // Simulate typing in the title input field
-        JTextField titleInputField = setLeaderView.titleInputField;
+        JTextField titleInputField = setLeaderView.setLeaderInputField;
         titleInputField.setText("Leader Title");
 
         // Trigger keyTyped event
         for (char c : "Leader Title".toCharArray()) {
             titleInputField.dispatchEvent(new KeyEvent(
                     titleInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
-        }
-
-        // Verify that the state is updated in the view model
-        verify(mockSetLeaderViewModel, atLeastOnce()).setState(any(SetLeaderState.class));
-    }
-
-    /**
-     * Verifies the behavior of the message input field by simulating key typing events and ensuring that
-     * the view model's state is updated accordingly.
-     */
-    @Test
-    public void testKeyTyped_MessageInputField() {
-        // Simulate typing in the message input field
-        JTextField messageInputField = setLeaderView.messageInputFiled;
-        messageInputField.setText("Leader Message");
-
-        // Trigger keyTyped event
-        for (char c : "Leader Message".toCharArray()) {
-            messageInputField.dispatchEvent(new KeyEvent(
-                    messageInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
         }
 
         // Verify that the state is updated in the view model
@@ -127,22 +112,42 @@ public class SetLeaderViewTest {
     }
 
     @Test
-    public void testKeyTyped_TitleInputField() {
-        JTextField titleInputField = setLeaderView.getTitleInputField(); // Make sure this getter exists
-        String expectedTitle = "Leader Title";
-        titleInputField.setText(""); // Clear the field before simulating key input
+    public void testKeyTyped() {
+        // Given
+        JTextField textField = setLeaderView.setLeaderInputField;
+        KeyListener keyListener = textField.getKeyListeners()[0];
+        KeyEvent keyEvent = new KeyEvent(textField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, 'a');
 
-        // Simulate typing in the title input field
-        for (char c : expectedTitle.toCharArray()) {
-            KeyEvent keyEvent = new KeyEvent(
-                    titleInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c
-            );
-            SwingUtilities.invokeLater(() -> titleInputField.dispatchEvent(keyEvent));
-        }
+        // Simulate the keyTyped event
+        keyListener.keyTyped(keyEvent);
 
-        // Assuming SetLeaderState has a getTitle method to retrieve the title
-        SetLeaderState updatedState = new SetLeaderState();
-        updatedState.setTitle(expectedTitle);
-        verify(mockSetLeaderViewModel).setState(updatedState);
+        // Then
+        // Replace "setState" with the actual method that's being called within your keyTyped method.
+        verify(mockSetLeaderViewModel).setState(any(SetLeaderState.class)); // Use the actual class that's expected
+    }
+
+
+    @Test
+    public void testKeyPressed() {
+        // Given
+        KeyEvent keyEvent = new KeyEvent(setLeaderView.setLeaderInputField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, 'a');
+
+        // When
+        setLeaderView.setLeaderInputField.getKeyListeners()[0].keyPressed(keyEvent);
+
+        // Then
+        // Add verifications for keyPressed if there are any side effects
+    }
+
+    @Test
+    public void testKeyReleased() {
+        // Given
+        KeyEvent keyEvent = new KeyEvent(setLeaderView.setLeaderInputField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_A, 'a');
+
+        // When
+        setLeaderView.setLeaderInputField.getKeyListeners()[0].keyReleased(keyEvent);
+
+        // Then
+        // Add verifications for keyReleased if there are any side effects
     }
 }

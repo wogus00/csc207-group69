@@ -106,6 +106,11 @@ class CreateProjectUseCaseTest {
         verify(mockCreateProjectPresenter).prepareFailView("Project already exists.");
     }
 
+    /**
+     * Verifies that the output data of the create project use case holds the correct information.
+     * The test ensures that the output data object is populated with the expected project name,
+     * leader email, and member emails, and that the use case failure flag is set correctly.
+     */
     @Test
     void testCreateProjectOutputDataHoldsCorrectInformation() {
         // Arrange
@@ -123,6 +128,14 @@ class CreateProjectUseCaseTest {
         assertEquals(expectedMemberEmails, outputData.getMemberEmails());
     }
 
+    /**
+     * Tests the process of project creation when the project does not already exist in the system.
+     * It verifies that the project is saved correctly and that emails are sent to project members.
+     * The method also checks that the presenter is called to prepare a success view.
+     * @throws IOException If an I/O error occurs during the process.
+     * @throws MessagingException If a messaging error occurs when sending emails.
+     * @throws AddressException If an email address is invalid.
+     */
     @Test
     void testProjectCreationProceedsWhenNotExisting() throws IOException, MessagingException, AddressException {
         // Arrange
