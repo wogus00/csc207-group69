@@ -178,8 +178,20 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
         }
     }
 
-    public JButton getCancelButton() {
-        JButton cancelButton = null;
-        return cancelButton;
+    public JButton getCreateButton() {
+        return this.create;
     }
+
+    public JTextField getMemberEmailInputField() {
+        return memberEmailInputField;
+    }
+
+    public JTextField getProjectNameInputField(){
+        return projectNameInputField;
+    }
+
+    public JTextField getLeaderEmailInputField(){
+        return leaderEmailInputField;
+    }
+
 }
