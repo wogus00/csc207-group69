@@ -1,4 +1,5 @@
 package view;
+import interface_adapter.ViewManagerModel;
 import interface_adapter.set_leader.SetLeaderController;
 import interface_adapter.set_leader.SetLeaderState;
 import interface_adapter.set_leader.SetLeaderViewModel;
@@ -22,15 +23,14 @@ public class SetLeaderView extends JPanel implements ActionListener, PropertyCha
     public final String viewName = "Set Leader";
 
     private final SetLeaderViewModel setLeaderViewModel;
+    private ViewManagerModel viewManagerModel;
 
-    final JTextField titleInputField = new JTextField(15);
-
-    final JTextField messageInputFiled = new JTextField(15);
+    private final JTextField titleInputField = new JTextField(15);
 
     private final SetLeaderController setLeaderController;
 
-    final JButton cancel;
-    final JButton set;
+    private final JButton cancel;
+    private final JButton set;
 
     /**
      * Constructs a SetLeaderView with the specified controller and view model.
@@ -40,30 +40,28 @@ public class SetLeaderView extends JPanel implements ActionListener, PropertyCha
      * @param setLeaderViewModel  The view model holding the state and logic for setting a leader.
      */
     public SetLeaderView(SetLeaderController controller,
-                         SetLeaderViewModel setLeaderViewModel) {
+                         SetLeaderViewModel setLeaderViewModel,
+                         ViewManagerModel viewManagerModel) {
 
         this.setLeaderController = controller;
         this.setLeaderViewModel = setLeaderViewModel;
+        this.viewManagerModel = viewManagerModel;
         setLeaderViewModel.addPropertyChangeListener(this);
 
         LabelTextPanel setLeaderInfo = new LabelTextPanel(
                 new JLabel(setLeaderViewModel.SET_LEADER_LABEL), titleInputField);
 
         JPanel buttons = new JPanel();
+        set = new JButton(setLeaderViewModel.SET_LEADER_LABEL);
+        buttons.add(set);
         cancel = new JButton(setLeaderViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
         cancel.addActionListener(this);
-        set = new JButton(setLeaderViewModel.SET_BUTTON_LABEL);
-        buttons.add(set);
-        set.addActionListener(this);
 
         titleInputField.addKeyListener(
                 new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
-                        SetLeaderState currentState = setLeaderViewModel.getState();
-                        String text = titleInputField.getText() + e.getKeyChar();
-                        setLeaderViewModel.setState(currentState);
                     }
 
                     @Override
@@ -78,24 +76,24 @@ public class SetLeaderView extends JPanel implements ActionListener, PropertyCha
                 }
         );
 
-        messageInputFiled.addKeyListener(
-                new KeyListener() {
+        cancel.addActionListener(
+                new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource().equals(cancel)) {
+                    viewManagerModel.setActiveView("Main Page");
+                    viewManagerModel.firePropertyChanged();
+                    titleInputField.setText("");
+                }
+            }
+        });
+
+        set.addActionListener(
+                new ActionListener() {
                     @Override
-                    public void keyTyped(KeyEvent e) {
-                        SetLeaderState currentState = setLeaderViewModel.getState();
-                        String text = messageInputFiled.getText() + e.getKeyChar();
-
-                        setLeaderViewModel.setState(currentState);
-                    }
-
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-
-                    }
-
-                    @Override
-                    public void keyReleased(KeyEvent e) {
-
+                    public void actionPerformed(ActionEvent e) {
+                        setLeaderController.updateProjectDetails(setLeaderViewModel.getState().getProjectName(),
+                                titleInputField.getText());
                     }
                 }
         );
@@ -114,7 +112,6 @@ public class SetLeaderView extends JPanel implements ActionListener, PropertyCha
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Cancel not implemented yet.");
     }
 
     /**

@@ -22,12 +22,28 @@ class DeleteAnnouncementViewModelTest {
 
     @Test
     void testSetStateAndFirePropertyChanged() {
+        // Mock PropertyChangeListener
+        PropertyChangeListener mockListener = mock(PropertyChangeListener.class);
+        viewModel.addPropertyChangeListener(mockListener); // Add the listener to the viewModel
+
+        DeleteAnnouncementState oldState = viewModel.getState(); // Get the current state before setting a new one
         DeleteAnnouncementState newState = new DeleteAnnouncementState();
         viewModel.setState(newState);
 
-        verify(mockListener, times(1)).propertyChange(any(PropertyChangeEvent.class));
+        // Construct an expected PropertyChangeEvent, but only match propertyName and newValue
+        PropertyChangeEvent expectedEvent = new PropertyChangeEvent(
+                viewModel, "state", oldState, newState);
+
+        // Verify that propertyChange was called with the expected event, ignoring oldValue
+        verify(mockListener, times(1)).propertyChange(
+                argThat(event -> event.getPropertyName().equals(expectedEvent.getPropertyName()) &&
+                        event.getNewValue().equals(expectedEvent.getNewValue())));
+
         assertEquals(newState, viewModel.getState(), "The state should match the newly set value.");
     }
+
+
+
 
     @Test
     void testAddPropertyChangeListener() {

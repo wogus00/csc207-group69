@@ -1,11 +1,13 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.remove_email.RemoveEmailState;
 import interface_adapter.remove_email.RemoveEmailController;
 import interface_adapter.remove_email.RemoveEmailViewModel;
 
 import javax.mail.internet.AddressException;
 import javax.swing.*;
+import javax.swing.text.View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,15 +25,15 @@ public class RemoveEmailView extends JPanel implements ActionListener, PropertyC
     public final String viewName = "Remove Email";
 
     private final RemoveEmailViewModel removeEmailViewModel;
+    private ViewManagerModel viewManagerModel;
 
-    final JTextField titleInputField = new JTextField(15);
+    private final JTextField titleInputField = new JTextField(15);
 
-    final JTextField messageInputFiled = new JTextField(15);
 
     private final RemoveEmailController removeEmailController;
 
-    final JButton cancel;
-    final JButton remove;
+    private final JButton cancel;
+    private final JButton remove;
 
     /**
      * Constructs a RemoveEmailView with the specified controller and view model.
@@ -41,30 +43,49 @@ public class RemoveEmailView extends JPanel implements ActionListener, PropertyC
      * @param removeEmailViewModel The view model holding the state and logic for removing an email.
      */
     public RemoveEmailView(RemoveEmailController controller,
-                           RemoveEmailViewModel removeEmailViewModel) {
+                           RemoveEmailViewModel removeEmailViewModel,
+                           ViewManagerModel viewManagerModel) {
 
         this.removeEmailController = controller;
         this.removeEmailViewModel = removeEmailViewModel;
+        this.viewManagerModel = viewManagerModel;
         removeEmailViewModel.addPropertyChangeListener(this);
 
         LabelTextPanel removeEmailInfo = new LabelTextPanel(
                 new JLabel(removeEmailViewModel.REMOVE_EMAIL_LABEL), titleInputField);
 
         JPanel buttons = new JPanel();
+        remove =  new JButton(removeEmailViewModel.REMOVE_BUTTON_LABEL);
+        buttons.add(remove);
         cancel = new JButton(removeEmailViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
-        cancel.addActionListener(this);
-        remove = new JButton(removeEmailViewModel.REMOVE_BUTTON_LABEL);
-        buttons.add(remove);
-        remove.addActionListener(this);
+
+        remove.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        removeEmailController.removeProjectDetails(removeEmailViewModel.getState().getProjectName(),
+                                titleInputField.getText());
+                    }
+                }
+        );
+
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource().equals(cancel)) {
+                    viewManagerModel.setActiveView("Main Page");
+                    viewManagerModel.firePropertyChanged();
+                    titleInputField.setText("");
+                }
+            }
+        });
 
         titleInputField.addKeyListener(
                 new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
-                        RemoveEmailState currentState = removeEmailViewModel.getState();
-                        String text = titleInputField.getText() + e.getKeyChar();
-                        removeEmailViewModel.setState(currentState);
+
                     }
 
                     @Override
@@ -79,27 +100,7 @@ public class RemoveEmailView extends JPanel implements ActionListener, PropertyC
                 }
         );
 
-        messageInputFiled.addKeyListener(
-                new KeyListener() {
-                    @Override
-                    public void keyTyped(KeyEvent e) {
-                        RemoveEmailState currentState = removeEmailViewModel.getState();
-                        String text = messageInputFiled.getText() + e.getKeyChar();
 
-                        removeEmailViewModel.setState(currentState);
-                    }
-
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-
-                    }
-
-                    @Override
-                    public void keyReleased(KeyEvent e) {
-
-                    }
-                }
-        );
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

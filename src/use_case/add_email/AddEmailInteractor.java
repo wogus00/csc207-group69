@@ -43,6 +43,6 @@ public class AddEmailInteractor implements AddEmailInputBoundary {
         String projectName = addEmailInputData.getProjectName();
         String email = addEmailInputData.getEmail();
         addEmailDataAccessObject.addMemberToProject(projectName, email);
-        addEmailPresenter.prepareSuccessView();
+        addEmailPresenter.prepareSuccessView(email);
     }
 }

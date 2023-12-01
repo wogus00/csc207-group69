@@ -46,10 +46,11 @@ public class ModifyTaskInteractor implements ModifyTaskInputBoundary {
             Task newTask = taskFactory.create(projectName, taskName, supervisor, workingMembersList, deadline, comments, status);
             modifyTaskDataAccessObject.deleteOldTask(projectName, taskName);
             modifyTaskDataAccessObject.saveTask(projectName, newTask);
+
+            ModifyTaskOutputData modifyTaskOutputData = new ModifyTaskOutputData();
+            modifyTaskPresenter.prepareSuccessView(modifyTaskOutputData);
         }
 
-        ModifyTaskOutputData modifyTaskOutputData = new ModifyTaskOutputData();
-        modifyTaskPresenter.prepareSuccessView(modifyTaskOutputData);
 
 
     }
@@ -61,4 +62,6 @@ public class ModifyTaskInteractor implements ModifyTaskInputBoundary {
         // Create an ArrayList from the array
         return new ArrayList<>(Arrays.asList(array));
     }
+
+
 }

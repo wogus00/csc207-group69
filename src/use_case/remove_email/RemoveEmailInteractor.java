@@ -44,6 +44,6 @@ public class RemoveEmailInteractor implements RemoveEmailInputBoundary {
         String projectName = removeEmailInputData.getProjectName();
         String email = removeEmailInputData.getEmail();
         removeEmailDataAccessObject.removeMemberFromProject(projectName, email);
-        removeEmailPresenter.prepareSuccessView();
+        removeEmailPresenter.prepareSuccessView(email);
     }
 }

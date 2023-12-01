@@ -12,7 +12,7 @@ import java.beans.PropertyChangeSupport;
  */
 public class RemoveEmailViewModel extends ViewModel {
 
-    public static final String CREATE_BUTTON_LABEL = "Create Project";
+    public static final String REMOVE_BUTTON_LABEL = "Remove Member";
     public static final String TITLE_LABEL = "Create Project View";
     public static final String PROJECTNAME_LABEL = "Enter project name";
     public static final String LEADER_EMAIL_LABEL = "Enter leader's email";

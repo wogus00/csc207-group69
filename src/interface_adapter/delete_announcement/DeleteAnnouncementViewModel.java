@@ -32,7 +32,11 @@ public class DeleteAnnouncementViewModel extends ViewModel {
      *
      * @param state The new state to be set.
      */
-    public void setState(DeleteAnnouncementState state){this.state = state;}
+    public void setState(DeleteAnnouncementState state) {
+        DeleteAnnouncementState oldState = this.state;
+        this.state = state;
+        support.firePropertyChange("state", oldState, this.state); // Notifying the change
+    }
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 

@@ -20,12 +20,12 @@ public class CompleteTaskView extends JPanel implements ActionListener, Property
     public final String viewName = "Complete Task";
     private ViewManagerModel viewManagerModel;
     private final CompleteTaskViewModel completeTaskViewModel;
-    private final JTextField taskNameInputField = new JTextField(15);
+    final JTextField taskNameInputField = new JTextField(15);
 
     private final CompleteTaskController completeTaskController;
 
-    private final JButton complete;
-    private final JButton cancel;
+    final JButton complete;
+    final JButton cancel;
 
 
     public CompleteTaskView(ViewManagerModel viewManagerModel, CompleteTaskController completeTaskController, CompleteTaskViewModel completeTaskViewModel) {
@@ -52,6 +52,7 @@ public class CompleteTaskView extends JPanel implements ActionListener, Property
                 if (e.getSource().equals(cancel)) {
                     viewManagerModel.setActiveView("Main Page");
                     viewManagerModel.firePropertyChanged();
+                    taskNameInputField.setText("");
                 }
             }
         });
@@ -84,12 +85,17 @@ public class CompleteTaskView extends JPanel implements ActionListener, Property
                             String projectName = currentState.getProjectName();
                             String taskName = currentState.getTaskName();
                             String userEmail = currentState.getUserEmail();
+                            currentState.setTaskNameError(null);
+                            completeTaskViewModel.setState(currentState);
                             completeTaskController.execute(projectName, taskName, userEmail);
                             currentState = completeTaskViewModel.getState();
                             if (currentState.getTaskNameError() == null) {
                                 JOptionPane.showMessageDialog(CompleteTaskView.this, "completed task successfully");
                                 viewManagerModel.setActiveView("Main Page");
                                 viewManagerModel.firePropertyChanged();
+                                taskNameInputField.setText("");
+                            } else {
+                                JOptionPane.showMessageDialog(CompleteTaskView.this, currentState.getTaskNameError());
                             }
                         }
                     }

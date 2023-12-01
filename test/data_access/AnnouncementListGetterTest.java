@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.Map;
 import java.util.HashMap;
 
-public class AnnouncementListRetrieveStrategyTest {
+public class AnnouncementListGetterTest {
 
     @Mock
     private FirebaseAccessObject mockFirebaseAccessObject;
@@ -34,7 +34,7 @@ public class AnnouncementListRetrieveStrategyTest {
     @Mock
     private CollectionReference mockCollectionReference;
 
-    AnnouncementListRetrieveStrategy strategy;
+    AnnouncementListGetter strategy;
 
     @Before
     public void setUp() throws ExecutionException, InterruptedException {
@@ -44,7 +44,7 @@ public class AnnouncementListRetrieveStrategyTest {
         when(mockCollectionReference.document(anyString())).thenReturn(mockDocumentReference);
         when(mockDocumentReference.get()).thenReturn(mockApiFuture);
         when(mockApiFuture.get()).thenReturn(mockDocumentSnapshot);
-        strategy = new AnnouncementListRetrieveStrategy();
+        strategy = new AnnouncementListGetter();
     }
 
     @Test

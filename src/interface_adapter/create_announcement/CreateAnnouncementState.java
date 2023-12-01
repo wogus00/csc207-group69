@@ -1,5 +1,7 @@
 package interface_adapter.create_announcement;
 
+import java.util.ArrayList;
+
 /**
  * Represents the state of the announcement creation process.
  * This state object stores data related to the creation of an announcement
@@ -11,10 +13,14 @@ public class CreateAnnouncementState {
     private String message = "";
 
     private String announcementTitleError = null;
+    private String response = null;
 
     private String author = "";
 
     private String id = "";
+    private String project = "";
+
+    private ArrayList<String> emailsSent = null;
 
     /**
      * Constructs a new state by copying data from another state instance.
@@ -27,6 +33,8 @@ public class CreateAnnouncementState {
         announcementTitleError = copy.announcementTitleError;
         author = copy.author;
         id = copy.id;
+        project = copy.project;
+        response = copy.response;
     }
 
     /**
@@ -62,6 +70,24 @@ public class CreateAnnouncementState {
      */
     public String getAuthor() {
         return author;
+    }
+
+    /**
+     * Gets the name of project that the announcement belongs to.
+     *
+     * @return the name of project.
+     */
+    public String getProject() {
+        return project;
+    }
+
+    /**
+     * Gets the response of create announcement action;
+     *
+     * @return the response of action.
+     */
+    public String getResponse() {
+        return response;
     }
 
     /**
@@ -111,4 +137,23 @@ public class CreateAnnouncementState {
     public void setId(String id) {
         this.id = id;
     }
+
+    /**
+     * Sets the name of the project that the announcement belongs to.
+     *
+     * @param project the name of the project.
+     */
+    public void setProject(String project) {
+        this.project = project;
+    }
+
+    /**
+     * Sets the response of create announcement action;
+     *
+     * @param response the response of action.
+     */
+    public void setResponse(String response) {
+        this.response = response;
+    }
+
 }

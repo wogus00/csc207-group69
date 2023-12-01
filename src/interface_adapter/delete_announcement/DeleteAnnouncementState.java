@@ -12,6 +12,7 @@ public class DeleteAnnouncementState {
     private String announcementError = null;
 
     private String announcementID = "";
+    private String userEmail = "";
 
 
     /**
@@ -23,6 +24,7 @@ public class DeleteAnnouncementState {
         announcement = copy.announcement;
         announcementError = copy.announcementError;
         announcementID = copy.announcementID;
+        userEmail = copy.userEmail;
     }
 
     /**
@@ -92,5 +94,23 @@ public class DeleteAnnouncementState {
     @Override
     public String toString(){
         return announcement.getAnnouncementTitle();
+    }
+
+    /**
+     * Retrieves the user's email.
+     *
+     * @return The email of the user.
+     */
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    /**
+     * Sets the user's email.
+     *
+     * @param userEmail The email to be set for the user.
+     */
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }

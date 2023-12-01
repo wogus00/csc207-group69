@@ -12,11 +12,8 @@ import java.beans.PropertyChangeSupport;
  */
 public class AddEmailViewModel extends ViewModel {
 
-    public static final String CREATE_BUTTON_LABEL = "Create Project";
+    public final String ADD_BUTTON_LABEL = "Add Member";
     public static final String TITLE_LABEL = "Create Project View";
-    public static final String PROJECTNAME_LABEL = "Enter project name";
-    public static final String LEADER_EMAIL_LABEL = "Enter leader's email";
-    public static final String MEMBER_EMAIL_LABEL = "Enter all members' email";
     public final String CANCEL_BUTTON_LABEL = "Cancel";
     public final String ADD_BUTTON_LABEL = "Add";
     public final String ADD_EMAIL_LABEL = "Enter email you want to add";

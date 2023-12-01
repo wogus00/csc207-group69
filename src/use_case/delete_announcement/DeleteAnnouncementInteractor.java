@@ -41,10 +41,11 @@ public class DeleteAnnouncementInteractor implements DeleteAnnouncementInputBoun
     @Override
     public void execute(String announcementId, String currentUser) {
         try {
-            CommonAnnouncement announcement = deleteAnnouncementDataAccessObject.getAnnouncementById(announcementId);
+            Announcement announcement = deleteAnnouncementDataAccessObject.getAnnouncementById(announcementId);
 
             if (announcement == null) {
                 // Announcement not found
+                System.out.println("reached");
                 deleteAnnouncementPresenter.prepareNotFoundView(announcementId);
                 return;
             }

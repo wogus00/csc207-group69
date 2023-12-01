@@ -1,6 +1,5 @@
 package interface_adapter.set_leader;
 
-import use_case.remove_email.RemoveEmailInputData;
 import use_case.set_leader.SetLeaderInputBoundary;
 import use_case.set_leader.SetLeaderInputData;
 
@@ -23,8 +22,8 @@ public class SetLeaderController {
         this.setLeaderUseCaseInteractor = setLeaderUseCaseInteractor;
     }
 
-    public void setLeaderDetails(String projectName, String email) {
-        SetLeaderInputData setLeaderInputData = new SetLeaderInputData(projectName, email);
-        setLeaderInputData.updateProjectDetails(setLeaderInputData);
+    public void updateProjectDetails(String projectName, String newLeader) {
+        SetLeaderInputData setLeaderInputData = new SetLeaderInputData(projectName, newLeader);
+        setLeaderUseCaseInteractor.updateProjectDetails(setLeaderInputData);
     }
 }

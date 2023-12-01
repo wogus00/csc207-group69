@@ -1,9 +1,9 @@
 package use_case.login;
 
-import data_access.AnnouncementListRetrieveStrategy;
-import data_access.InfoListRetrieveStrategy;
-import data_access.MeetingListRetrieveStrategy;
-import data_access.TaskListRetrieveStrategy;
+import data_access.AnnouncementListGetter;
+import data_access.InfoListGetter;
+import data_access.MeetingListGetter;
+import data_access.TaskListGetter;
 import entity.CommonProject;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.ArgumentMatchers.*;
 
 public class LoginInteractorTest {
 
@@ -45,9 +44,9 @@ public class LoginInteractorTest {
 
         when(mockDataAccessObject.existsByName(projectName)).thenReturn(true);
         when(mockDataAccessObject.getProjectInfo(projectName)).thenReturn(new CommonProject(projectName, leaderEmail, memberEmails));
-        when(mockDataAccessObject.getInfoList(projectName, eq(any(TaskListRetrieveStrategy.class)))).thenReturn(taskList);
-        when(mockDataAccessObject.getInfoList(projectName, eq(any(MeetingListRetrieveStrategy.class)))).thenReturn(meetingList);
-        when(mockDataAccessObject.getInfoList(projectName, eq(any(AnnouncementListRetrieveStrategy.class)))).thenReturn(announcements);
+        when(mockDataAccessObject.getInfoList(projectName, eq(any(TaskListGetter.class)))).thenReturn(taskList);
+        when(mockDataAccessObject.getInfoList(projectName, eq(any(MeetingListGetter.class)))).thenReturn(meetingList);
+        when(mockDataAccessObject.getInfoList(projectName, eq(any(AnnouncementListGetter.class)))).thenReturn(announcements);
 
         LoginInputData inputData = new LoginInputData(projectName, userEmail);
 
@@ -56,7 +55,7 @@ public class LoginInteractorTest {
 
         // Verify
         verify(mockDataAccessObject).existsByName(eq(projectName));
-        verify(mockDataAccessObject, times(3)).getInfoList(eq(projectName), any(InfoListRetrieveStrategy.class));
+        verify(mockDataAccessObject, times(3)).getInfoList(eq(projectName), any(InfoListGetter.class));
         verify(mockPresenter).prepareSuccessView(any(LoginOutputData.class));
     }
 

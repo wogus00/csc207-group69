@@ -13,7 +13,7 @@ public interface AddEmailOutputBoundary {
      * This method is called when adding an email to a project has been completed successfully.
      * It should handle the logic for displaying a success message or view to the user.
      */
-    void prepareSuccessView();
+    void prepareSuccessView(String newMember);
 
     /**
      * Prepares and presents a failure view with a specified error message.

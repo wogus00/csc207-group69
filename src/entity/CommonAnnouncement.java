@@ -1,6 +1,7 @@
 package entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  * Represents an announcement with a title, message, timestamp, author, and identifier.
@@ -14,6 +15,8 @@ public class CommonAnnouncement implements Announcement {
     private final String author;
     private final String id;
 
+    private ArrayList<String> emailsSent;
+
     /**
      * Constructs a new CommonAnnouncement with the specified details.
      *
@@ -23,7 +26,11 @@ public class CommonAnnouncement implements Announcement {
      * @param author            the author of the announcement
      * @param id                the unique identifier for the announcement
      */
-    public CommonAnnouncement(String announcementTitle, String message, LocalDateTime creationTime, String author, String id) {
+    public CommonAnnouncement(String announcementTitle,
+                              String message,
+                              LocalDateTime creationTime,
+                              String author,
+                              String id) {
         this.announcementTitle = announcementTitle;
         this.message = message;
         this.creationTime = creationTime;
@@ -70,4 +77,6 @@ public class CommonAnnouncement implements Announcement {
      */
     @Override
     public String getId() { return id; }
+
+
 }

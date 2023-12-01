@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface DeleteAnnouncementDataAccessInterface {
 
-    CommonAnnouncement getAnnouncementById(String announcementId);
+    Announcement getAnnouncementById(String announcementId);
 
     boolean deleteAnnouncement(String announcementId);
 }

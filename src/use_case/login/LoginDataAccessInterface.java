@@ -10,5 +10,5 @@ public interface LoginDataAccessInterface {
 
     Project getProjectInfo(String projectName);
 
-    ArrayList<String> getInfoList(String projectName, InfoListRetrieveStrategy infoListRetrieveStrategy);
+    ArrayList<String> getInfoList(String projectName, InfoListGetter infoListRetrieveStrategy);
 }

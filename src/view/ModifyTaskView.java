@@ -19,14 +19,14 @@ public class ModifyTaskView extends JPanel implements ActionListener, PropertyCh
     public final String viewName = "Modify Task";
     private ViewManagerModel viewManagerModel;
     private final ModifyTaskViewModel modifyTaskViewModel;
-    private final JTextField taskNameInputField = new JTextField(15);
-    private final JTextField supervisorInputField = new JTextField(15);
-    private final JTextField memberEmailsInputField = new JTextField(15);
-    private final JTextField deadlineInputField = new JTextField(15);
-    private final JTextField commentsInputField = new JTextField(15);
+    final JTextField taskNameInputField = new JTextField(15);
+    final JTextField supervisorInputField = new JTextField(15);
+    final JTextField memberEmailsInputField = new JTextField(15);
+    final JTextField deadlineInputField = new JTextField(15);
+    final JTextField commentsInputField = new JTextField(15);
     private final ModifyTaskController modifyTaskController;
-    private final JButton modify;
-    private final JButton cancel;
+    final JButton modify;
+    final JButton cancel;
     public ModifyTaskView(ViewManagerModel viewManagerModel, ModifyTaskController modifyTaskController, ModifyTaskViewModel modifyTaskViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.modifyTaskController = modifyTaskController;
@@ -57,6 +57,11 @@ public class ModifyTaskView extends JPanel implements ActionListener, PropertyCh
                 if (e.getSource().equals(cancel)) {
                     viewManagerModel.setActiveView("Main Page");
                     viewManagerModel.firePropertyChanged();
+                    taskNameInputField.setText("");
+                    supervisorInputField.setText("");
+                    memberEmailsInputField.setText("");
+                    deadlineInputField.setText("");
+                    commentsInputField.setText("");
                 }
             }
         });
@@ -73,12 +78,24 @@ public class ModifyTaskView extends JPanel implements ActionListener, PropertyCh
                             String workingMembers = currentState.getWorkingMembersList();
                             String deadline = currentState.getDeadline();
                             String comments = currentState.getComments();
+                            currentState.setWorkingMembersError(null);
+                            currentState.setTaskNameError(null);
+                            modifyTaskViewModel.setState(currentState);
                             modifyTaskController.execute(projectName, taskName, supervisor, workingMembers, deadline, comments);
                             currentState = modifyTaskViewModel.getState();
                             if (currentState.getTaskNameError() == null && currentState.getWorkingMembersError() == null) {
                                 JOptionPane.showMessageDialog(ModifyTaskView.this, "modified task successfully");
                                 viewManagerModel.setActiveView("Main Page");
                                 viewManagerModel.firePropertyChanged();
+                                taskNameInputField.setText("");
+                                supervisorInputField.setText("");
+                                memberEmailsInputField.setText("");
+                                deadlineInputField.setText("");
+                                commentsInputField.setText("");
+                            } else if (currentState.getTaskNameError() != null) {
+                                JOptionPane.showMessageDialog(ModifyTaskView.this, modifyTaskViewModel.getState().getTaskNameError());
+                            } else {
+                                JOptionPane.showMessageDialog(ModifyTaskView.this, modifyTaskViewModel.getState().getWorkingMembersError());
                             }
                         }
                     }

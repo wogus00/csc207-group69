@@ -1,6 +1,7 @@
 package interface_adapter.modify_task;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.main_page.MainPageViewModel;
 import use_case.modify_task.ModifyTaskOutputBoundary;
 import use_case.modify_task.ModifyTaskOutputData;
 
@@ -11,6 +12,7 @@ import use_case.modify_task.ModifyTaskOutputData;
 public class ModifyTaskPresenter implements ModifyTaskOutputBoundary {
     private final ModifyTaskViewModel modifyTaskViewModel;
     private ViewManagerModel viewManagerModel;
+    private MainPageViewModel mainPageViewModel;
 
     /**
      * Constructor method that modifys ModifyTaskPresenter class with appropriate view manager model and view model.
@@ -28,6 +30,14 @@ public class ModifyTaskPresenter implements ModifyTaskOutputBoundary {
      */
     @Override
     public void prepareFailView(String error) {
+        ModifyTaskState state = modifyTaskViewModel.getState();
+        if (error.equals("Task Does not Exist")) {
+            state.setTaskNameError(error);
+        } else {
+            state.setWorkingMembersError(error);
+        }
+        modifyTaskViewModel.setState(state);
+        modifyTaskViewModel.firePropertyChanged();
     }
 
     /**
@@ -36,5 +46,7 @@ public class ModifyTaskPresenter implements ModifyTaskOutputBoundary {
      */
     @Override
     public void prepareSuccessView(ModifyTaskOutputData modifyTaskOutputData) {
+        viewManagerModel.setActiveView("Main Page");
+        viewManagerModel.firePropertyChanged();
     }
 }
