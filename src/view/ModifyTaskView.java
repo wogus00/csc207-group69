@@ -19,14 +19,14 @@ public class ModifyTaskView extends JPanel implements ActionListener, PropertyCh
     public final String viewName = "Modify Task";
     private ViewManagerModel viewManagerModel;
     private final ModifyTaskViewModel modifyTaskViewModel;
-    private final JTextField taskNameInputField = new JTextField(15);
-    private final JTextField supervisorInputField = new JTextField(15);
-    private final JTextField memberEmailsInputField = new JTextField(15);
-    private final JTextField deadlineInputField = new JTextField(15);
-    private final JTextField commentsInputField = new JTextField(15);
+    final JTextField taskNameInputField = new JTextField(15);
+    final JTextField supervisorInputField = new JTextField(15);
+    final JTextField memberEmailsInputField = new JTextField(15);
+    final JTextField deadlineInputField = new JTextField(15);
+    final JTextField commentsInputField = new JTextField(15);
     private final ModifyTaskController modifyTaskController;
-    private final JButton modify;
-    private final JButton cancel;
+    final JButton modify;
+    final JButton cancel;
     public ModifyTaskView(ViewManagerModel viewManagerModel, ModifyTaskController modifyTaskController, ModifyTaskViewModel modifyTaskViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.modifyTaskController = modifyTaskController;
