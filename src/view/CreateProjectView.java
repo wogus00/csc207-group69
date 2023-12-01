@@ -177,4 +177,9 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
             JOptionPane.showMessageDialog(this, state.getProjectNameError());
         }
     }
+
+    public JButton getCancelButton() {
+        JButton cancelButton = null;
+        return cancelButton;
+    }
 }

@@ -24,14 +24,14 @@ public class RemoveEmailView extends JPanel implements ActionListener, PropertyC
 
     private final RemoveEmailViewModel removeEmailViewModel;
 
-    private final JTextField titleInputField = new JTextField(15);
+    final JTextField titleInputField = new JTextField(15);
 
-    private final JTextField messageInputFiled = new JTextField(15);
+    final JTextField messageInputFiled = new JTextField(15);
 
     private final RemoveEmailController removeEmailController;
 
-    private final JButton cancel;
-    private final JButton remove;
+    final JButton cancel;
+    final JButton remove;
 
     /**
      * Constructs a RemoveEmailView with the specified controller and view model.

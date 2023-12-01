@@ -37,4 +37,7 @@ public class SetLeaderInputData {
     public String getEmail() {
         return new_leader;
     }
+
+    public void updateProjectDetails(SetLeaderInputData setLeaderInputData) {
+    }
 }

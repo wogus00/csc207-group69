@@ -23,14 +23,14 @@ public class SetLeaderView extends JPanel implements ActionListener, PropertyCha
 
     private final SetLeaderViewModel setLeaderViewModel;
 
-    private final JTextField titleInputField = new JTextField(15);
+    final JTextField titleInputField = new JTextField(15);
 
-    private final JTextField messageInputFiled = new JTextField(15);
+    final JTextField messageInputFiled = new JTextField(15);
 
     private final SetLeaderController setLeaderController;
 
-    private final JButton cancel;
-    private final JButton set;
+    final JButton cancel;
+    final JButton set;
 
     /**
      * Constructs a SetLeaderView with the specified controller and view model.

@@ -30,14 +30,15 @@ public class AddEmailView extends JPanel implements ActionListener, PropertyChan
      */
     private final AddEmailViewModel addEmailViewModel;
 
-    private final JTextField titleInputField = new JTextField(15);
+    final JTextField titleInputField = new JTextField(15);
 
-    private final JTextField messageInputFiled = new JTextField(15);
+    final JTextField messageInputFiled = new JTextField(15);
 
     private final AddEmailController addEmailController;
 
-    private final JButton cancel;
-    private final JButton add;
+    final JButton cancel;
+    final JButton add;
+    public Label messageInputField;
 
     public AddEmailView(AddEmailController controller,
                         AddEmailViewModel addEmailViewModel) {
