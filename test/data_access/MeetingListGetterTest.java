@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.Map;
 import java.util.HashMap;
 
-public class TaskListGetterTest {
+public class MeetingListGetterTest {
 
     @Mock
     private FirebaseAccessObject mockFirebaseAccessObject;
@@ -39,7 +39,7 @@ public class TaskListGetterTest {
     private CollectionReference mockCollectionReference;
 
 
-    private TaskListGetter getter;
+    private MeetingListGetter getter;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -53,7 +53,7 @@ public class TaskListGetterTest {
         when(mockCollectionReference.document(anyString())).thenReturn(mockDocumentReference);
         when(mockDocumentReference.get()).thenReturn(mockApiFuture);
         when(mockApiFuture.get()).thenReturn(mockDocumentSnapshot);
-        getter = new TaskListGetter();
+        getter = new MeetingListGetter();
     }
 
     @Test
@@ -62,33 +62,24 @@ public class TaskListGetterTest {
         Map<String, Object> mockData = new HashMap<>();
 
         // Uncompleted task
-        Map<String, Object> taskData = new HashMap<>();
-        taskData.put("taskName", "Test Task");
-        taskData.put("supervisor", "supervisor@example.com");
-        taskData.put("workingMemberList", "supervisor@example.com");
-        taskData.put("deadline", null);
-        taskData.put("comments", "Test Comment");
-        taskData.put("status", false);
+        Map<String, Object> meetingData = new HashMap<>();
+        meetingData.put("meetingName", "Test Meeting");
+        meetingData.put("meetingDate", "01/01/2024");
+        meetingData.put("endTime", "01:00");
+
+
 
         // Completed task that shouldn't be included
-        Map<String, Object> taskData2 = new HashMap<>();
-        taskData2.put("taskName", "Test Task 2");
-        taskData2.put("supervisor", "supervisor2@example.com");
-        taskData2.put("workingMemberList", "supervisor2@example.com");
-        taskData2.put("deadline", null);
-        taskData2.put("comments", "Test Comment 2");
-        taskData2.put("status", true);
 
 
-        mockData.put("Test Task",taskData);
-        mockData.put("Test Task 2", taskData2);
+        mockData.put("Test Meeting",meetingData);
         // Populate mockData as needed to simulate Firestore data
         when(mockDocumentSnapshot.getData()).thenReturn(mockData);
 
 
         List<String> result = getter.getInfoList("TestProject", mockFirebaseAccessObject);
 
-        assertEquals("Test Task", result.get(0));
+        assertEquals("Test Meeting", result.get(0));
         assertEquals(1, result.size());
     }
 

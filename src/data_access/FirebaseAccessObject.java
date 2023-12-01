@@ -84,10 +84,8 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
             Map<String, Object> data1 = new HashMap<>();
             DocumentReference docRefTask = db.collection(projectName).document("taskInfo");
             DocumentReference docRefMeeting = db.collection(projectName).document("meetingInfo");
-            DocumentReference docRefAnnounce = db.collection(projectName).document("announcementInfo");
             docRefTask.set(data1);
             docRefMeeting.set(data1);
-            docRefAnnounce.set(data1);
             DocumentReference docRefCollection = db.collection("IDCollection").document("IDCollection");
             ApiFuture<DocumentSnapshot> snapShot = docRefCollection.get();
             DocumentSnapshot IDInfo = null;
@@ -307,6 +305,9 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
             if (collectionIterator.next().getId().equals(projectName)) {
                 return true;
             }
+        }
+        if (projectName.equals("announcements") | projectName.equals("IDCollection")) {
+            return true;
         }
         return false;
     }
