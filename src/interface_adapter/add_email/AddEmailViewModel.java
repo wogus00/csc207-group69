@@ -15,7 +15,6 @@ public class AddEmailViewModel extends ViewModel {
     public final String ADD_BUTTON_LABEL = "Add Member";
     public static final String TITLE_LABEL = "Create Project View";
     public final String CANCEL_BUTTON_LABEL = "Cancel";
-    public final String ADD_BUTTON_LABEL = "Add";
     public final String ADD_EMAIL_LABEL = "Enter email you want to add";
 
     private AddEmailState state = new AddEmailState();
