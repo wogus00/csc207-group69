@@ -34,7 +34,7 @@ public class AnnouncementListGetterTest {
     @Mock
     private CollectionReference mockCollectionReference;
 
-    AnnouncementListGetter strategy;
+    AnnouncementMessageListGetter strategy;
 
     @Before
     public void setUp() throws ExecutionException, InterruptedException {
@@ -44,7 +44,7 @@ public class AnnouncementListGetterTest {
         when(mockCollectionReference.document(anyString())).thenReturn(mockDocumentReference);
         when(mockDocumentReference.get()).thenReturn(mockApiFuture);
         when(mockApiFuture.get()).thenReturn(mockDocumentSnapshot);
-        strategy = new AnnouncementListGetter();
+        strategy = new AnnouncementMessageListGetter();
     }
 
     @Test

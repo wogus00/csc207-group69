@@ -1,6 +1,6 @@
 package use_case.login;
 
-import data_access.AnnouncementListGetter;
+import data_access.AnnouncementMessageListGetter;
 import data_access.InfoListGetter;
 import data_access.MeetingListGetter;
 import data_access.TaskListGetter;
@@ -46,7 +46,7 @@ public class LoginInteractorTest {
         when(mockDataAccessObject.getProjectInfo(projectName)).thenReturn(new CommonProject(projectName, leaderEmail, memberEmails));
         when(mockDataAccessObject.getInfoList(projectName, eq(any(TaskListGetter.class)))).thenReturn(taskList);
         when(mockDataAccessObject.getInfoList(projectName, eq(any(MeetingListGetter.class)))).thenReturn(meetingList);
-        when(mockDataAccessObject.getInfoList(projectName, eq(any(AnnouncementListGetter.class)))).thenReturn(announcements);
+        when(mockDataAccessObject.getInfoList(projectName, eq(any(AnnouncementMessageListGetter.class)))).thenReturn(announcements);
 
         LoginInputData inputData = new LoginInputData(projectName, userEmail);
 
