@@ -24,16 +24,16 @@ import java.io.IOException;
 public class RemoveEmailView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "Remove Email";
 
-    private final RemoveEmailViewModel removeEmailViewModel;
-    private ViewManagerModel viewManagerModel;
+    final RemoveEmailViewModel removeEmailViewModel;
+    ViewManagerModel viewManagerModel;
 
-    private final JTextField titleInputField = new JTextField(15);
+    final JTextField removeEmailInputField = new JTextField(15);
 
 
     private final RemoveEmailController removeEmailController;
 
-    private final JButton cancel;
-    private final JButton remove;
+    final JButton cancel;
+    final JButton remove;
 
     /**
      * Constructs a RemoveEmailView with the specified controller and view model.
@@ -52,7 +52,7 @@ public class RemoveEmailView extends JPanel implements ActionListener, PropertyC
         removeEmailViewModel.addPropertyChangeListener(this);
 
         LabelTextPanel removeEmailInfo = new LabelTextPanel(
-                new JLabel(removeEmailViewModel.REMOVE_EMAIL_LABEL), titleInputField);
+                new JLabel(removeEmailViewModel.REMOVE_EMAIL_LABEL), removeEmailInputField);
 
         JPanel buttons = new JPanel();
         remove =  new JButton(removeEmailViewModel.REMOVE_BUTTON_LABEL);
@@ -65,7 +65,7 @@ public class RemoveEmailView extends JPanel implements ActionListener, PropertyC
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         removeEmailController.removeProjectDetails(removeEmailViewModel.getState().getProjectName(),
-                                titleInputField.getText());
+                                removeEmailInputField.getText());
                     }
                 }
         );
@@ -76,12 +76,12 @@ public class RemoveEmailView extends JPanel implements ActionListener, PropertyC
                 if (e.getSource().equals(cancel)) {
                     viewManagerModel.setActiveView("Main Page");
                     viewManagerModel.firePropertyChanged();
-                    titleInputField.setText("");
+                    removeEmailInputField.setText("");
                 }
             }
         });
 
-        titleInputField.addKeyListener(
+        removeEmailInputField.addKeyListener(
                 new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
