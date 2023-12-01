@@ -100,7 +100,7 @@ public class Main {
         ModifyMeetingView modifyMeetingView = ModifyMeetingUseCaseFactory.modifyMeetingView(viewManagerModel, modifyMeetingViewModel, firebaseAccessObject, gmailDataAccessObject, mainPageViewModel);
         views.add(modifyMeetingView, modifyMeetingView.viewName);
 
-        CreateAnnouncementView createAnnouncementView = CreateAnnouncementUseCaseFactory.createAnnouncementView(viewManagerModel, createAnnouncementViewModel, firebaseAccessObject, mainPageViewModel);
+        CreateAnnouncementView createAnnouncementView = CreateAnnouncementUseCaseFactory.createAnnouncementView(viewManagerModel, createAnnouncementViewModel, firebaseAccessObject, gmailDataAccessObject, mainPageViewModel);
         views.add(createAnnouncementView, createAnnouncementView.viewName);
 
         DeleteAnnouncementView deleteAnnouncementView = DeleteAnnouncementUseCaseFactory.createDeleteAnnouncementView(viewManagerModel,deleteAnnouncementViewModel, firebaseAccessObject, createAnnouncementViewModel, mainPageViewModel);
