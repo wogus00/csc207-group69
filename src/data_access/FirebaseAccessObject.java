@@ -171,8 +171,17 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         return project;
     }
 
-    public ArrayList<String> getInfoList(String projectName, InfoListGetter infoListGetter) {
-        return (ArrayList<String>) infoListGetter.getInfoList(projectName, this);
+    public ArrayList<String> getInfoList(String projectName, String type) {
+        ProjectInfoAccessor accessor = new ProjectInfoAccessorImplementation(projectName, this);
+        if (type.equals("task")) {
+            return accessor.getTaskInfoList();
+        } if (type.equals("meeting")) {
+            return accessor.getMeetingInfoList();
+        } if (type.equals("announcement")) {
+            return accessor.getAnnouncementInfoList();
+        } else {
+            return new ArrayList<>();
+        }
     }
 
 
@@ -345,12 +354,13 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
 
     @Override
     public boolean taskNameExists(String projectName, String taskName) {
-        TaskListGetter strategy = new TaskListGetter();
-        ArrayList<String> taskList = (ArrayList<String>) strategy.getInfoList(projectName, this);
+        ProjectInfoAccessor accessor = new ProjectInfoAccessorImplementation(projectName, this);
+        ArrayList<String> taskList = accessor.getTaskInfoList();
         if (taskList.contains(taskName)) {
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     @Override

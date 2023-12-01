@@ -1,9 +1,6 @@
 package use_case.login;
 
-import data_access.AnnouncementListGetter;
-import data_access.InfoListGetter;
-import data_access.MeetingListGetter;
-import data_access.TaskListGetter;
+import data_access.*;
 import entity.CommonProject;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,9 +41,9 @@ public class LoginInteractorTest {
 
         when(mockDataAccessObject.existsByName(projectName)).thenReturn(true);
         when(mockDataAccessObject.getProjectInfo(projectName)).thenReturn(new CommonProject(projectName, leaderEmail, memberEmails));
-        when(mockDataAccessObject.getInfoList(projectName, eq(any(TaskListGetter.class)))).thenReturn(taskList);
-        when(mockDataAccessObject.getInfoList(projectName, eq(any(MeetingListGetter.class)))).thenReturn(meetingList);
-        when(mockDataAccessObject.getInfoList(projectName, eq(any(AnnouncementListGetter.class)))).thenReturn(announcements);
+        when(mockDataAccessObject.getInfoList(projectName, "task")).thenReturn(taskList);
+        when(mockDataAccessObject.getInfoList(projectName, "meeting")).thenReturn(meetingList);
+        when(mockDataAccessObject.getInfoList(projectName, "announcement")).thenReturn(announcements);
 
         LoginInputData inputData = new LoginInputData(projectName, userEmail);
 
@@ -55,7 +52,7 @@ public class LoginInteractorTest {
 
         // Verify
         verify(mockDataAccessObject).existsByName(eq(projectName));
-        verify(mockDataAccessObject, times(3)).getInfoList(eq(projectName), any(InfoListGetter.class));
+        verify(mockDataAccessObject, times(3)).getInfoList(eq(projectName), anyString());
         verify(mockPresenter).prepareSuccessView(any(LoginOutputData.class));
     }
 
