@@ -18,7 +18,7 @@ import java.io.IOException;
 /**
  * The AddEmailView class represents the graphical user interface for adding emails.
  * It extends JPanel and implements ActionListener and PropertyChangeListener to handle user interactions and model updates.
- */
+t */
 public class AddEmailView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "Add Email";
 

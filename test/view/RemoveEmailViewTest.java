@@ -1,9 +1,11 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.add_email.AddEmailState;
 import interface_adapter.remove_email.RemoveEmailController;
 import interface_adapter.remove_email.RemoveEmailState;
 import interface_adapter.remove_email.RemoveEmailViewModel;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -12,7 +14,10 @@ import org.mockito.MockitoAnnotations;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -113,5 +118,64 @@ public class RemoveEmailViewTest {
         // Usually, you would assert that the error message is shown on the UI,
         // but since JOptionPane.showMessageDialog is a static method,
         // it's a bit tricky to verify using Mockito without additional tools or refactoring.
+    }
+
+    @Test
+    public void testKeyTyped() {
+        // Given
+        JTextField textField = removeEmailView.removeEmailInputField;
+        KeyListener keyListener = textField.getKeyListeners()[0];
+        KeyEvent keyEvent = new KeyEvent(textField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, 'a');
+
+        // Simulate the keyTyped event
+        keyListener.keyTyped(keyEvent);
+
+        // Then
+        // Replace "setState" with the actual method that's being called within your keyTyped method.
+        verify(mockRemoveEmailViewModel).setState(any(RemoveEmailState.class)); // Use the actual class that's expected
+    }
+
+
+    @Test
+    public void testKeyPressed() {
+        // Given
+        KeyEvent keyEvent = new KeyEvent(removeEmailView.removeEmailInputField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, 'a');
+
+        // When
+        removeEmailView.removeEmailInputField.getKeyListeners()[0].keyPressed(keyEvent);
+
+        // Then
+        // Add verifications for keyPressed if there are any side effects
+    }
+
+    @Test
+    public void testKeyReleased() {
+        // Given
+        KeyEvent keyEvent = new KeyEvent(removeEmailView.removeEmailInputField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_A, 'a');
+
+        // When
+        removeEmailView.removeEmailInputField.getKeyListeners()[0].keyReleased(keyEvent);
+
+        // Then
+        // Add verifications for keyReleased if there are any side effects
+    }
+
+    @Test
+    public void testActionPerformed_Cancel_NotImplemented() {
+        // Redirect System.out to a ByteArrayOutputStream
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        // Simulate the action event
+        ActionEvent mockEvent = mock(ActionEvent.class);
+        removeEmailView.actionPerformed(mockEvent);
+
+        // Reset the standard output to its original stream
+        System.setOut(originalOut);
+
+        // Verify the output contains the expected text
+        String expectedOutput = "Cancel not implemented yet.\n"; // Include newline character because println is used
+        Assert.assertEquals(expectedOutput, outContent.toString());
     }
 }

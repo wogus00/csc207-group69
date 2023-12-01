@@ -11,8 +11,11 @@ import org.mockito.MockitoAnnotations;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.awt.event.KeyEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -82,26 +85,6 @@ public class AddEmailViewTest {
     }
 
     /**
-     * Verifies that typing in the title input field updates the view model state.
-     * Simulates the user typing a string into the title field and checks if the state is set at least once.
-     */
-    @Test
-    public void testKeyTyped_AddEmailInputField() {
-        // Given
-        JTextField titleInputField = addEmailView.addEmailInputField;
-        titleInputField.setText("Subject");
-
-        // When
-        for (char c : "Subject".toCharArray()) {
-            titleInputField.dispatchEvent(new KeyEvent(
-                    titleInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
-        }
-
-        // Then
-        verify(mockAddEmailViewModel, atLeastOnce()).setState(any(AddEmailState.class));
-    }
-
-    /**
      * Tests the view's response to an error property change event.
      * Ensures that when the view model state changes to include an error, the view displays the appropriate error message.
      */
@@ -116,4 +99,64 @@ public class AddEmailViewTest {
         PropertyChangeEvent evt = new PropertyChangeEvent(mockAddEmailViewModel, "state", null, stateWithError);
         addEmailView.propertyChange(evt);
     }
+
+    @Test
+    public void testKeyTyped() {
+        // Given
+        JTextField textField = addEmailView.addEmailInputField;
+        KeyListener keyListener = textField.getKeyListeners()[0];
+        KeyEvent keyEvent = new KeyEvent(textField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, 'a');
+
+        // Simulate the keyTyped event
+        keyListener.keyTyped(keyEvent);
+
+        // Then
+        // Replace "setState" with the actual method that's being called within your keyTyped method.
+        verify(mockAddEmailViewModel).setState(any(AddEmailState.class)); // Use the actual class that's expected
+    }
+
+
+    @Test
+    public void testKeyPressed() {
+        // Given
+        KeyEvent keyEvent = new KeyEvent(addEmailView.addEmailInputField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, 'a');
+
+        // When
+        addEmailView.addEmailInputField.getKeyListeners()[0].keyPressed(keyEvent);
+
+        // Then
+        // Add verifications for keyPressed if there are any side effects
+    }
+
+    @Test
+    public void testKeyReleased() {
+        // Given
+        KeyEvent keyEvent = new KeyEvent(addEmailView.addEmailInputField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_A, 'a');
+
+        // When
+        addEmailView.addEmailInputField.getKeyListeners()[0].keyReleased(keyEvent);
+
+        // Then
+        // Add verifications for keyReleased if there are any side effects
+    }
+
+    @Test
+    public void testActionPerformed_Cancel_NotImplemented() {
+        // Redirect System.out to a ByteArrayOutputStream
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        // Simulate the action event
+        ActionEvent mockEvent = mock(ActionEvent.class);
+        addEmailView.actionPerformed(mockEvent);
+
+        // Reset the standard output to its original stream
+        System.setOut(originalOut);
+
+        // Verify the output contains the expected text
+        String expectedOutput = "Cancel not implemented yet.\n"; // Include newline character because println is used
+        assertEquals(expectedOutput, outContent.toString());
+    }
+
 }

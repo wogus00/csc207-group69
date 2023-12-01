@@ -1,6 +1,7 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.remove_email.RemoveEmailState;
 import interface_adapter.set_leader.SetLeaderController;
 import interface_adapter.set_leader.SetLeaderState;
 import interface_adapter.set_leader.SetLeaderViewModel;
@@ -11,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 
 import static org.mockito.Mockito.*;
@@ -107,5 +109,45 @@ public class SetLeaderViewTest {
         // Verify that an error message is displayed
         // You would check that the UI reflects this error message,
         // but this is tricky to test due to the static call to JOptionPane.showMessageDialog.
+    }
+
+    @Test
+    public void testKeyTyped() {
+        // Given
+        JTextField textField = setLeaderView.setLeaderInputField;
+        KeyListener keyListener = textField.getKeyListeners()[0];
+        KeyEvent keyEvent = new KeyEvent(textField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, 'a');
+
+        // Simulate the keyTyped event
+        keyListener.keyTyped(keyEvent);
+
+        // Then
+        // Replace "setState" with the actual method that's being called within your keyTyped method.
+        verify(mockSetLeaderViewModel).setState(any(SetLeaderState.class)); // Use the actual class that's expected
+    }
+
+
+    @Test
+    public void testKeyPressed() {
+        // Given
+        KeyEvent keyEvent = new KeyEvent(setLeaderView.setLeaderInputField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, 'a');
+
+        // When
+        setLeaderView.setLeaderInputField.getKeyListeners()[0].keyPressed(keyEvent);
+
+        // Then
+        // Add verifications for keyPressed if there are any side effects
+    }
+
+    @Test
+    public void testKeyReleased() {
+        // Given
+        KeyEvent keyEvent = new KeyEvent(setLeaderView.setLeaderInputField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_A, 'a');
+
+        // When
+        setLeaderView.setLeaderInputField.getKeyListeners()[0].keyReleased(keyEvent);
+
+        // Then
+        // Add verifications for keyReleased if there are any side effects
     }
 }
