@@ -11,12 +11,16 @@ import entity.CommonMeeting;
 import use_case.create_announcement.CreateAnnouncementInputData;
 
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -78,5 +82,26 @@ class CreateMeetingInteractorTest {
         interactor.execute(inputData);
 
         verify(presenter).prepareFailView("Meeting name is already taken");
+    }
+
+    @Test
+    void testExecuteError() throws MessagingException, IOException, ExecutionException, InterruptedException {
+        // Mock the behavior of sendMeetingCreationEmail to throw an exception
+        when(gmailAccessObject.sendMeetingCreationEmail(anyString(), anyString(), anyString())).thenThrow(new IOException("Mocked IO exception"));
+
+        ArrayList<String> emails = new ArrayList<>(Arrays.asList("test1@example.com", "test2@example.com"));
+        CreateMeetingInputData inputData = new CreateMeetingInputData("Name", emails, "11/11/1111", "11:11", "22:22", "Project");
+        when(dataAccessObject.meetingNameExists("Project", "Name")).thenReturn(false);
+        when(dataAccessObject.memberExists("Project", emails)).thenReturn(true);
+        when(factory.create("Name", emails, "11/11/1111", "11:11", "22:22", "Project")).thenReturn(new CommonMeeting("Name", emails, "11/11/1111", "11:11", "22:22", "Project"));
+
+        // Use assertThrows to verify that an exception is thrown during execution
+        RuntimeException thrownException = assertThrows(RuntimeException.class, () -> interactor.execute(inputData));
+
+        // Verify that the expected exception was thrown
+        assertEquals("Mocked IO exception", thrownException.getCause().getMessage());
+
+        // Verify that certain methods were called during the exception handling
+        verify(gmailAccessObject).sendMeetingCreationEmail(anyString(), anyString(), anyString());
     }
 }

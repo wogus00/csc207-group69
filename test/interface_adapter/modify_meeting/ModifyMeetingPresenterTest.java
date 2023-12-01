@@ -9,19 +9,22 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import use_case.modify_meeting.ModifyMeetingOutputData;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class ModifyMeetingPresenterTest {
 
     @Mock
-    private ViewManagerModel mockViewManagerModel;
-    @Mock
     private ModifyMeetingViewModel mockModifyMeetingViewModel;
     @Mock
     private MainPageViewModel mockMainPageViewModel;
+    @Mock
+    private ViewManagerModel mockViewManagerModel;
 
     private ModifyMeetingPresenter presenter;
 
@@ -35,14 +38,48 @@ public class ModifyMeetingPresenterTest {
     public void testPrepareSuccessView() {
         // Arrange
         ArrayList<String> emails = new ArrayList<>(Arrays.asList("test1@example.com", "test2@example.com"));
-        ModifyMeetingOutputData response = new ModifyMeetingOutputData("Name", emails, "11/11/1111", "11:11", "22:22", "Project");
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        String futureDate = currentDateTime.plusDays(1).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        String futureTime = currentDateTime.plusHours(1).format(DateTimeFormatter.ofPattern("HH:mm"));
+
+        ModifyMeetingOutputData outputData = new ModifyMeetingOutputData("Meeting", emails, futureDate, futureTime, futureTime, "Project");
+
+        // Mock the main page state
+        MainPageState mockMainPageState = mock(MainPageState.class);
+        when(mockMainPageViewModel.getState()).thenReturn(mockMainPageState);
+        when(mockMainPageState.getMeetingList()).thenReturn(new ArrayList<>());
 
         // Act
-        presenter.prepareSuccessView(response);
+        presenter.prepareSuccessView(outputData);
 
         // Assert
-        verify(mockMainPageViewModel).setState(any(MainPageState.class));
-        verify(mockViewManagerModel).setActiveView(mockModifyMeetingViewModel.getViewName());
+        verify(mockMainPageViewModel).firePropertyChanged();
+        verify(mockViewManagerModel).setActiveView("Main Page");
         verify(mockViewManagerModel).firePropertyChanged();
+
+        // Additional assertions depending on your implementation
+        assertEquals("Meeting", mockMainPageState.getMeetingList().get(0));
+        // Add more assertions based on your actual implementation
+    }
+
+    @Test
+    public void testPrepareFailView() {
+        // Arrange
+        String error = "Error message";
+
+        // Mock the modify meeting state
+        ModifyMeetingState mockModifyMeetingState = mock(ModifyMeetingState.class);
+        when(mockModifyMeetingViewModel.getState()).thenReturn(mockModifyMeetingState);
+        when(mockModifyMeetingState.getMeetingNameError()).thenReturn(error);
+
+        // Act
+        presenter.prepareFailView(error);
+
+        // Assert
+        verify(mockModifyMeetingViewModel).firePropertyChanged();
+
+        // Additional assertions depending on your implementation
+        assertEquals(error, mockModifyMeetingState.getMeetingNameError());
+        // Add more assertions based on your actual implementation
     }
 }

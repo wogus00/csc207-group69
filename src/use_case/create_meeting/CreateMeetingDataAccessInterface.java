@@ -12,5 +12,6 @@ public interface CreateMeetingDataAccessInterface {
         boolean meetingNameExists(String projectName, String meetingName) throws ExecutionException, InterruptedException;
 
         boolean memberExists(String projectName, ArrayList<String> participantEmail) throws ExecutionException, InterruptedException;
+
 }
 

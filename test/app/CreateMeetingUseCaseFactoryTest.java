@@ -1,22 +1,23 @@
 package app;
 
-import entity.Meeting;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.create_meeting.CreateMeetingController;
+import interface_adapter.create_meeting.CreateMeetingState;
 import interface_adapter.create_meeting.CreateMeetingViewModel;
 import interface_adapter.main_page.MainPageViewModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import use_case.create_meeting.CreateMeetingDataAccessInterface;
-import use_case.create_meeting.CreateMeetingGmailDataAccessInterface;
+import use_case.create_meeting.*;
 import view.CreateMeetingView;
 
-
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 public class CreateMeetingUseCaseFactoryTest {
 
@@ -25,33 +26,47 @@ public class CreateMeetingUseCaseFactoryTest {
     @Mock
     private CreateMeetingViewModel mockCreateMeetingViewModel;
     @Mock
-    private CreateMeetingDataAccessInterface mockCreateMeetingDataAccessObject;
+    private CreateMeetingDataAccessInterface mockUserDataAccessObject;
     @Mock
-    private CreateMeetingGmailDataAccessInterface mockCreateMeetingGmailDataAccessObject;
+    private CreateMeetingGmailDataAccessInterface mockGmailDataAccessObject;
     @Mock
-    private MainPageViewModel mainPageViewModel;
+    private MainPageViewModel mockMainPageViewModel;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testCreateLoginView_Success() {
-        // Setup
-        // Configure mocks if necessary
+    public void testCreateMeetingView() {
+        // Arrange
+        when(mockCreateMeetingViewModel.getState()).thenReturn(new CreateMeetingState());
 
         // Act
-        CreateMeetingView result = CreateMeetingUseCaseFactory.createMeetingView(
-                mockViewManagerModel,
-                mockCreateMeetingViewModel,
-                mockCreateMeetingDataAccessObject,
-                mockCreateMeetingGmailDataAccessObject,
-                mainPageViewModel
-        );
+        CreateMeetingView createMeetingView = CreateMeetingUseCaseFactory.createMeetingView(
+                mockViewManagerModel, mockCreateMeetingViewModel, mockUserDataAccessObject,
+                mockGmailDataAccessObject, mockMainPageViewModel);
 
         // Assert
-        assertNotNull(result);
-        // Additional assertions or verifications can be added here
+        assertNotNull(createMeetingView);
+    }
+
+    @Test
+    public void testCreateMeetingUseCase() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException {
+        // Arrange
+        when(mockCreateMeetingViewModel.getState()).thenReturn(new CreateMeetingState());
+
+        // Act
+        Method privateMethod = CreateMeetingUseCaseFactory.class.getDeclaredMethod("createMeetingUseCase",
+                ViewManagerModel.class, CreateMeetingViewModel.class,
+                CreateMeetingDataAccessInterface.class, CreateMeetingGmailDataAccessInterface.class,
+                MainPageViewModel.class);
+        privateMethod.setAccessible(true);
+        CreateMeetingController createMeetingController = (CreateMeetingController) privateMethod.invoke(null,
+                mockViewManagerModel, mockCreateMeetingViewModel, mockUserDataAccessObject,
+                mockGmailDataAccessObject, mockMainPageViewModel);
+
+        // Assert
+        assertNotNull(createMeetingController);
     }
 }
