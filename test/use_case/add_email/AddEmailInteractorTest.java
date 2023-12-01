@@ -48,7 +48,7 @@ class AddEmailInteractorTest {
 
         AddEmailOutputBoundary successPresenter = new AddEmailOutputBoundary() {
             @Override
-            public void prepareSuccessView() {
+            public void prepareSuccessView(String newMember) {
                 // Assert
                 assertFalse(mockFirebaseAccessObject.getProjectInfo(projectName).getMemberEmails().contains(email));
             }

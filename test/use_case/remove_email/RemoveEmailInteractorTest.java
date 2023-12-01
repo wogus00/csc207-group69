@@ -19,6 +19,7 @@ class RemoveEmailInteractorTest {
 
     private RemoveEmailInteractor interactor;
     private RemoveEmailDataAccessInterface repository;
+    private RemoveEmailOutputBoundary presenter;
     @Mock
     private FirebaseAccessObject mockFirebaseAccessObject;
 
@@ -26,7 +27,7 @@ class RemoveEmailInteractorTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         repository = mock(RemoveEmailDataAccessInterface.class);
-        interactor = new RemoveEmailInteractor(repository);
+        interactor = new RemoveEmailInteractor(repository, presenter);
     }
 
     /**
@@ -66,12 +67,12 @@ class RemoveEmailInteractorTest {
     @Test
     public void whenEmailIsRemoved_thenRepositoryShouldUpdate() {
         // Given
-        RemoveEmailInputData inputData = new RemoveEmailInputData("example@example.com");
+        RemoveEmailInputData inputData = new RemoveEmailInputData("Test Project" ,"test@example.com");
 
         // When
-        interactor.removeEmail(inputData);
+        interactor.updateProjectDetails(inputData);
 
         // Then
-        verify(repository).removeEmail("example@example.com");
+        verify(repository).removeMemberFromProject("Test Project", "test@example.com");
     }
 }
