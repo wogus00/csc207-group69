@@ -47,6 +47,9 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
+/**
+ * Gmail Data Access Object that communicates with the Gmail API.
+ */
 public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, CompleteTaskGmailDataAccessInterface, ModifyTaskGmailDataAccessInterface, CreateAnnouncementGmailDataAccessInterface, CreateMeetingGmailDataAccessInterface, ModifyMeetingGmailDataAccessInterface {
 
     private static final String APPLICATION_NAME = "group-project";
@@ -61,6 +64,12 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
     private final Gmail service;
 
 
+    /**
+     * Constructor method that instantiates the GmailDataAccessObject.
+     *
+     * @throws IOException
+     * @throws GeneralSecurityException
+     */
     public GmailDataAccessObject() throws IOException, GeneralSecurityException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
