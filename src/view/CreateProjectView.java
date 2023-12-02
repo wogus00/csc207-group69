@@ -19,6 +19,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
+/**
+ * The view component for creating projects in the application.
+ * It provides user interface elements for users to input project details.
+ */
 public class CreateProjectView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "create project";
 
@@ -33,6 +37,12 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
     private final JButton login;
 
 
+    /**
+     * Constructor method to create CreateProjectView
+     * @param createProjectController Controller class related to creating project
+     * @param createProjectViewModel View model class related to creating project
+     * @param viewManagerModel View manager model that updates the view.
+     */
     public CreateProjectView(CreateProjectController createProjectController,
                              CreateProjectViewModel createProjectViewModel,
                              ViewManagerModel viewManagerModel) {
@@ -165,10 +175,19 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
         this.add(buttons);
     }
 
+    /**
+     * Handles action events triggered within the view.
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
     }
 
+    /**
+     * Responds to property changes in the view model.
+     * @param evt A PropertyChangeEvent object describing the event source
+     *            and the property that has changed.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         CreateProjectState state = (CreateProjectState) evt.getNewValue();
@@ -180,19 +199,15 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
     public JButton getCreateButton() {
         return this.create;
     }
-
     public JButton getLoginButton() {
         return login;
     }
-
     public JTextField getMemberEmailInputField() {
         return memberEmailInputField;
     }
-
     public JTextField getProjectNameInputField(){
         return projectNameInputField;
     }
-
     public JTextField getLeaderEmailInputField(){
         return leaderEmailInputField;
     }

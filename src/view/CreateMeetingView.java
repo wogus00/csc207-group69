@@ -18,6 +18,10 @@ import java.beans.PropertyChangeListener;
 import java.util.concurrent.ExecutionException;
 
 
+/**
+ * The view component for creating meetings in the application.
+ * It provides user interface elements for users to input meeting details.
+ */
 public class CreateMeetingView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "create meeting";
     private ViewManagerModel viewManagerModel;
@@ -32,6 +36,12 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
     final JButton cancel;
 
 
+    /**
+     * Constructor method to create CreateMeetingView
+     * @param viewManagerModel viewManagerModel that updates the view
+     * @param createMeetingController Controller class related to creating meetings
+     * @param createMeetingViewModel ViewModel class related to creating meetings
+     */
     public CreateMeetingView(ViewManagerModel viewManagerModel,
                              CreateMeetingController createMeetingController,
                              CreateMeetingViewModel createMeetingViewModel) {
@@ -240,11 +250,20 @@ public class CreateMeetingView extends JPanel implements ActionListener, Propert
         this.add(buttons);
     }
 
+    /**
+     * Handles action events triggered within the view.
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
 
+    /**
+     * Responds to property changes in the view model.
+     * @param evt A PropertyChangeEvent object describing the event source
+     *            and the property that has changed.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         CreateMeetingState state = (CreateMeetingState) evt.getNewValue();

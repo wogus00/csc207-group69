@@ -16,6 +16,10 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * The CompleteTaskView class represents the GUI for completing tasks.
+ * It extends JPanel and implements ActionListener, PropertyChangeListener to handle user interactions and model updates.
+ */
 public class CompleteTaskView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "Complete Task";
     private ViewManagerModel viewManagerModel;
@@ -28,6 +32,13 @@ public class CompleteTaskView extends JPanel implements ActionListener, Property
     final JButton cancel;
 
 
+    /**
+     * Constructor method that creates the CompleteTaskView with specified controller and view models.
+     * Sets up the UI components for the task completion interface
+     * @param viewManagerModel View Manager Model that handles update of the views
+     * @param completeTaskController Controller class that manages user actions
+     * @param completeTaskViewModel View Model that handles state and logic for task completion
+     */
     public CompleteTaskView(ViewManagerModel viewManagerModel, CompleteTaskController completeTaskController, CompleteTaskViewModel completeTaskViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.completeTaskController = completeTaskController;
@@ -112,11 +123,21 @@ public class CompleteTaskView extends JPanel implements ActionListener, Property
 
 
 
+    /**
+     * Invoked when an action occurs on the view components.
+     *
+     * @param e The action event.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
 
+    /**
+     * This method gets called when a bound property is changed.
+     *
+     * @param evt The property change event.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
