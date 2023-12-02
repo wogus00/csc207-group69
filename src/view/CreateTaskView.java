@@ -36,7 +36,7 @@ public class CreateTaskView extends JPanel implements ActionListener, PropertyCh
     /**
      * Constructor method to create CreateTaskView object.
      * @param viewManagerModel ViewManagerModel that updates the view
-     * @param createTaskController controller class associated with creating task
+     * @param createTaskController Controller class associated with creating task
      * @param createTaskViewModel view model class associated with creating task
      */
     public CreateTaskView(ViewManagerModel viewManagerModel, CreateTaskController createTaskController, CreateTaskViewModel createTaskViewModel) {

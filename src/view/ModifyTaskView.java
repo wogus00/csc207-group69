@@ -16,8 +16,7 @@ import java.beans.PropertyChangeListener;
 
 /**
  * The ModifyTaskView class represents the GUI view for modifying task.
- * This class extends JPanel and includes user interface elements for selecting and
- * modifying tasks.
+ * This class extends JPanel and includes user interface elements for selecting and modifying tasks.
  */
 public class ModifyTaskView extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -35,9 +34,9 @@ public class ModifyTaskView extends JPanel implements ActionListener, PropertyCh
 
     /**
      * Constructor method that creates ModifyTaskView class.
-     * @param viewManagerModel view manager model for updating view
-     * @param modifyTaskController controller associated with this view
-     * @param modifyTaskViewModel view model associated with this view
+     * @param viewManagerModel View manager model for updating view
+     * @param modifyTaskController Controller associated with this view
+     * @param modifyTaskViewModel View model associated with this view
      */
     public ModifyTaskView(ViewManagerModel viewManagerModel, ModifyTaskController modifyTaskController, ModifyTaskViewModel modifyTaskViewModel) {
         this.viewManagerModel = viewManagerModel;
