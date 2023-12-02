@@ -14,6 +14,11 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * The ModifyTaskView class represents the GUI view for modifying task.
+ * This class extends JPanel and includes user interface elements for selecting and
+ * modifying tasks.
+ */
 public class ModifyTaskView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewName = "Modify Task";
@@ -27,6 +32,13 @@ public class ModifyTaskView extends JPanel implements ActionListener, PropertyCh
     private final ModifyTaskController modifyTaskController;
     final JButton modify;
     final JButton cancel;
+
+    /**
+     * Constructor method that creates ModifyTaskView class.
+     * @param viewManagerModel view manager model for updating view
+     * @param modifyTaskController controller associated with this view
+     * @param modifyTaskViewModel view model associated with this view
+     */
     public ModifyTaskView(ViewManagerModel viewManagerModel, ModifyTaskController modifyTaskController, ModifyTaskViewModel modifyTaskViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.modifyTaskController = modifyTaskController;
@@ -203,11 +215,20 @@ public class ModifyTaskView extends JPanel implements ActionListener, PropertyCh
     }
 
 
+    /**
+     * Invoked when an action occurs on the view components.
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
 
+    /**
+     * This method gets called when a bound property is changed.
+     * @param evt A PropertyChangeEvent object describing the event source
+     *            and the property that has changed.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
