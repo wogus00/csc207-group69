@@ -5,18 +5,21 @@ import com.google.cloud.firestore.*;
 import data_access.FirebaseAccessObject;
 import entity.Announcement;
 import entity.CommonAnnouncement;
+import entity.Project;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import entity.CommonProject;
 
 public class FirebaseAccessObjectTest {
 
@@ -28,12 +31,25 @@ public class FirebaseAccessObjectTest {
     @Mock
     private DocumentReference mockDocumentReference;
     @Mock
+    private DocumentReference mockDocumentReference2;
+    @Mock
+    private DocumentReference mockDocumentReference3;
+    @Mock
+    private DocumentReference mockDocumentReference4;
+    @Mock
     private ApiFuture<WriteResult> mockWriteResult;
 
     private FirebaseAccessObject firebaseAccessObject;
 
     @Mock
     private CollectionReference mockCollectionReference;
+    @Mock
+    private DocumentSnapshot mockDocumentSnapshot;
+    @Mock
+    private Collections mockCollections;
+    @Mock
+    private Iterator<CollectionReference> mockIterator;
+
 
     @Before
     public void setUp() {
@@ -43,8 +59,74 @@ public class FirebaseAccessObjectTest {
         when(mockFirestore.collection(anyString())).thenReturn(mockCollectionReference);
         when(mockCollectionReference.document(anyString())).thenReturn(mockDocumentReference);
         when(mockDocumentReference.get()).thenReturn(mockDocumentSnapshotFuture);
-        ;
+
     }
+
+    @Test
+    public void testGetProjectInfo() throws InterruptedException, ExecutionException {
+
+        ArrayList<String> members = new ArrayList<>(Arrays.asList("member1@example.com", "member2@example.com"));
+        when(mockDocumentSnapshotFuture.get()).thenReturn(mockDocumentSnapshot);
+        when(mockDocumentSnapshot.getString("leaderEmail")).thenReturn("leader@example.com");
+        when(mockDocumentSnapshot.get("memberEmails")).thenReturn(members);
+        Project project = firebaseAccessObject.getProjectInfo("Test Project");
+
+        assertNotNull(project);
+        assertEquals("leader@example.com", project.getLeaderEmail());
+        assertTrue(project.getMemberEmails().contains("member1@example.com"));
+        assertTrue(project.getMemberEmails().contains("member2@example.com"));
+    }
+
+    @Test
+    public void testExistsByName() throws InterruptedException, ExecutionException {
+        when(mockDocumentSnapshotFuture.get()).thenReturn(mockDocumentSnapshot);
+        when(mockDocumentSnapshot.get("IDCollection")).thenReturn(new ArrayList<>(Arrays.asList("Test Project")));
+        when(mockIterator.hasNext()).thenReturn(true, false); // Adjust based on your scenario
+        when(mockIterator.next()).thenReturn(mockCollectionReference);
+        when(mockCollectionReference.getId()).thenReturn("ExistingProject");
+
+        assertTrue(firebaseAccessObject.existsByName("ExistingProject"));
+
+        assertFalse(firebaseAccessObject.existsByName("NonExistingProject"));
+    }
+
+
+    @Test
+    public void testSaveProject() throws InterruptedException, ExecutionException {
+        String projectName = "Test Project";
+        Project project = new CommonProject(projectName, "leader@example.com", new ArrayList<>());
+        DocumentSnapshot mockIDInfoSnapshot = mock(DocumentSnapshot.class);
+
+        when(mockFirestore.collection("IDCollection").document(anyString())).thenReturn(mockDocumentReference);
+        when(mockFirestore.collection(projectName).document("projectInfo")).thenReturn(mockDocumentReference2);
+        when(mockFirestore.collection(projectName).document("meetingInfo")).thenReturn(mockDocumentReference3);
+        when(mockFirestore.collection(projectName).document("taskInfo")).thenReturn(mockDocumentReference4);
+        when(mockDocumentReference.get()).thenReturn(mockDocumentSnapshotFuture);
+        when(mockDocumentSnapshotFuture.get()).thenReturn(mockDocumentSnapshot);
+        when(mockDocumentSnapshot.get("IDCollection")).thenReturn(new ArrayList<String>());
+
+        firebaseAccessObject.save(project);
+
+        // Verify that Firestore's collection and document methods are called with correct arguments for projectInfo
+        verify(mockFirestore, times(6)).collection(projectName);
+        verify(mockFirestore, times(2)).collection("IDCollection");
+        verify(mockCollectionReference, times(1)).document("projectInfo");
+
+        // Verify setting of project info
+        ArgumentCaptor<Map<String, Object>> projectInfoCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(mockCollectionReference.document("projectInfo")).set(projectInfoCaptor.capture());
+        Map<String, Object> projectInfo = projectInfoCaptor.getValue();
+        assertEquals("Test Project", projectInfo.get("projectName"));
+        assertEquals("leader@example.com", projectInfo.get("leaderEmail"));
+
+        // Verify initialization of taskInfo and meetingInfo
+        verify(mockCollectionReference.document("taskInfo")).set(any(Map.class));
+        verify(mockCollectionReference.document("meetingInfo")).set(any(Map.class));
+
+        // Verify update of IDCollection
+        verify(mockFirestore.collection("IDCollection").document("IDCollection"), times(1)).set(any(Map.class));
+    }
+
 
     @Test
     public void testSaveAnnouncementSuccessfully() throws Exception {
