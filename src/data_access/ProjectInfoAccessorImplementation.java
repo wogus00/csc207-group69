@@ -6,21 +6,24 @@ public class ProjectInfoAccessorImplementation implements ProjectInfoAccessor {
 
     private final String projectName;
     private final FirebaseAccessObject firebaseAccessObject;
+    public AnnouncementMessageListGetter announcementMessageListGetter;
+    public TaskListGetter taskListGetter;
+    public MeetingListGetter meetingListGetter;
 
     public ProjectInfoAccessorImplementation(String projectName, FirebaseAccessObject firebaseAccessObject) {
         this.projectName = projectName;
         this.firebaseAccessObject = firebaseAccessObject;
+        this.announcementMessageListGetter = new AnnouncementMessageListGetter();
+        this.taskListGetter = new TaskListGetter();
+        this.meetingListGetter = new MeetingListGetter();
     }
     public ArrayList<String> getAnnouncementInfoList(){
-        InfoListGetter getter = new AnnouncementMessageListGetter();
-        return (ArrayList<String>) getter.getInfoList(projectName, firebaseAccessObject);
+        return (ArrayList<String>) announcementMessageListGetter.getInfoList(projectName, firebaseAccessObject);
     }
     public ArrayList<String> getMeetingInfoList(){
-        InfoListGetter getter = new MeetingListGetter();
-        return (ArrayList<String>) getter.getInfoList(projectName, firebaseAccessObject);
+        return (ArrayList<String>) meetingListGetter.getInfoList(projectName, firebaseAccessObject);
     }
     public ArrayList<String> getTaskInfoList(){
-        InfoListGetter getter = new TaskListGetter();
-        return (ArrayList<String>) getter.getInfoList(projectName, firebaseAccessObject);
+        return (ArrayList<String>) taskListGetter.getInfoList(projectName, firebaseAccessObject);
     }
 }
