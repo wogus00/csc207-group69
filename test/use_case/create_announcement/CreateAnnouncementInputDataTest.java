@@ -40,7 +40,7 @@ class CreateAnnouncementInputDataTest {
 
     @Test
     void testUniqueIdForDifferentInstances() {
-        CreateAnnouncementInputData anotherInputData = new CreateAnnouncementInputData(title, message, author);
+        CreateAnnouncementInputData anotherInputData = new CreateAnnouncementInputData(projectName, title, message, author);
         assertNotEquals(inputData.getAnnouncementId(), anotherInputData.getAnnouncementId(), "Each instance should have a unique announcement ID.");
     }
 }
