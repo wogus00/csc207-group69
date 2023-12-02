@@ -20,14 +20,14 @@
     - Users are able to create the task, assign it to other users, and send emails.
     - Assigned users can complete the task.
     - Supervising user can modify the task.
-  - `Create, Delete, Modify Meetings` features by @makototakahara
+  - `Create and Modify Meetings` features by @makototakahara
     - Users are able to create the meeting, assign it to relevant users, and send emails.
     - Assigned users can delete the meeting.
     - Supervising user can modify the task.
   - `Create, Delete Announcement` features by @Kosei1227
     - Users are able to create announcement that sends an email to all users.
     - The responsible user is able to delete announcement.
-  - `Add and Delete Email` and `Set Leader` features by @ShioTatsu-Japan
+  - `Add and Remove Email` and `Set Leader` features by @ShioTatsu-Japan
     - The leader user is able to add or remove members of the project
     - The leader user is able to set the leader of the project to other user.
 ## Code Organization
@@ -59,9 +59,9 @@ As mentioned above, we incorporated Clean Architecture for the design of the pro
 - As mentioned above, each member was responsible for one of the use cases below
   - `Log in` and `Create Project`
   - `Create, Complete, Modify Tasks`
-  - `Create, Delete, Modify Meetings`
+  - `Create and Modify Meetings`
   - `Create, Delete Announcement`
-  - `Add and Delete Email` and `Set Leader`
+  - `Add and Remove Email` and `Set Leader`
 ## SOLID Design Principles
 The following are key examples of adhering the SOLID design principles.
 - Single Responsibility Principle
