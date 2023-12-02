@@ -8,10 +8,12 @@ import entity.CommonAnnouncement;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -41,15 +43,16 @@ public class FirebaseAccessObjectTest {
         when(mockFirestore.collection(anyString())).thenReturn(mockCollectionReference);
         when(mockCollectionReference.document(anyString())).thenReturn(mockDocumentReference);
         when(mockDocumentReference.get()).thenReturn(mockDocumentSnapshotFuture);
+        ;
     }
 
     @Test
     public void testSaveAnnouncementSuccessfully() throws Exception {
         // Arrange
-        CommonAnnouncement announcement = new CommonAnnouncement("Test Title1", "Test Message", LocalDateTime.now(), "Test Author", "TestId");
+        Announcement announcement = new CommonAnnouncement("Test Title1", "Test Message", LocalDateTime.now(), "Test Author", "TestId");
 
         // Act
-        firebaseAccessObject.save(announcement);
+        firebaseAccessObject.save("project name", announcement);
 
         // Assert
         verify(mockFirestore).collection("announcements");
@@ -59,12 +62,12 @@ public class FirebaseAccessObjectTest {
     @Test
     public void testSaveAnnouncementWithException() {
         // Arrange
-        CommonAnnouncement announcement = new CommonAnnouncement("Test Title", "Test Message", LocalDateTime.now(), "Test Author", "TestId");
+        Announcement announcement = new CommonAnnouncement("Test Title", "Test Message", LocalDateTime.now(), "Test Author", "TestId");
         when(mockDocumentReference.set(any(Map.class))).thenThrow(new RuntimeException("Firestore operation failed"));
 
         try {
             // Act
-            firebaseAccessObject.save(announcement);
+            firebaseAccessObject.save("project name",announcement);
             fail("Expected an RuntimeException to be thrown");
         } catch (RuntimeException e) {
             // Assert
@@ -115,12 +118,15 @@ public class FirebaseAccessObjectTest {
         when(mockFirestore.collection("announcements").document(announcementId)).thenReturn(mockDocumentReference);
 
         // Act
-        CommonAnnouncement result = firebaseAccessObject.getAnnouncementById(announcementId);
+        Announcement result = firebaseAccessObject.getAnnouncementById(announcementId);
 
         // Assert
         assertNotNull(result);
         assertEquals("Test Title", result.getAnnouncementTitle());
-        // ... additional assertions for other fields ...
+        assertEquals("Test Message", result.getMessage());
+        assertEquals("Test Author", result.getAuthor());
+        assertEquals("2023-01-01T12:00:00", result.getCreationTime());
+        assertEquals("testID", result.getId());
     }
 
     @Test
@@ -136,13 +142,10 @@ public class FirebaseAccessObjectTest {
 
 
         // Act
-        CommonAnnouncement result = firebaseAccessObject.getAnnouncementById(announcementId);
+        Announcement result = firebaseAccessObject.getAnnouncementById(announcementId);
 
         // Assert
         assertNull(result);
     }
 
-
-
-    // Additional test cases as necessary
 }

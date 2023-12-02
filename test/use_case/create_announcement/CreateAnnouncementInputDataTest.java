@@ -6,13 +6,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CreateAnnouncementInputDataTest {
     private CreateAnnouncementInputData inputData;
+
+    private String projectName = "project name";
     private String title = "Test Title";
     private String message = "Test Message";
     private String author = "Test Author";
 
     @BeforeEach
     void setUp() {
-        inputData = new CreateAnnouncementInputData(title, message, author);
+        inputData = new CreateAnnouncementInputData(projectName, title, message, author);
     }
 
     @Test
@@ -38,7 +40,7 @@ class CreateAnnouncementInputDataTest {
 
     @Test
     void testUniqueIdForDifferentInstances() {
-        CreateAnnouncementInputData anotherInputData = new CreateAnnouncementInputData(title, message, author);
+        CreateAnnouncementInputData anotherInputData = new CreateAnnouncementInputData(projectName, title, message, author);
         assertNotEquals(inputData.getAnnouncementId(), anotherInputData.getAnnouncementId(), "Each instance should have a unique announcement ID.");
     }
 }

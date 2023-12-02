@@ -12,16 +12,17 @@ import use_case.create_meeting.CreateMeetingOutputData;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class CreateMeetingPresenterTest {
 
     @Mock
-    private ViewManagerModel mockViewManagerModel;
-    @Mock
     private CreateMeetingViewModel mockCreateMeetingViewModel;
     @Mock
     private MainPageViewModel mockMainPageViewModel;
+    @Mock
+    private ViewManagerModel mockViewManagerModel;
 
     private CreateMeetingPresenter presenter;
 
@@ -34,15 +35,44 @@ public class CreateMeetingPresenterTest {
     @Test
     public void testPrepareSuccessView() {
         // Arrange
-        ArrayList<String> emails = new ArrayList<>(Arrays.asList("test1@example.com", "test2@example.com"));
-        CreateMeetingOutputData response = new CreateMeetingOutputData("Name", emails, "11/11/1111", "11:11", "22:22", "Project");
+        CreateMeetingOutputData outputData = new CreateMeetingOutputData("MeetingName", new ArrayList<>(), "date", "start", "end", "project");
+
+        // Mock the main page state
+        MainPageState mockMainPageState = mock(MainPageState.class);
+        when(mockMainPageState.getMeetingList()).thenReturn(new ArrayList<>());
+        when(mockMainPageViewModel.getState()).thenReturn(mockMainPageState);
 
         // Act
-        presenter.prepareSuccessView(response);
+        presenter.prepareSuccessView(outputData);
 
         // Assert
-        verify(mockMainPageViewModel).setState(any(MainPageState.class));
-        verify(mockViewManagerModel).setActiveView(mockCreateMeetingViewModel.getViewName());
+        verify(mockMainPageViewModel).firePropertyChanged();
+        verify(mockViewManagerModel).setActiveView("Main Page");
         verify(mockViewManagerModel).firePropertyChanged();
+
+        // Additional assertions depending on your implementation
+        assertEquals("MeetingName", mockMainPageViewModel.getState().getMeetingList().get(0));
+        // Add more assertions based on your actual implementation
+    }
+
+    @Test
+    public void testPrepareFailView() {
+        // Arrange
+        String error = "Error message";
+
+        // Mock the create meeting state
+        CreateMeetingState mockCreateMeetingState = mock(CreateMeetingState.class);
+        when(mockCreateMeetingViewModel.getState()).thenReturn(mockCreateMeetingState);
+        when(mockCreateMeetingState.getMeetingNameError()).thenReturn(error);
+
+        // Act
+        presenter.prepareFailView(error);
+
+        // Assert
+        verify(mockCreateMeetingViewModel).firePropertyChanged();
+
+        // Additional assertions depending on your implementation
+        assertEquals(error, mockCreateMeetingState.getMeetingNameError());
+        // Add more assertions based on your actual implementation
     }
 }

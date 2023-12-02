@@ -44,7 +44,7 @@ class SetLeaderInteractorTest {
 
         SetLeaderOutputBoundary successPresenter = new SetLeaderOutputBoundary() {
             @Override
-            public void prepareSuccessView() {
+            public void prepareSuccessView(String new_leader) {
                 assertEquals(project.getLeaderEmail(), newLeaderEmail);
             }
 
@@ -80,7 +80,7 @@ class SetLeaderInteractorTest {
 
         SetLeaderOutputBoundary failurePresenter = new SetLeaderOutputBoundary() {
             @Override
-            public void prepareSuccessView() {
+            public void prepareSuccessView(String new_leader) {
                 fail("Setting the same leader should not be successful.");
             }
 

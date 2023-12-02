@@ -21,15 +21,15 @@ import java.util.concurrent.ExecutionException;
 public class CreateMeetingView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "create meeting";
     private ViewManagerModel viewManagerModel;
-    private final CreateMeetingViewModel createMeetingViewModel;
-    private final JTextField meetingNameInputField = new JTextField(15);
-    private final JTextField participantEmailInputField = new JTextField(15);
-    private final JTextField meetingDateInputField = new JTextField(15);
-    private final JTextField startTimeInputField = new JTextField(15);
-    private final JTextField endTimeInputField = new JTextField(15);
+    final CreateMeetingViewModel createMeetingViewModel;
+    final JTextField meetingNameInputField = new JTextField(15);
+    final JTextField participantEmailInputField = new JTextField(15);
+    final JTextField meetingDateInputField = new JTextField(15);
+    final JTextField startTimeInputField = new JTextField(15);
+    final JTextField endTimeInputField = new JTextField(15);
     private final CreateMeetingController createMeetingController;
-    private final JButton create;
-    private final JButton cancel;
+    final JButton create;
+    final JButton cancel;
 
 
     public CreateMeetingView(ViewManagerModel viewManagerModel,

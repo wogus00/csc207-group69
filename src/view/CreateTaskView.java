@@ -20,14 +20,14 @@ public class CreateTaskView extends JPanel implements ActionListener, PropertyCh
     public final String viewName = "Create Task";
     private ViewManagerModel viewManagerModel;
     private final CreateTaskViewModel createTaskViewModel;
-    private final JTextField taskNameInputField = new JTextField(15);
-    private final JTextField supervisorInputField = new JTextField(15);
-    private final JTextField memberEmailsInputField = new JTextField(15);
-    private final JTextField deadlineInputField = new JTextField(15);
-    private final JTextField commentsInputField = new JTextField(15);
+    final JTextField taskNameInputField = new JTextField(15);
+    final JTextField supervisorInputField = new JTextField(15);
+    final JTextField memberEmailsInputField = new JTextField(15);
+    final JTextField deadlineInputField = new JTextField(15);
+    final JTextField commentsInputField = new JTextField(15);
     private final CreateTaskController createTaskController;
-    private final JButton create;
-    private final JButton cancel;
+    final JButton create;
+    final JButton cancel;
     public CreateTaskView(ViewManagerModel viewManagerModel, CreateTaskController createTaskController, CreateTaskViewModel createTaskViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.createTaskController = createTaskController;

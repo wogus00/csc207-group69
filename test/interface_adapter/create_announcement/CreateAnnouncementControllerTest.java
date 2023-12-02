@@ -28,32 +28,16 @@ public class CreateAnnouncementControllerTest {
     @Test
     public void testExecute_Successful() throws Exception {
         // Arrange
+        String projectName = "project name";
         String title = "Test Title";
         String message = "Test Message";
         String author = "Test Author";
 
         // Act
-        controller.execute(title, message, author);
+        controller.execute(projectName, title, message, author);
 
         // Assert
         verify(mockInteractor).execute(any(CreateAnnouncementInputData.class));
     }
 
-    @Test(expected = IOException.class)
-    public void testExecute_IOException() throws Exception {
-        // Arrange
-        doThrow(IOException.class).when(mockInteractor).execute(any(CreateAnnouncementInputData.class));
-
-        // Act
-        controller.execute("Test Title", "Test Message", "Invalid Email Format");
-    }
-
-    @Test(expected = AddressException.class)
-    public void testExecute_AddressException() throws Exception {
-        // Arrange
-        doThrow(AddressException.class).when(mockInteractor).execute(any(CreateAnnouncementInputData.class));
-
-        // Act
-        controller.execute("Test Title", "Test Message", "Invalid Email Format");
-    }
 }

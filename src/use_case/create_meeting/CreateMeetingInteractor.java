@@ -75,10 +75,10 @@ public class CreateMeetingInteractor implements CreateMeetingInputBoundary {
                 } catch (IOException | MessagingException e) {
                     throw new RuntimeException(e);
                 }
-
-                CreateMeetingOutputData createMeetingOutputData = new CreateMeetingOutputData(meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
-                createMeetingPresenter.prepareSuccessView(createMeetingOutputData);
             }
+
+            CreateMeetingOutputData createMeetingOutputData = new CreateMeetingOutputData(meetingName, participantEmail, meetingDate, startTime, endTime, projectName);
+            createMeetingPresenter.prepareSuccessView(createMeetingOutputData);
         }
     }
 }

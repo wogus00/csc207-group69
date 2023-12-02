@@ -167,7 +167,6 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
     }
 
     @Override
@@ -177,4 +176,25 @@ public class CreateProjectView extends JPanel implements ActionListener, Propert
             JOptionPane.showMessageDialog(this, state.getProjectNameError());
         }
     }
+
+    public JButton getCreateButton() {
+        return this.create;
+    }
+
+    public JButton getLoginButton() {
+        return login;
+    }
+
+    public JTextField getMemberEmailInputField() {
+        return memberEmailInputField;
+    }
+
+    public JTextField getProjectNameInputField(){
+        return projectNameInputField;
+    }
+
+    public JTextField getLeaderEmailInputField(){
+        return leaderEmailInputField;
+    }
+
 }
