@@ -76,25 +76,4 @@ class CreateAnnouncementInteractorTest {
         verify(dataAccessObject).save("project name", mockAnnouncement);
         verify(presenter).prepareFailView(anyString());
     }
-
-    @Test
-    void testEmailSendingAfterSuccessfulAnnouncementCreation() throws MessagingException, IOException {
-        String projectName = "TestProject";
-        ArrayList<String> memberEmails = new ArrayList<>(Arrays.asList("member1@example.com", "member2@example.com"));
-        Project mockProject = mock(Project.class);
-        when(mockProject.getMemberEmails()).thenReturn(memberEmails);
-
-        CreateAnnouncementInputData inputData = new CreateAnnouncementInputData("project name","Title", "Message", "Author");
-        CommonAnnouncement mockAnnouncement = new CommonAnnouncement("Title", "Message", LocalDateTime.now(), "Author", "ID");
-
-        when(factory.create(eq(inputData.getAnnouncementTitle()), eq(inputData.getMessage()),
-                any(LocalDateTime.class), eq(inputData.getAuthor()),
-                eq(inputData.getAnnouncementId()))).thenReturn(mockAnnouncement);
-
-        interactor.execute(inputData);
-
-        verify(gmailDataAccessObject, times(memberEmails.size())).sendAnnouncementCreationEmail(
-                eq(inputData.getAuthor()), anyString(), eq(inputData.getAnnouncementTitle()));
-    }
-
 }

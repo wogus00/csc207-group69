@@ -8,7 +8,12 @@ import use_case.create_project.CreateProjectOutputData;
 
 import java.awt.*;
 
+/**
+ * Presenter class for Create Project use case.
+ * This class updates the view model and state based on whether the project was successfully created or not.
+ */
 public class CreateProjectPresenter implements CreateProjectOutputBoundary {
+
 
     private final CreateProjectViewModel createProjectViewModel;
 
@@ -17,6 +22,13 @@ public class CreateProjectPresenter implements CreateProjectOutputBoundary {
 
     private ViewManagerModel viewManagerModel;
 
+    /**
+     * Constructor method that creates CreateProjectPresenter class with the view manager model and view model.
+     *
+     * @param createProjectViewModel View model for the Create Project use case.
+     * @param viewManagerModel View manager model that is responsible for managing the active view.
+     * @param mainPageViewModel View model for the main page.
+     */
     public CreateProjectPresenter(ViewManagerModel viewManagerModel,
                            CreateProjectViewModel createProjectViewModel,
                                   MainPageViewModel mainPageViewModel) {
@@ -25,6 +37,11 @@ public class CreateProjectPresenter implements CreateProjectOutputBoundary {
         this.mainPageViewModel = mainPageViewModel;
     }
 
+    /**
+     * Prepares a success view when a project has been created successfully.
+     *
+     * @param response The output data from the Create Meeting use case.
+     */
     @Override
     public void prepareSuccessView(CreateProjectOutputData response) {
         // On success, switch to the project dashboard view.
@@ -40,6 +57,11 @@ public class CreateProjectPresenter implements CreateProjectOutputBoundary {
 
     }
 
+    /**
+     * Prepares a failure view when the creation of a project fails.
+     *
+     * @param error A string describing the error encountered during the creation of the meeting.
+     */
     @Override
     public void prepareFailView(String error) {
         CreateProjectState createProjectState = createProjectViewModel.getState();
