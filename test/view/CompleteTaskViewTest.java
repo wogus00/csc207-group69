@@ -45,7 +45,8 @@ public class CompleteTaskViewTest {
     }
 
     @Test
-    public void testCompleteButtonActionListener_Success() {
+    public void
+    testCompleteButtonActionListener_Success() {
         // Set up the state in the mock ViewModel
         CompleteTaskState mockState = new CompleteTaskState();
         mockState.setProjectName("Test Project");

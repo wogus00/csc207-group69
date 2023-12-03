@@ -10,5 +10,4 @@ public interface CreateProjectDataAccessInterface {
 
     void save(Project project);
 
-    void saveMeeting(Meeting meeting) throws ExecutionException, InterruptedException;
 }
