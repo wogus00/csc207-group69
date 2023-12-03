@@ -312,5 +312,4 @@ public class MainPageState {
 
     }
 
-    public void addAnnouncement(String announcementTitle){this.announcements.add(announcementTitle);}
 }
