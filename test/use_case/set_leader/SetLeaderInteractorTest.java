@@ -1,101 +1,57 @@
-package use_case.set_leader;
-
-import data_access.FirebaseAccessObject;
-import entity.CommonProject;
-import entity.Project;
+package use_case.set_leader;//package use_case.set_leader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import use_case.set_leader.SetLeaderInputBoundary;
-import use_case.set_leader.SetLeaderInputData;
-import use_case.set_leader.SetLeaderInteractor;
-import use_case.set_leader.SetLeaderOutputBoundary;
 
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class SetLeaderInteractorTest {
 
+    private SetLeaderInteractor interactor;
     @Mock
-    private FirebaseAccessObject mockFirebaseAccessObject;
+    private SetLeaderDataAccessInterface mockSetLeaderDataAccessObject;
+    @Mock
+    private SetLeaderOutputBoundary mockSetLeaderPresenter;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        interactor = new SetLeaderInteractor(mockSetLeaderDataAccessObject, mockSetLeaderPresenter);
     }
 
-    /**
-     * Tests the successful setting of a new leader for a project.
-     * Verifies that the new leader's email is correctly updated in the project's details
-     * by mocking the FirebaseAccessObject and asserting the interaction.
-     */
     @Test
-    void successTest() {
+    void setLeaderSuccessfully() {
         // Arrange
-        String projectName = "TestProject";
-        String newLeaderEmail = "test@example.com";
-        CommonProject project = new CommonProject(projectName, newLeaderEmail, new ArrayList<>());
-        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
-
-        SetLeaderInputData inputData = new SetLeaderInputData(projectName, newLeaderEmail);
-
-        SetLeaderOutputBoundary successPresenter = new SetLeaderOutputBoundary() {
-            @Override
-            public void prepareSuccessView(String new_leader) {
-                assertEquals(project.getLeaderEmail(), newLeaderEmail);
-            }
-
-            @Override
-            public void prepareFailView(String error) {
-                fail("Setting a new leader should be successful.");
-            }
-        };
-
-        SetLeaderInputBoundary interactor = new SetLeaderInteractor(mockFirebaseAccessObject, successPresenter);
+        SetLeaderInputData inputData = new SetLeaderInputData("TestProject", "newleader@example.com");
 
         // Act
         interactor.updateProjectDetails(inputData);
 
         // Assert
-        verify(mockFirebaseAccessObject).getProjectInfo(projectName);
+        verify(mockSetLeaderDataAccessObject).SetLeaderToNewLeader("TestProject", "newleader@example.com");
+        verify(mockSetLeaderPresenter).prepareSuccessView("newleader@example.com");
     }
 
-    /**
-     * Tests if an error is raised when trying to set a new leader who is the same as the current leader.
-     * Verifies that such an action does not succeed and appropriately triggers a failure response
-     * using a mocked FirebaseAccessObject.
-     */
     @Test
-    void sameLeaderErrorTest() {
+    void setLeaderForNonExistentProjectShouldThrowIllegalArgumentException() {
         // Arrange
-        String projectName = "TestProject";
-        String originalLeader = "leader@example.com";
-        CommonProject project = new CommonProject(projectName, originalLeader, new ArrayList<>());
-        when(mockFirebaseAccessObject.getProjectInfo(projectName)).thenReturn(project);
+        SetLeaderInputData inputData = new SetLeaderInputData("NonExistentProject", "newleader@example.com");
 
-        SetLeaderInputData inputData = new SetLeaderInputData(projectName, originalLeader);
+        // Simulate project not existing
+        doThrow(new IllegalArgumentException("Project does not exist")).when(mockSetLeaderDataAccessObject)
+                .SetLeaderToNewLeader("NonExistentProject", "newleader@example.com");
 
-        SetLeaderOutputBoundary failurePresenter = new SetLeaderOutputBoundary() {
-            @Override
-            public void prepareSuccessView(String new_leader) {
-                fail("Setting the same leader should not be successful.");
-            }
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> interactor.updateProjectDetails(inputData));
 
-            @Override
-            public void prepareFailView(String error) {
-                assertEquals("New leader is the same as the current leader", error);
-            }
-        };
+        // Verify that `SetLeaderToNewLeader` was called
+        verify(mockSetLeaderDataAccessObject).SetLeaderToNewLeader("NonExistentProject", "newleader@example.com");
 
-        SetLeaderInputBoundary interactor = new SetLeaderInteractor(mockFirebaseAccessObject, failurePresenter);
-
-        // Act
-        interactor.updateProjectDetails(inputData);
-
-        // Assert
-        verify(mockFirebaseAccessObject).getProjectInfo(projectName);
+        // Verify that `prepareSuccessView` was never called since the project does not exist
+        verify(mockSetLeaderPresenter, never()).prepareSuccessView(anyString());
     }
+
+    // Add more test cases based on your specific use cases
 }
