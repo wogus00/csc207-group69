@@ -78,6 +78,17 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         this.db = FirestoreClient.getFirestore();
     }
 
+    /**
+     * Saves the project details to a Firestore database.
+     * This method performs the following actions:
+     * 1. Saves basic project information (name, leader email, member emails) in a document named 'projectInfo'.
+     * 2. Initializes empty documents for 'taskInfo' and 'meetingInfo' under the project collection.
+     * 3. Updates the 'IDCollection' document in the 'IDCollection' collection with the project name.
+     *
+     * @param project The Project object containing details to be saved.
+     *                It should contain the project name, leader email, and member emails.
+     * @throws RuntimeException if there is an interruption or execution failure during Firestore operations.
+     */
     public void save(Project project) {
             String projectName = project.getProjectName();
             String leaderEmail = project.getLeaderEmail();
@@ -114,6 +125,17 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
             docRefCollection.set(data2);
     }
 
+    /**
+     * Saves meeting details to a Firestore database.
+     * The method performs the following:
+     * 1. Retrieves existing meeting information from the 'meetingInfo' document under the specified project.
+     * 2. Updates or creates new meeting information with details like meeting name, participant emails, meeting date, start time, and end time.
+     * 3. Saves the updated meeting information back to the 'meetingInfo' document.
+     *
+     * @param meeting The Meeting object containing details to be saved.
+     *                It should contain the meeting name, project name, participant emails, meeting date, start time, and end time.
+     * @throws RuntimeException if there is an interruption or execution failure during Firestore operations.
+     */
     @Override
     public void saveMeeting(Meeting meeting) {
         String meetingName = meeting.getMeetingName();
@@ -147,7 +169,19 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         docRefMeeting.set(meetings);
     }
 
-
+    /**
+     * Checks if a meeting name already exists in the specified project.
+     *
+     * This method queries the Firestore database for a document that represents
+     * meeting information in a given project. It then checks if the specified
+     * meeting name exists within the retrieved document.
+     *
+     * @param projectName The name of the project in which to check for the meeting name.
+     * @param meetingName The name of the meeting to check for existence.
+     * @return {@code true} if the meeting name exists, {@code false} otherwise.
+     * @throws ExecutionException If the computation threw an exception.
+     * @throws InterruptedException If the current thread was interrupted while waiting.
+     */
     public boolean meetingNameExists(String projectName, String meetingName) throws ExecutionException, InterruptedException {
         DocumentReference docRef = db.collection(projectName).document("meetingInfo");
         ApiFuture<DocumentSnapshot> snapshot = docRef.get();
@@ -161,7 +195,20 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         return false;
     }
 
-
+    /**
+     * Retrieves information about a specific project.
+     *
+     * This method accesses the Firestore database to obtain details of a project
+     * based on its name. It fetches project information including the project leader's
+     * email and the emails of all project members. The method then constructs and
+     * returns a {@code Project} object with this information.
+     *
+     * If the operation is interrupted or fails to execute, it throws a {@code RuntimeException}.
+     *
+     * @param projectName The name of the project for which information is to be retrieved.
+     * @return A {@code Project} object containing details of the specified project.
+     * @throws RuntimeException If an {@code InterruptedException} or {@code ExecutionException} occurs.
+     */
     public Project getProjectInfo(String projectName) {
         DocumentReference docRef = db.collection(projectName).document("projectInfo");
         ApiFuture<DocumentSnapshot> snapShot = docRef.get();
@@ -179,6 +226,18 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         return project;
     }
 
+    /**
+     * Retrieves a list of information based on the specified type within a given project.
+     *
+     * This method serves as a gateway to fetch different types of information (tasks, meetings,
+     * or announcements) from a project. It uses a {@code ProjectInfoAccessor} to access the
+     * desired information. The type of information to be retrieved is specified by the 'type' parameter.
+     *
+     * @param projectName The name of the project from which to retrieve information.
+     * @param type The type of information to retrieve. Valid options are "task", "meeting", or "announcement".
+     * @return An {@code ArrayList<String>} containing the requested information. If the type is not recognized,
+     *         it returns an empty list.
+     */
     public ArrayList<String> getInfoList(String projectName, String type) {
         ProjectInfoAccessor accessor = new ProjectInfoAccessorImplementation(projectName, this);
         if (type.equals("task")) {
@@ -192,9 +251,20 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         }
     }
 
-
-
-
+    /**
+     * Adds a member to a specific project by email.
+     *
+     * This method updates the 'projectInfo' document of the specified project in the Firestore database.
+     * It runs a transaction to ensure the member's email is not already in the project's member list.
+     * If the project does not exist or if the email is already in the member list, the method throws
+     * an exception.
+     *
+     * @param projectName The name of the project to which the member is to be added.
+     * @param email The email address of the member to be added.
+     * @throws IllegalStateException If the specified project does not exist in the database.
+     * @throws IllegalArgumentException If the provided email already exists in the project's member list.
+     * @throws RuntimeException If the transaction fails or is interrupted for other reasons.
+     */
     public void addMemberToProject(String projectName, String email) {
         DocumentReference docRef = db.collection(projectName).document("projectInfo");
 
@@ -231,7 +301,20 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         }
     }
 
-
+    /**
+     * Removes a member from a specific project by email.
+     *
+     * This method updates the 'projectInfo' document of the specified project in the Firestore database.
+     * It runs a transaction to ensure the project exists and the member's email is in the project's member list.
+     * If the project does not exist, the member list is empty, or the email is not in the member list,
+     * the method throws an exception.
+     *
+     * @param projectName The name of the project from which the member is to be removed.
+     * @param email The email address of the member to be removed.
+     * @throws IllegalStateException If the specified project does not exist or the member list is empty.
+     * @throws IllegalArgumentException If the provided email is not in the project's member list.
+     * @throws RuntimeException If the transaction fails or is interrupted for other reasons.
+     */
     @Override
     public void removeMemberFromProject(String projectName, String email) {
         DocumentReference docRef = db.collection(projectName).document("projectInfo");
@@ -273,7 +356,20 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         }
     }
 
-
+    /**
+     * Sets a new leader for a specified project.
+     *
+     * This method performs a transaction in the Firestore database to update the leader of a project.
+     * It ensures that the new leader's email is different from the current leader's email. If the project
+     * does not exist, or if the new leader's email is the same as the current leader's, the method throws
+     * an exception. It also updates the member list to reflect this change in leadership.
+     *
+     * @param projectName The name of the project for which the leadership change is to occur.
+     * @param newLeaderEmail The email address of the new leader.
+     * @throws IllegalStateException If the specified project does not exist in the database.
+     * @throws IllegalArgumentException If the new leader's email is the same as the current leader's email.
+     * @throws RuntimeException If the transaction fails or is interrupted for other reasons.
+     */
     @Override
     public void SetLeaderToNewLeader(String projectName, String newLeaderEmail) {
         DocumentReference docRef = db.collection(projectName).document("projectInfo");
@@ -315,6 +411,17 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         }
     }
 
+    /**
+     * Checks if a project with the specified name exists.
+     *
+     * This method iterates over a collection of project references, comparing each project's
+     * ID with the provided project name. It also checks for specific project names like
+     * "announcements" or "IDCollection" as a special case. If a project with the given name
+     * is found, or if the name matches one of the special cases, the method returns true.
+     *
+     * @param projectName The name of the project to check for existence.
+     * @return {@code true} if the project exists or matches a special case; {@code false} otherwise.
+     */
     public boolean existsByName(String projectName) {
         Collections collections = new Collections(this);
         Iterator<CollectionReference> collectionIterator = collections.iterator();
@@ -329,6 +436,19 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         return false;
     }
 
+    /**
+     * Saves a new task to the Firestore database under a specified project.
+     *
+     * This method first retrieves the document for task information within the given project.
+     * It then constructs a map of task details from the provided {@code Task} object, which includes
+     * task name, supervisor, working members list, deadline, comments, and status. These details are
+     * then saved to the Firestore document. If the retrieval of task information is interrupted or fails
+     * to execute, a {@code RuntimeException} is thrown.
+     *
+     * @param projectName The name of the project under which the task is to be saved.
+     * @param newTask The {@code Task} object containing the details of the task to be saved.
+     * @throws RuntimeException If the task information retrieval is interrupted or fails.
+     */
     @Override
     public void saveTask(String projectName, Task newTask) {
         DocumentReference docRef = db.collection(projectName).document("taskInfo");
@@ -360,6 +480,13 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         docRef.set(fields);
     }
 
+    /**
+     * Checks if a task name already exists within a project.
+     *
+     * @param projectName The name of the project to check.
+     * @param taskName The name of the task to verify.
+     * @return {@code true} if the task name exists within the project; {@code false} otherwise.
+     */
     @Override
     public boolean taskNameExists(String projectName, String taskName) {
         ProjectInfoAccessor accessor = new ProjectInfoAccessorImplementation(projectName, this);
@@ -371,6 +498,12 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         }
     }
 
+    /**
+     * Deletes an old task from a specified project.
+     *
+     * @param projectName The name of the project from which the task should be deleted.
+     * @param oldTaskName The name of the task to be deleted.
+     */
     @Override
     public void deleteOldTask(String projectName, String oldTaskName) {
         DocumentReference docRef = db.collection(projectName).document("taskInfo");
@@ -396,6 +529,12 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         docRef.set(newFields);
     }
 
+    /**
+     * Marks a specified task as completed within a project.
+     *
+     * @param projectName The name of the project containing the task.
+     * @param taskName The name of the task to mark as complete.
+     */
     @Override
     public void completeTask(String projectName, String taskName) {
         DocumentReference docRef = db.collection(projectName).document("taskInfo");
@@ -416,6 +555,14 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         docRef.set(fields);
     }
 
+    /**
+     * Checks if a user has access to a specified task within a project.
+     *
+     * @param projectName The name of the project containing the task.
+     * @param taskName The name of the task to check access for.
+     * @param userEmail The email of the user to check for access.
+     * @return {@code true} if the user has access to the task; {@code false} otherwise.
+     */
     @Override
     public boolean userHasAccessToTask(String projectName, String taskName, String userEmail) {
         DocumentReference docRef = db.collection(projectName).document("taskInfo");
@@ -439,6 +586,13 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         return false;
     }
 
+    /**
+     * Checks if members in a given list exist within a project.
+     *
+     * @param projectName The name of the project to check in.
+     * @param workingMembersList The list of member emails to verify.
+     * @return {@code true} if all members in the list exist within the project; {@code false} otherwise.
+     */
     @Override
     public boolean memberExists(String projectName, ArrayList<String> workingMembersList) {
         ArrayList<String> allMembers = new ArrayList<>();

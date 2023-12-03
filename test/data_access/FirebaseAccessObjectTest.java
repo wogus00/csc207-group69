@@ -3,9 +3,7 @@ package data_access;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import data_access.FirebaseAccessObject;
-import entity.Announcement;
-import entity.CommonAnnouncement;
-import entity.Project;
+import entity.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -19,7 +17,6 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import entity.CommonProject;
 
 public class FirebaseAccessObjectTest {
 
@@ -50,6 +47,9 @@ public class FirebaseAccessObjectTest {
     @Mock
     private Iterator<CollectionReference> mockIterator;
 
+    @Mock
+    private ProjectInfoAccessorImplementation mockProjectInfoAccessor;
+
 
     @Before
     public void setUp() {
@@ -76,6 +76,61 @@ public class FirebaseAccessObjectTest {
         assertTrue(project.getMemberEmails().contains("member1@example.com"));
         assertTrue(project.getMemberEmails().contains("member2@example.com"));
     }
+
+    @Test
+    public void testMeetingNameExists_Exists() throws Exception {
+        // Setup test data
+        String projectName = "ProjectX";
+        String meetingName = "Meeting1";
+        Map<String, Object> meetings = new HashMap<>();
+        meetings.put(meetingName, new HashMap<>()); // Add meetingName to the mock data
+
+        // Mock the DocumentSnapshot to return our test data
+        when(mockDocumentSnapshot.exists()).thenReturn(true);
+        when(mockDocumentSnapshot.getData()).thenReturn(meetings);
+        when(mockDocumentSnapshotFuture.get()).thenReturn(mockDocumentSnapshot);
+
+        // Call the method
+        boolean exists = firebaseAccessObject.meetingNameExists(projectName, meetingName);
+
+        // Assert the result
+        assertTrue(exists);
+    }
+
+    @Test
+    public void testMeetingNameExists_DoesNotExist() throws Exception {
+        // Setup test data
+        String projectName = "ProjectX";
+        String meetingName = "Meeting1";
+        Map<String, Object> meetings = new HashMap<>(); // No meetingName in the mock data
+
+        // Mock the DocumentSnapshot to return our test data
+        when(mockDocumentSnapshot.exists()).thenReturn(true);
+        when(mockDocumentSnapshot.getData()).thenReturn(meetings);
+        when(mockDocumentSnapshotFuture.get()).thenReturn(mockDocumentSnapshot);
+
+        // Call the method
+        boolean exists = firebaseAccessObject.meetingNameExists(projectName, meetingName);
+
+        // Assert the result
+        assertFalse(exists);
+    }
+
+
+    @Test
+    public void testGetInfoList_InvalidType() {
+        // Setup
+        String projectName = "ProjectX";
+        String type = "invalidType";
+
+        // Call the method
+        ArrayList<String> result = firebaseAccessObject.getInfoList(projectName, type);
+
+        // Assert that the result is an empty list
+        assertTrue(result.isEmpty());
+    }
+
+
 
     @Test
     public void testExistsByName() throws InterruptedException, ExecutionException {
