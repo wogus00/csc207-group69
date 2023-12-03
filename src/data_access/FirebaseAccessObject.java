@@ -92,10 +92,8 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
             Map<String, Object> data1 = new HashMap<>();
             DocumentReference docRefTask = db.collection(projectName).document("taskInfo");
             DocumentReference docRefMeeting = db.collection(projectName).document("meetingInfo");
-            DocumentReference docRefAnnounce = db.collection(projectName).document("announcementInfo");
             docRefTask.set(data1);
             docRefMeeting.set(data1);
-            docRefAnnounce.set(data1);
             DocumentReference docRefCollection = db.collection("IDCollection").document("IDCollection");
             ApiFuture<DocumentSnapshot> snapShot = docRefCollection.get();
             DocumentSnapshot IDInfo = null;
@@ -181,8 +179,17 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         return project;
     }
 
-    public ArrayList<String> getInfoList(String projectName, InfoListGetter infoListGetter) {
-        return (ArrayList<String>) infoListGetter.getInfoList(projectName, this);
+    public ArrayList<String> getInfoList(String projectName, String type) {
+        ProjectInfoAccessor accessor = new ProjectInfoAccessorImplementation(projectName, this);
+        if (type.equals("task")) {
+            return accessor.getTaskInfoList();
+        } if (type.equals("meeting")) {
+            return accessor.getMeetingInfoList();
+        } if (type.equals("announcement")) {
+            return accessor.getAnnouncementInfoList();
+        } else {
+            return new ArrayList<>();
+        }
     }
 
 
@@ -316,6 +323,9 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
                 return true;
             }
         }
+        if (projectName.equals("announcements") | projectName.equals("IDCollection")) {
+            return true;
+        }
         return false;
     }
 
@@ -352,12 +362,13 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
 
     @Override
     public boolean taskNameExists(String projectName, String taskName) {
-        TaskListGetter strategy = new TaskListGetter();
-        ArrayList<String> taskList = (ArrayList<String>) strategy.getInfoList(projectName, this);
+        ProjectInfoAccessor accessor = new ProjectInfoAccessorImplementation(projectName, this);
+        ArrayList<String> taskList = accessor.getTaskInfoList();
         if (taskList.contains(taskName)) {
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     @Override
