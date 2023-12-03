@@ -1,6 +1,5 @@
 package use_case.login;
 
-import data_access.*;
 import entity.CommonProject;
 import org.junit.Before;
 import org.junit.Test;
