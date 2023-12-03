@@ -42,7 +42,7 @@ import java.beans.PropertyChangeEvent;
  * It extends JPanel and implements ActionListener and PropertyChangeListener to interact with
  * the user actions and model changes.
  */
-public class MainPageView extends JPanel implements ActionListener, PropertyChangeListener {
+public class MainPageView extends JPanel implements PropertyChangeListener {
 
     public final String viewName = "Main Page";
 
@@ -74,7 +74,25 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
     JLabel announcementLabel;
     JButton recentAnnouncement;
     JLabel recentAnnouncementInfo = new JLabel();
-    private JPanel projectPanelExtension;
+    JPanel projectPanelExtension;
+    JPanel taskPanelExtension;
+    JPanel meetingPanelExtension;
+    JPanel announcementPanelExtension;
+    JButton taskButton;
+    JButton meetingButton;
+    JButton announcementButton;
+    JButton projectButton;
+    JButton logoutButton;
+    JButton buttonT1;
+    JButton buttonT2;
+    JButton buttonT3;
+    JButton buttonM1;
+    JButton buttonM2;
+    JButton buttonA1;
+    JButton buttonA2;
+    JButton buttonP1;
+    JButton buttonP2;
+    JButton buttonP3;
 
     /**
      * Constructs a new MainPageView class with specific models
@@ -202,11 +220,11 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         // List for different extension panels
         ArrayList<JPanel> buttonList = new ArrayList<>();
 
-        JButton taskButton = new JButton("Task");
-        JButton meetingButton = new JButton("Meeting");
-        JButton announcementButton = new JButton("Announcement");
-        JButton projectButton = new JButton("Project");
-        JButton logoutButton = new JButton("Log out");
+        taskButton = new JButton("Task");
+        meetingButton = new JButton("Meeting");
+        announcementButton = new JButton("Announcement");
+        projectButton = new JButton("Project");
+        logoutButton = new JButton("Log out");
 
 
         typeButtonPanel.add(taskButton);
@@ -217,13 +235,13 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
 
 
         // Additional button panels for extension, initially not visible
-        JPanel taskPanelExtension = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        taskPanelExtension = new JPanel(new FlowLayout(FlowLayout.LEFT));
         taskPanelExtension.setName("Task Extension");
         taskPanelExtension.setVisible(false);
 
-        JButton buttonT1 = new JButton("create task");
-        JButton buttonT2 = new JButton("modify task");
-        JButton buttonT3 = new JButton("complete task");
+        buttonT1 = new JButton("create task");
+        buttonT2 = new JButton("modify task");
+        buttonT3 = new JButton("complete task");
         taskPanelExtension.add(buttonT1);
         taskPanelExtension.add(buttonT2);
         taskPanelExtension.add(buttonT3);
@@ -232,23 +250,23 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         buttonPanel.add(taskPanelExtension);
         buttonList.add(taskPanelExtension);
 
-        JPanel meetingPanelExtension = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        meetingPanelExtension = new JPanel(new FlowLayout(FlowLayout.LEFT));
         meetingPanelExtension.setName("Meeting Extension");
         meetingPanelExtension.setVisible(false);
 
-        JButton buttonM1 = new JButton("create meeting");
-        JButton buttonM2 = new JButton("modify meeting");
+        buttonM1 = new JButton("create meeting");
+        buttonM2 = new JButton("modify meeting");
         meetingPanelExtension.add(buttonM1);
         meetingPanelExtension.add(buttonM2);
         buttonPanel.add(meetingPanelExtension);
         buttonList.add(meetingPanelExtension);
 
-        JPanel announcementPanelExtension = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        announcementPanelExtension = new JPanel(new FlowLayout(FlowLayout.LEFT));
         announcementPanelExtension.setName("Announcement Extension");
         announcementPanelExtension.setVisible(false);
 
-        JButton buttonA1 = new JButton("create announcement");
-        JButton buttonA2 = new JButton("delete announcement");
+        buttonA1 = new JButton("create announcement");
+        buttonA2 = new JButton("delete announcement");
         announcementPanelExtension.add(buttonA1);
         announcementPanelExtension.add(buttonA2);
         buttonPanel.add(announcementPanelExtension);
@@ -258,9 +276,9 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         projectPanelExtension.setName("Project Extension");
         projectPanelExtension.setVisible(false);
 
-        JButton buttonP1 = new JButton("add member");
-        JButton buttonP2 = new JButton("remove member");
-        JButton buttonP3 = new JButton("change leader");
+        buttonP1 = new JButton("add member");
+        buttonP2 = new JButton("remove member");
+        buttonP3 = new JButton("change leader");
         projectPanelExtension.add(buttonP1);
         projectPanelExtension.add(buttonP2);
         projectPanelExtension.add(buttonP3);
@@ -374,6 +392,7 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
                         MainPageState mainPageState = mainPageViewModel.getState();
                         CreateTaskState createTaskState = createTaskViewModel.getState();
                         createTaskState.setProjectName(mainPageState.getProjectName());
+                        createTaskViewModel.setState(createTaskState);
                         createTaskViewModel.firePropertyChanged();
                         viewManagerModel.setActiveView("Create Task");
                         viewManagerModel.firePropertyChanged();
@@ -520,15 +539,6 @@ public class MainPageView extends JPanel implements ActionListener, PropertyChan
         // Center the window and make it visible
     }
 
-    /**
-     * React to a button click that results in evt.
-     *
-     * @param evt The ActionEvent object.
-     */
-    @Override
-    public void actionPerformed(ActionEvent evt) {
-
-    }
 
     /**
      * React to property changes in the view model.
