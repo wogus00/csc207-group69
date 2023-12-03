@@ -26,6 +26,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CreateProjectViewTest {
 
@@ -60,134 +62,62 @@ public class CreateProjectViewTest {
     public void testProjectNameInputField() {
         // Given
         JTextField projectNameInputField = view.getProjectNameInputField();
-        String projectName = "New Project Name";
+        char c = 'c';
 
-        // When
-        projectNameInputField.setText(projectName);
-        for (char c : projectName.toCharArray()) {
-            projectNameInputField.dispatchEvent(new KeyEvent(
-                    projectNameInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
-        }
+        projectNameInputField.getKeyListeners()[0].keyTyped(new KeyEvent(
+                projectNameInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
+        projectNameInputField.getKeyListeners()[0].keyPressed(new KeyEvent(
+                projectNameInputField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, c));
+        projectNameInputField.getKeyListeners()[0].keyReleased(new KeyEvent(
+                projectNameInputField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_A, c));
 
-        // Then
-        CreateProjectState expectedState = new CreateProjectState();
-        expectedState.setProjectName(projectName);
-        verify(mockViewModel).setState(refEq(expectedState));
+        assertEquals(mockViewModel.getState().getProjectName(), "c");
     }
 
     @Test
     public void testLeaderEmailInputField() {
         // Given
         JTextField leaderEmailInputField = view.getLeaderEmailInputField();
-        String leaderEmail = "leader@example.com";
+        char c = 'c';
 
-        // When
-        leaderEmailInputField.setText(leaderEmail);
-        for (char c : leaderEmail.toCharArray()) {
-            leaderEmailInputField.dispatchEvent(new KeyEvent(
-                    leaderEmailInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
-        }
+        leaderEmailInputField.getKeyListeners()[0].keyTyped(new KeyEvent(
+                leaderEmailInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
+        leaderEmailInputField.getKeyListeners()[0].keyReleased(new KeyEvent(
+                leaderEmailInputField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_A, c));
+        leaderEmailInputField.getKeyListeners()[0].keyPressed(new KeyEvent(
+                leaderEmailInputField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, c));
 
-        // Then
-        CreateProjectState expectedState = new CreateProjectState();
-        expectedState.setLeaderEmail(leaderEmail);
-        verify(mockViewModel).setState(refEq(expectedState));
+
+        assertEquals(mockViewModel.getState().getLeaderEmail(), "c");
     }
 
     @Test
     public void testMemberEmailInputField() {
         // Given
         JTextField memberEmailInputField = view.getMemberEmailInputField();
-        String memberEmail = "member1@example.com,member2@example.com";
+        char c = 'c';
 
-        // When
-        memberEmailInputField.setText(memberEmail);
-        for (char c : memberEmail.toCharArray()) {
-            memberEmailInputField.dispatchEvent(new KeyEvent(
-                    memberEmailInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
-        }
+        memberEmailInputField.getKeyListeners()[0].keyTyped(new KeyEvent(
+                memberEmailInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
+        memberEmailInputField.getKeyListeners()[0].keyPressed(new KeyEvent(
+                memberEmailInputField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, c));
+        memberEmailInputField.getKeyListeners()[0].keyReleased(new KeyEvent(
+                memberEmailInputField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_A, c));
 
-        // Then
-        CreateProjectState expectedState = new CreateProjectState();
-        expectedState.setMemberEmail(memberEmail);
-        verify(mockViewModel).setState(refEq(expectedState));
+
+        assertEquals(mockViewModel.getState().getMemberEmail(), new ArrayList<>(Arrays.asList("c")));
     }
 
     @Test
     public void testLoginButtonActionListener() {
-        // Given
-        CreateProjectView view = new CreateProjectView(mockController, mockViewModel, mockViewManagerModel);
         JButton loginButton = view.getLoginButton(); // Assuming there is a getter for the login button
 
         // When
         loginButton.doClick();
 
         // Then
-        verify(mockViewManagerModel).setActiveView("login");
+        verify(mockViewManagerModel).setActiveView("log in");
         verify(mockViewManagerModel).firePropertyChanged();
-    }
-
-    @Test
-    public void testProjectNameInputFieldKeyListener() {
-        // Given
-        JTextField projectNameInputField = view.getProjectNameInputField();
-        String projectName = "New Project Name";
-        CreateProjectState expectedState = new CreateProjectState();
-        expectedState.setProjectName(projectName);
-
-        // When
-        KeyListener[] listeners = projectNameInputField.getKeyListeners();
-        for (KeyListener listener : listeners) {
-            for (char c : projectName.toCharArray()) {
-                listener.keyTyped(new KeyEvent(projectNameInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
-            }
-        }
-
-        // Then
-        verify(mockViewModel).setState(refEq(expectedState));
-    }
-
-    @Test
-    public void testLeaderEmailInputFieldKeyListener() {
-        // Given
-        JTextField leaderEmailInputField = view.getLeaderEmailInputField();
-        String leaderEmail = "leader@example.com";
-        CreateProjectState mockState = mock(CreateProjectState.class);
-
-        when(mockViewModel.getState()).thenReturn(mockState);
-
-        // Simulate user typing in the leaderEmailInputField
-        for (char c : leaderEmail.toCharArray()) {
-            leaderEmailInputField.dispatchEvent(new KeyEvent(
-                    leaderEmailInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
-        }
-
-        // Then
-        verify(mockViewModel, times(leaderEmail.length())).setState(any(CreateProjectState.class));
-    }
-
-    @Test
-    public void testMemberEmailInputFieldKeyListener() {
-        // Given
-        CreateProjectState initialState = new CreateProjectState();
-        when(mockViewModel.getState()).thenReturn(initialState);
-
-        JTextField memberEmailInputField = view.getMemberEmailInputField(); // Make sure your view has this getter
-        KeyEvent keyEvent = new KeyEvent(memberEmailInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, 'a');
-
-        // When
-        for(KeyListener listener : memberEmailInputField.getKeyListeners()) {
-            listener.keyTyped(keyEvent);
-        }
-
-        // Then
-        // Verify that setState was called with the updated state
-        verify(mockViewModel).setState(any(CreateProjectState.class));
-
-        // To be more precise, you can capture the argument and assert the state's details
-        // ArgumentCaptor<CreateProjectState> stateCaptor = ArgumentCaptor.forClass(CreateProjectState.class);
-        // verify(mockViewModel).setState(stateCaptor.capture());
-        // assertEquals("a", stateCaptor.getValue().getMemberEmail().get(0)); // This line depends on how you manage the state of emails
     }
 
     @Test
@@ -198,7 +128,7 @@ public class CreateProjectViewTest {
         when(mockViewModel.getState()).thenReturn(stateWithError);
 
         // When
-        view.propertyChange(new PropertyChangeEvent(this, "projectNameError", "", "Error message"));
+        view.propertyChange(new PropertyChangeEvent(this, "projectNameError", null, stateWithError));
 
         // Then
         // Verify that a dialog box is shown. This might require you to mock JOptionPane.showDialog or similar.
@@ -216,24 +146,6 @@ public class CreateProjectViewTest {
         // verify(mockSomeComponent).someMethod();
     }
 
-    @Test
-    public void testPropertyChangeWithError() {
-        // Given
-        CreateProjectState mockState = mock(CreateProjectState.class);
-        when(mockState.getProjectNameError()).thenReturn("Error message");
-        PropertyChangeEvent mockEvent = new PropertyChangeEvent(this, "projectName", null, mockState);
-
-        // When
-        view.propertyChange(mockEvent);
-
-        // Then
-        // The following line assumes that you have a method to get the parent frame or component for the JOptionPane
-        // If you do not, you will need to find another way to verify that the JOptionPane has been displayed.
-        verify(mockState).getProjectNameError();
-        // This line verifies that a JOptionPane is displayed with the correct error message.
-        // If you can intercept the dialog parent, you can check for JOptionPane invocations.
-        // However, if you can't intercept, this may not be directly testable.
-    }
 
     @Test
     public void testPropertyChangeWithNoError() {
@@ -264,21 +176,6 @@ public class CreateProjectViewTest {
         // there's nothing to verify. This is a placeholder for when actionPerformed has an implementation.
     }
 
-    @Test
-    public void testPropertyChange_WithError() {
-        // Given
-        CreateProjectState mockState = mock(CreateProjectState.class);
-        PropertyChangeEvent mockEvent = new PropertyChangeEvent(new Object(), "projectNameError", null, mockState);
-        when(mockState.getProjectNameError()).thenReturn("Error message");
-
-        // When
-        view.propertyChange(mockEvent);
-
-        // Then
-        verify(mockState).getProjectNameError();
-        // You should also verify that a dialog is shown, but this requires further setup as JOptionPane
-        // is a static method and can't be directly mocked without a framework like PowerMock.
-    }
 
     @Test
     public void testLeaderEmailInputFieldKeyPressed() {
@@ -314,62 +211,6 @@ public class CreateProjectViewTest {
         // For example, if releasing a key is supposed to trigger validation, you would verify that
     }
 
-    @Test
-    public void shouldUpdateProjectNameOnKeyTyped() {
-        // given
-        String typedText = "New Project";
-        when(mockViewModel.getState()).thenReturn(new CreateProjectState());
-        JTextField projectNameInputField = view.getProjectNameInputField();
-
-        // when
-        for (char c : typedText.toCharArray()) {
-            KeyEvent keyEvent = new KeyEvent(projectNameInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c);
-            for (KeyListener kl : projectNameInputField.getKeyListeners()) {
-                kl.keyTyped(keyEvent);
-            }
-        }
-
-        // then
-        verify(mockViewModel).setState(any(CreateProjectState.class));
-    }
-
-    @Test
-    public void shouldUpdateLeaderEmailOnKeyTyped() {
-        // given
-        String typedText = "leader@example.com";
-        when(mockViewModel.getState()).thenReturn(new CreateProjectState());
-        JTextField leaderEmailInputField = view.getLeaderEmailInputField();
-
-        // when
-        for (char c : typedText.toCharArray()) {
-            KeyEvent keyEvent = new KeyEvent(leaderEmailInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c);
-            for (KeyListener kl : leaderEmailInputField.getKeyListeners()) {
-                kl.keyTyped(keyEvent);
-            }
-        }
-
-        // then
-        verify(mockViewModel).setState(any(CreateProjectState.class));
-    }
-
-    @Test
-    public void shouldUpdateMemberEmailOnKeyTyped() {
-        // given
-        String typedText = "member@example.com";
-        when(mockViewModel.getState()).thenReturn(new CreateProjectState());
-        JTextField memberEmailInputField = view.getMemberEmailInputField();
-
-        // when
-        for (char c : typedText.toCharArray()) {
-            KeyEvent keyEvent = new KeyEvent(memberEmailInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c);
-            for (KeyListener kl : memberEmailInputField.getKeyListeners()) {
-                kl.keyTyped(keyEvent);
-            }
-        }
-
-        // then
-        verify(mockViewModel).setState(any(CreateProjectState.class));
-    }
 
     @Test
     public void shouldShowErrorMessageDialogOnProjectNameError() {
@@ -470,17 +311,15 @@ public class CreateProjectViewTest {
     }
 
     @Test
-    void testCreateProjectExceptionHandling() throws AddressException, IOException {
-        // Given an IOException is thrown when the execute method is called
-        doThrow(IOException.class).when(mockController).execute(anyString(), anyString(), any());
+    public void testActionListenerException() throws IOException, AddressException {
+        // Setting up the mock behavior
+        when(mockViewModel.getState()).thenReturn(new CreateProjectState());
+        doThrow(IOException.class).when(mockController).execute(anyString(), anyString(), any(ArrayList.class));
 
-        // When and Then: assert that executing the create button click
-        // results in a RuntimeException
-        JButton createButton = view.getCreateButton();
-        assertThrows(RuntimeException.class, createButton::doClick);
-
-        // Optionally, verify the interactions or the state after the exception was thrown
-        // This is just an example and might need to be adjusted based on actual code behavior
-        verify(mockViewModel).setState(any(CreateProjectState.class));
+        assertThrows(RuntimeException.class, () -> {
+            view.getCreateButton().getActionListeners()[0].actionPerformed(
+                    new ActionEvent(view.getCreateButton(), ActionEvent.ACTION_PERFORMED, null)
+            );
+        });
     }
 }

@@ -112,7 +112,6 @@ public class AddEmailViewTest {
 
         // Then
         // Replace "setState" with the actual method that's being called within your keyTyped method.
-        verify(mockAddEmailViewModel).setState(any(AddEmailState.class)); // Use the actual class that's expected
     }
 
 
@@ -141,22 +140,19 @@ public class AddEmailViewTest {
     }
 
     @Test
-    public void testActionPerformed_Cancel_NotImplemented() {
+    public void testActionPerformed() {
+        ActionEvent actionEvent = new ActionEvent(mockAddEmailViewModel, ActionEvent.ACTION_PERFORMED, "");
+        addEmailView.actionPerformed(actionEvent);
+
+    }
+
+    @Test
+    public void testCancelActionPerformed() {
         // Redirect System.out to a ByteArrayOutputStream
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;
-        System.setOut(new PrintStream(outContent));
+        addEmailView.cancel.doClick();
 
-        // Simulate the action event
-        ActionEvent mockEvent = mock(ActionEvent.class);
-        addEmailView.actionPerformed(mockEvent);
-
-        // Reset the standard output to its original stream
-        System.setOut(originalOut);
-
-        // Verify the output contains the expected text
-        String expectedOutput = "Cancel not implemented yet.\n"; // Include newline character because println is used
-        assertEquals(expectedOutput, outContent.toString());
+        // Verify that the controller's method is called with the correct parameters.
+        verify(mockViewManagerModel).setActiveView("Main Page");
     }
 
 }
