@@ -97,6 +97,7 @@ public class CreateAnnouncementViewTest {
     public void testAnnouncementSentButtonActionListener() throws AddressException, IOException {
         when(mockCreateAnnouncementViewModel.getState()).thenReturn(new CreateAnnouncementState());
         CreateAnnouncementState expectedState = new CreateAnnouncementState();
+        expectedState.setProject("project name");
         expectedState.setAnnouncementTitle("Test Title");
         expectedState.setMessage("Test Message");
         expectedState.setAuthor("Test Author");

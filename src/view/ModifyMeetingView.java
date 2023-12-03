@@ -19,6 +19,10 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The view component for modifying meetings in the application.
+ * It provides user interface elements for users to input meeting details.
+ */
 public class ModifyMeetingView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewName = "Modify Meeting";
@@ -32,6 +36,13 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
     private final ModifyMeetingController modifyMeetingController;
     final JButton modify;
     final JButton cancel;
+
+    /**
+     * Constructor method to create ModifyMeetingView
+     * @param viewManagerModel ViewManagerModel that updates the view
+     * @param modifyMeetingController Controller class related to modifying meetings
+     * @param modifyMeetingViewModel ViewModel class related to modifying meetings
+     */
     public ModifyMeetingView(ViewManagerModel viewManagerModel, ModifyMeetingController modifyMeetingController, ModifyMeetingViewModel modifyMeetingViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.modifyMeetingController = modifyMeetingController;
@@ -230,11 +241,20 @@ public class ModifyMeetingView extends JPanel implements ActionListener, Propert
         this.add(buttons);
     }
 
+    /**
+     * Handles action events triggered within the view.
+     * @param e The event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
 
+    /**
+     * Responds to property changes in the view model.
+     * @param evt A PropertyChangeEvent object describing the event source
+     *            and the property that has changed.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         ModifyMeetingState state = (ModifyMeetingState) evt.getNewValue();

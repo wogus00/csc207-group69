@@ -15,6 +15,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Objects;
 
+/**
+ * The CreateTaskView class represents the GUI view for creating tasks.
+ * This class extends JPanel and includes user interface elements for creating tasks.
+ */
 public class CreateTaskView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewName = "Create Task";
@@ -28,6 +32,13 @@ public class CreateTaskView extends JPanel implements ActionListener, PropertyCh
     private final CreateTaskController createTaskController;
     final JButton create;
     final JButton cancel;
+
+    /**
+     * Constructor method to create CreateTaskView object.
+     * @param viewManagerModel ViewManagerModel that updates the view
+     * @param createTaskController Controller class associated with creating task
+     * @param createTaskViewModel view model class associated with creating task
+     */
     public CreateTaskView(ViewManagerModel viewManagerModel, CreateTaskController createTaskController, CreateTaskViewModel createTaskViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.createTaskController = createTaskController;
@@ -200,11 +211,20 @@ public class CreateTaskView extends JPanel implements ActionListener, PropertyCh
     }
 
 
+    /**
+     * Invoked when an action occurs on the view components.
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
 
+    /**
+     * This method gets called when a bound property is changed.
+     * @param evt A PropertyChangeEvent object describing the event source
+     *            and the property that has changed.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 

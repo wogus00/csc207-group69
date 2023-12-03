@@ -53,7 +53,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
     // Load Firebase Admin SDK credentials
     public FirebaseAccessObject() {
         try {
-            FileInputStream serviceAccount = new FileInputStream("Google_Firebase_SDK.json");
+            FileInputStream serviceAccount = new FileInputStream("google_firebase_sdk.json");
             FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
             boolean hasBeenInitialized = false;
             List<FirebaseApp> firebaseApps = FirebaseApp.getApps();
@@ -65,7 +65,7 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
             if (!hasBeenInitialized) {
 
             // if (FirebaseApp.getApps().isEmpty()) {
-                // FileInputStream serviceAccount = new FileInputStream("Google_Firebase_SDK.json");
+                // FileInputStream serviceAccount = new FileInputStream("google_firebase_sdk.json");
                 // FirebaseOptions options = new FirebaseOptions.Builder()
                         // .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                         // .build();
