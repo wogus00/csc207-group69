@@ -63,7 +63,5 @@ public class CreateTaskPresenterTest {
         verify(mockViewManagerModel).setActiveView(anyString());
         verify(mockViewManagerModel).firePropertyChanged();
     }
-
-
 }
 
