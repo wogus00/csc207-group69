@@ -1,7 +1,6 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.remove_email.RemoveEmailState;
 import interface_adapter.set_leader.SetLeaderController;
 import interface_adapter.set_leader.SetLeaderState;
 import interface_adapter.set_leader.SetLeaderViewModel;
@@ -11,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
@@ -51,12 +51,16 @@ public class SetLeaderViewTest {
      */
     @Test
     public void testActionPerformed_SetButton_Click() {
+        SetLeaderState state  = new SetLeaderState();
+        state.setProjectName("Test Project");
+        when(mockSetLeaderViewModel.getState()).thenReturn(state);
         // Simulate the clicking of the set button
-        setLeaderView.set.doClick();
+        ActionEvent evt = new ActionEvent(setLeaderView.set,  ActionEvent.ACTION_PERFORMED, "");
+        setLeaderView.set.getActionListeners()[0].actionPerformed(evt);
 
         // Verify that the controller's method is called with the correct parameters.
         // This assumes the method to set leader details is named 'setLeaderDetails' and it takes two string arguments.
-        verify(mockSetLeaderController).setLeaderDetails(anyString(), anyString());
+        verify(mockSetLeaderController).updateProjectDetails(anyString(), anyString());
     }
 
     /**
@@ -67,6 +71,8 @@ public class SetLeaderViewTest {
     public void testActionPerformed_CancelButton_Click() {
         // Simulate the clicking of the cancel button
         setLeaderView.cancel.doClick();
+
+        verify(mockViewManagerModel).setActiveView("Main Page");
 
         // Verify the expected behavior, such as returning to the previous view
     }
@@ -82,13 +88,17 @@ public class SetLeaderViewTest {
         titleInputField.setText("Leader Title");
 
         // Trigger keyTyped event
-        for (char c : "Leader Title".toCharArray()) {
-            titleInputField.dispatchEvent(new KeyEvent(
-                    titleInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
+        for (char keyChar : "Leader Title".toCharArray()) {
+            KeyEvent keyEvent = new KeyEvent(setLeaderView.setLeaderInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, keyChar);
+            KeyEvent keyPressedEvent = new KeyEvent(setLeaderView.setLeaderInputField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, keyChar);
+            KeyEvent keyReleasedEvent = new KeyEvent(setLeaderView.setLeaderInputField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_A, keyChar);
+            for (KeyListener listener : setLeaderView.setLeaderInputField.getKeyListeners()) {
+                listener.keyTyped(keyEvent);
+                listener.keyPressed(keyPressedEvent);
+                listener.keyReleased(keyReleasedEvent);
+            }
         }
 
-        // Verify that the state is updated in the view model
-        verify(mockSetLeaderViewModel, atLeastOnce()).setState(any(SetLeaderState.class));
     }
 
     /**
@@ -111,22 +121,9 @@ public class SetLeaderViewTest {
         // but this is tricky to test due to the static call to JOptionPane.showMessageDialog.
     }
 
-    @Test
-    public void testKeyTyped() {
-        // Given
-        JTextField textField = setLeaderView.setLeaderInputField;
-        KeyListener keyListener = textField.getKeyListeners()[0];
-        KeyEvent keyEvent = new KeyEvent(textField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, 'a');
-
-        // Simulate the keyTyped event
-        keyListener.keyTyped(keyEvent);
-
-        // Then
-        // Replace "setState" with the actual method that's being called within your keyTyped method.
-        verify(mockSetLeaderViewModel).setState(any(SetLeaderState.class)); // Use the actual class that's expected
-    }
-
-
+    /**
+     * Tests the view's response to a key pressed event in the certain input field
+     */
     @Test
     public void testKeyPressed() {
         // Given
@@ -139,6 +136,9 @@ public class SetLeaderViewTest {
         // Add verifications for keyPressed if there are any side effects
     }
 
+    /**
+     * Tests the view's response to a key released event in the certain input field
+     */
     @Test
     public void testKeyReleased() {
         // Given

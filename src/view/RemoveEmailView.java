@@ -110,13 +110,11 @@ public class RemoveEmailView extends JPanel implements ActionListener, PropertyC
 
     /**
      * Handles action events triggered in this view.
-     * Currently, it prints a message to the console for any action, indicating that the action is not yet implemented.
      *
      * @param e The ActionEvent object containing details of the event.
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Cancel not implemented yet.");
     }
 
     /**

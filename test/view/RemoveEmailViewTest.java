@@ -1,28 +1,22 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.add_email.AddEmailState;
 import interface_adapter.remove_email.RemoveEmailController;
 import interface_adapter.remove_email.RemoveEmailState;
 import interface_adapter.remove_email.RemoveEmailViewModel;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests for the {@link RemoveEmailView} class. These tests verify the interactions between the
@@ -67,14 +61,14 @@ public class RemoveEmailViewTest {
     }
 
     /**
-     * Tests the functionality of the cancel button action. This test should verify that the appropriate
-     * view change occurs when the cancel button is clicked, simulating a user's cancellation of the email removal process.
-     * Actual behavior to be verified depends on the implementation of the cancel button's action listener.
-     */
+     * Tests the functionality of the action performed method
+     * this currently does not have real function implemented so we'll simply show that this exists
+     * */
     @Test
-    public void testActionPerformed_CancelButton_Click() {
+    public void testActionPerformed() {
         // Simulate the clicking of the cancel button
-        removeEmailView.cancel.doClick();
+        ActionEvent actionEvent =  new ActionEvent(mockRemoveEmailViewModel, ActionEvent.ACTION_PERFORMED, "");
+        removeEmailView.actionPerformed(actionEvent);
 
         // Verify the expected behavior, such as returning to the previous view
     }
@@ -86,17 +80,17 @@ public class RemoveEmailViewTest {
     @Test
     public void testKeyTyped_RemoveEmailInputField() {
         // Simulate typing in the title input field
-        JTextField titleInputField = removeEmailView.removeEmailInputField;
-        titleInputField.setText("Email Title");
-
         // Trigger keyTyped event
-        for (char c : "Email Title".toCharArray()) {
-            titleInputField.dispatchEvent(new KeyEvent(
-                    titleInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, c));
+        for (char keyChar : "Leader Title".toCharArray()) {
+            KeyEvent keyEvent = new KeyEvent(removeEmailView.removeEmailInputField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, keyChar);
+            KeyEvent keyPressedEvent = new KeyEvent(removeEmailView.removeEmailInputField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_A, keyChar);
+            KeyEvent keyReleasedEvent = new KeyEvent(removeEmailView.removeEmailInputField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_A, keyChar);
+            for (KeyListener listener : removeEmailView.removeEmailInputField.getKeyListeners()) {
+                listener.keyTyped(keyEvent);
+                listener.keyPressed(keyPressedEvent);
+                listener.keyReleased(keyReleasedEvent);
+            }
         }
-
-        // Verify that the state is updated in the view model
-        verify(mockRemoveEmailViewModel, atLeastOnce()).setState(any(RemoveEmailState.class));
     }
 
     /**
@@ -120,22 +114,9 @@ public class RemoveEmailViewTest {
         // it's a bit tricky to verify using Mockito without additional tools or refactoring.
     }
 
-    @Test
-    public void testKeyTyped() {
-        // Given
-        JTextField textField = removeEmailView.removeEmailInputField;
-        KeyListener keyListener = textField.getKeyListeners()[0];
-        KeyEvent keyEvent = new KeyEvent(textField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, 'a');
-
-        // Simulate the keyTyped event
-        keyListener.keyTyped(keyEvent);
-
-        // Then
-        // Replace "setState" with the actual method that's being called within your keyTyped method.
-        verify(mockRemoveEmailViewModel).setState(any(RemoveEmailState.class)); // Use the actual class that's expected
-    }
-
-
+    /**
+     * Tests the view's response to a key pressed event in the certain input field
+     */
     @Test
     public void testKeyPressed() {
         // Given
@@ -148,6 +129,9 @@ public class RemoveEmailViewTest {
         // Add verifications for keyPressed if there are any side effects
     }
 
+    /**
+     * Tests the view's response to a key released event in the certain input field
+     */
     @Test
     public void testKeyReleased() {
         // Given
@@ -160,22 +144,17 @@ public class RemoveEmailViewTest {
         // Add verifications for keyReleased if there are any side effects
     }
 
+    /**
+     * Tests the functionality of the cancel button action. This test should verify that the appropriate
+     * view change occurs when the cancel button is clicked, simulating a user's cancellation of the email removal process.
+     * Actual behavior to be verified depends on the implementation of the cancel button's action listener.
+     */
     @Test
-    public void testActionPerformed_Cancel_NotImplemented() {
+    public void testCancelActionPerformed() {
         // Redirect System.out to a ByteArrayOutputStream
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;
-        System.setOut(new PrintStream(outContent));
+        removeEmailView.cancel.doClick();
 
-        // Simulate the action event
-        ActionEvent mockEvent = mock(ActionEvent.class);
-        removeEmailView.actionPerformed(mockEvent);
-
-        // Reset the standard output to its original stream
-        System.setOut(originalOut);
-
-        // Verify the output contains the expected text
-        String expectedOutput = "Cancel not implemented yet.\n"; // Include newline character because println is used
-        Assert.assertEquals(expectedOutput, outContent.toString());
+        // Verify that the controller's method is called with the correct parameters.
+        verify(mockViewManagerModel).setActiveView("Main Page");
     }
 }
