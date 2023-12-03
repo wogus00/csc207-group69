@@ -20,7 +20,6 @@ import com.google.api.services.gmail.model.Message;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import use_case.complete_task.CompleteTaskDataAccessInterface;
-import use_case.complete_task.CompleteTaskGmailDataAccessInterface;
 
 import use_case.create_announcement.CreateAnnouncementGmailDataAccessInterface;
 
@@ -50,7 +49,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Gmail Data Access Object that communicates with the Gmail API.
  */
-public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, CompleteTaskGmailDataAccessInterface, ModifyTaskGmailDataAccessInterface, CreateAnnouncementGmailDataAccessInterface, CreateMeetingGmailDataAccessInterface, ModifyMeetingGmailDataAccessInterface {
+public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterface, CreateTaskGmailDataAccessInterface, ModifyTaskGmailDataAccessInterface, CreateAnnouncementGmailDataAccessInterface, CreateMeetingGmailDataAccessInterface, ModifyMeetingGmailDataAccessInterface {
 
     private static final String APPLICATION_NAME = "group-project";
 
@@ -211,11 +210,6 @@ public class GmailDataAccessObject implements CreateProjectGmailDataAccessInterf
         message.setRaw(encodedEmail);
 
         return message;
-    }
-
-    @Override
-    public Message sendTaskCompletionEmail(String fromEmail, String toEmail, String taskName) {
-        return null;
     }
 
     @Override

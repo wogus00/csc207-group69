@@ -39,7 +39,7 @@ public class Main {
     public static void main(String[] args) throws GeneralSecurityException, IOException {
 
         // main application window
-        JFrame application = new JFrame("Create Project");
+        JFrame application = new JFrame("Time2Work");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         CardLayout cardLayout = new CardLayout();
@@ -79,7 +79,7 @@ public class Main {
         ModifyTaskView modifyTaskView = ModifyTaskUseCaseFactory.modifyTaskView(viewManagerModel, modifyTaskViewModel,firebaseAccessObject, gmailDataAccessObject);
         views.add(modifyTaskView,modifyTaskView.viewName);
 
-        CompleteTaskView completeTaskView = CompleteTaskUseCaseFactory.completeTaskView(viewManagerModel, completeTaskViewModel, firebaseAccessObject, gmailDataAccessObject, mainPageViewModel);
+        CompleteTaskView completeTaskView = CompleteTaskUseCaseFactory.completeTaskView(viewManagerModel, completeTaskViewModel, firebaseAccessObject, mainPageViewModel);
         views.add(completeTaskView, completeTaskView.viewName);
 
         AddEmailViewModel addEmailViewModel = new AddEmailViewModel();

@@ -1,4 +1,4 @@
-# csc207-group69
+# Time2Work: Collaborative Task Management Platform
 ## Contributors:
 - Jaehyeon Park @wogus00
 - Tatsuya Shiokawa @ShioTatsu-Japan
@@ -62,8 +62,3 @@ As mentioned above, we incorporated Clean Architecture for the design of the pro
   - `Create and Modify Meetings`
   - `Create, Delete Announcement`
   - `Add and Remove Email` and `Set Leader`
-## SOLID Design Principles
-The following are key examples of adhering the SOLID design principles.
-- Single Responsibility Principle
-- Open/Closed Principle
-## Design Patterns

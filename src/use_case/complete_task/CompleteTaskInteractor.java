@@ -9,21 +9,17 @@ package use_case.complete_task;
 public class CompleteTaskInteractor implements CompleteTaskInputBoundary {
 
     final CompleteTaskDataAccessInterface completeTaskDataAccessObject;
-    final CompleteTaskGmailDataAccessInterface completeTaskGmailDataAccessObject;
     final CompleteTaskOutputBoundary completeTaskPresenter;
 
     /**
      * Constructor class that creates new CompleteTaskInteractor class with specified data access objects and output boundary.
      *
      * @param completeTaskDataAccessObject Interface implemented by FirebaseDataAccessObject responsible for communicating with Google Firebase.
-     * @param completeTaskGmailDataAccessObject Interface implemented by GmailDataAccessObject responsible for communicating with Gmail API.
      * @param completeTaskPresenter Output Boundary to present the result of the completing task.
      */
     public CompleteTaskInteractor(CompleteTaskDataAccessInterface completeTaskDataAccessObject,
-                                  CompleteTaskGmailDataAccessInterface completeTaskGmailDataAccessObject,
                                   CompleteTaskOutputBoundary completeTaskPresenter) {
         this.completeTaskDataAccessObject = completeTaskDataAccessObject;
-        this.completeTaskGmailDataAccessObject = completeTaskGmailDataAccessObject;
         this.completeTaskPresenter = completeTaskPresenter;
     }
 
