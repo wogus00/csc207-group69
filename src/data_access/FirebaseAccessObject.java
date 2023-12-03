@@ -551,8 +551,11 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
                 Timestamp creationTimeStamp = (Timestamp) document.get("creationTime");
                 String id = document.getId();
 
-                // Assuming creationTime is stored in ISO_LOCAL_DATE_TIME format
-                LocalDateTime creationTime = creationTimeStamp.toSqlTimestamp().toLocalDateTime();
+                LocalDateTime creationTime = null;
+                if (creationTimeStamp != null) {
+                    // Assuming creationTime is stored in ISO_LOCAL_DATE_TIME format
+                    creationTime = creationTimeStamp.toSqlTimestamp().toLocalDateTime();
+                }
 
                 return new CommonAnnouncement(title, message, creationTime, author, id);
             } else {
@@ -565,5 +568,34 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
             return null;
         }
     }
+
+//    @Override
+//    public Announcement getAnnouncementById(String announcementId) {
+//        DocumentReference docRef = db.collection("announcements").document(announcementId);
+//        ApiFuture<DocumentSnapshot> future = docRef.get();
+//        try {
+//            DocumentSnapshot document = future.get();
+//            if (document.exists()) {
+//                // Constructing CommonAnnouncement from the document
+//                String title = document.getString("title");
+//                String message = document.getString("message");
+//                String author = document.getString("author");
+//                Timestamp creationTimeStamp = (Timestamp) document.get("creationTime");
+//                String id = document.getId();
+//
+//                // Assuming creationTime is stored in ISO_LOCAL_DATE_TIME format
+//                LocalDateTime creationTime = creationTimeStamp.toSqlTimestamp().toLocalDateTime();
+//
+//                return new CommonAnnouncement(title, message, creationTime, author, id);
+//            } else {
+//                // Handle the case where the announcement doesn't exist
+//                return null;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            // Handle exceptions
+//            return null;
+//        }
+//    }
 }
 
