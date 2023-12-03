@@ -111,7 +111,9 @@ class DeleteAnnouncementPresenterTest {
 //        when(mockAnnouncement.getMessage()).thenReturn("Mock Message"); // Ensure getMessage returns a valid string
 //
 //        when(createAnnouncementViewModel.getViewName()).thenReturn("ExpectedViewName");
-//        when(deleteAnnouncementViewModel.getState()).thenReturn(mockDeleteState);
+//        when(deleteAnnouncementViewModel.getState()).thenR
+//
+//        eturn(mockDeleteState);
 //        when(createAnnouncementViewModel.getState()).thenReturn(mockCreateState);
 //
 //        ArrayList<String> mockAnnouncements = new ArrayList<>();
