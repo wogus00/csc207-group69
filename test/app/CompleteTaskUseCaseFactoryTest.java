@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import use_case.complete_task.CompleteTaskDataAccessInterface;
-import use_case.complete_task.CompleteTaskGmailDataAccessInterface;
 import view.CompleteTaskView;
 
 import static org.junit.Assert.assertNotNull;
@@ -20,8 +19,6 @@ public class CompleteTaskUseCaseFactoryTest {
     private CompleteTaskViewModel mockCompleteTaskViewModel;
     @Mock
     private CompleteTaskDataAccessInterface mockCompleteTaskDataAccessObject;
-    @Mock
-    private CompleteTaskGmailDataAccessInterface mockCompleteTaskGmailDataAccessObject;
     @Mock
     private MainPageViewModel mainPageViewModel;
 
@@ -40,7 +37,6 @@ public class CompleteTaskUseCaseFactoryTest {
                 mockViewManagerModel,
                 mockCompleteTaskViewModel,
                 mockCompleteTaskDataAccessObject,
-                mockCompleteTaskGmailDataAccessObject,
                 mainPageViewModel
         );
 

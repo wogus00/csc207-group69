@@ -16,18 +16,17 @@ public class CompleteTaskUseCaseFactory {
     public static CompleteTaskView completeTaskView(ViewManagerModel viewManagerModel,
                                                     CompleteTaskViewModel completeTaskViewModel,
                                                     CompleteTaskDataAccessInterface userDataAccessObject,
-                                                    CompleteTaskGmailDataAccessInterface gmailDataAccessObject,
                                                     MainPageViewModel mainPageViewModel) {
-        CompleteTaskController completeTaskController = completeTaskUseCase(viewManagerModel, completeTaskViewModel, userDataAccessObject, gmailDataAccessObject, mainPageViewModel);
+        CompleteTaskController completeTaskController = completeTaskUseCase(viewManagerModel, completeTaskViewModel, userDataAccessObject, mainPageViewModel);
         return new CompleteTaskView(viewManagerModel, completeTaskController, completeTaskViewModel);
 
 
     }
 
-    private static CompleteTaskController completeTaskUseCase(ViewManagerModel viewManagerModel, CompleteTaskViewModel completeTaskViewModel, CompleteTaskDataAccessInterface userDataAccessObject, CompleteTaskGmailDataAccessInterface gmailDataAccessObject, MainPageViewModel mainPageViewModel) {
+    private static CompleteTaskController completeTaskUseCase(ViewManagerModel viewManagerModel, CompleteTaskViewModel completeTaskViewModel, CompleteTaskDataAccessInterface userDataAccessObject, MainPageViewModel mainPageViewModel) {
         CompleteTaskOutputBoundary completeTaskOutputBoundary = new CompleteTaskPresenter(viewManagerModel, completeTaskViewModel, mainPageViewModel);
 
-        CompleteTaskInputBoundary completeTaskInteractor = new CompleteTaskInteractor(userDataAccessObject, gmailDataAccessObject, completeTaskOutputBoundary);
+        CompleteTaskInputBoundary completeTaskInteractor = new CompleteTaskInteractor(userDataAccessObject, completeTaskOutputBoundary);
         return new CompleteTaskController(completeTaskInteractor);
     }
 }

@@ -25,8 +25,7 @@ class CompleteTaskInteractorTest {
 
     @Mock
     private CompleteTaskDataAccessInterface dataAccessObject;
-    @Mock
-    private CompleteTaskGmailDataAccessInterface gmailAccessObject;
+
     @Mock
     private CompleteTaskOutputBoundary presenter;
     @Mock
@@ -37,7 +36,7 @@ class CompleteTaskInteractorTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        interactor = new CompleteTaskInteractor(dataAccessObject, gmailAccessObject, presenter);
+        interactor = new CompleteTaskInteractor(dataAccessObject, presenter);
     }
 
     @Test
