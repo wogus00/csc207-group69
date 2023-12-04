@@ -73,7 +73,7 @@ public class CreateAnnouncementInteractor implements CreateAnnouncementInputBoun
                     announcement.getAuthor(),
                     announcement.getId());
             createAnnouncementPresenter.prepareSuccessView(createAnnouncementOutputData);
-            ArrayList<String> membersList = createAnnouncementDataAccessObject.getMembersEmails(announcement.getProjectName());
+            ArrayList<String> membersList = createAnnouncementDataAccessObject.getMembersEmails(createAnnouncementInputData.getProjectName());
             for (String email: membersList) {
                 try {
                     gmailDataAccessObject.sendAnnouncementCreationEmail(announcement.getAuthor(), email, announcement.getAnnouncementTitle());
