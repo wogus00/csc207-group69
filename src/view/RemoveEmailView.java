@@ -66,6 +66,7 @@ public class RemoveEmailView extends JPanel implements ActionListener, PropertyC
                     public void actionPerformed(ActionEvent e) {
                         removeEmailController.removeProjectDetails(removeEmailViewModel.getState().getProjectName(),
                                 removeEmailInputField.getText());
+                        JOptionPane.showMessageDialog(RemoveEmailView.this, "removed email successfully");
                     }
                 }
         );
@@ -77,6 +78,7 @@ public class RemoveEmailView extends JPanel implements ActionListener, PropertyC
                     viewManagerModel.setActiveView("Main Page");
                     viewManagerModel.firePropertyChanged();
                     removeEmailInputField.setText("");
+                    JOptionPane.showMessageDialog(RemoveEmailView.this, "cancelled successfully");
                 }
             }
         });
@@ -115,6 +117,7 @@ public class RemoveEmailView extends JPanel implements ActionListener, PropertyC
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(RemoveEmailView.this, "removed email successfully");
     }
 
     /**

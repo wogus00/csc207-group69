@@ -63,6 +63,7 @@ public class AddEmailView extends JPanel implements ActionListener, PropertyChan
                     public void actionPerformed(ActionEvent e) {
                         addEmailController.addProjectDetails(addEmailViewModel.getState().getProjectName(),
                                 addEmailInputField.getText());
+                        JOptionPane.showMessageDialog(AddEmailView.this, "added email successfully");
                     }
                 }
         );
@@ -74,6 +75,7 @@ public class AddEmailView extends JPanel implements ActionListener, PropertyChan
                     viewManagerModel.setActiveView("Main Page");
                     viewManagerModel.firePropertyChanged();
                     addEmailInputField.setText("");
+                    JOptionPane.showMessageDialog(AddEmailView.this, "cancelled successfully");
                 }
             }
         });
@@ -112,7 +114,9 @@ public class AddEmailView extends JPanel implements ActionListener, PropertyChan
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+
         System.out.println("Cancel not implemented yet.");
+        JOptionPane.showMessageDialog(AddEmailView.this, "added email successfully");
     }
 
     /**

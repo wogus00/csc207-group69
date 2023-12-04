@@ -84,6 +84,7 @@ public class SetLeaderView extends JPanel implements ActionListener, PropertyCha
                     viewManagerModel.setActiveView("Main Page");
                     viewManagerModel.firePropertyChanged();
                     setLeaderInputField.setText("");
+                    JOptionPane.showMessageDialog(SetLeaderView.this, "cancelled successfully");
                 }
             }
         });
@@ -94,6 +95,7 @@ public class SetLeaderView extends JPanel implements ActionListener, PropertyCha
                     public void actionPerformed(ActionEvent e) {
                         setLeaderController.updateProjectDetails(setLeaderViewModel.getState().getProjectName(),
                                 setLeaderInputField.getText());
+                        JOptionPane.showMessageDialog(SetLeaderView.this, "set leader successfully");
                     }
                 }
         );
@@ -112,6 +114,7 @@ public class SetLeaderView extends JPanel implements ActionListener, PropertyCha
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(SetLeaderView.this, "set leader successfully");
     }
 
     /**
