@@ -251,6 +251,33 @@ public class FirebaseAccessObject implements CreateProjectDataAccessInterface, C
         }
     }
 
+    @Override
+    public ArrayList<String> getMembersEmails(String projectName) {
+        DocumentReference docRef = db.collection(projectName).document("projectInfo");
+        ArrayList<String> memberEmails = new ArrayList<>();
+
+        try {
+            // Retrieve the projectInfo document
+            ApiFuture<DocumentSnapshot> future = docRef.get();
+            DocumentSnapshot document = future.get();
+
+            if (document.exists()) {
+                // Extract the memberEmails list
+                memberEmails = (ArrayList<String>) document.get("memberEmails");
+                if (memberEmails == null) {
+                    memberEmails = new ArrayList<>(); // Return empty list if field is null
+                }
+            } else {
+                System.out.println("No such document!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle exceptions
+        }
+
+        return memberEmails;
+    }
+
+
     /**
      * Adds a member to a specific project by email.
      *

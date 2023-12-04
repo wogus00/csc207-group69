@@ -7,6 +7,8 @@ import entity.Project;
 import interface_adapter.create_announcement.CreateAnnouncementPresenter;
 import use_case.create_project.CreateProjectGmailDataAccessInterface;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -71,6 +73,14 @@ public class CreateAnnouncementInteractor implements CreateAnnouncementInputBoun
                     announcement.getAuthor(),
                     announcement.getId());
             createAnnouncementPresenter.prepareSuccessView(createAnnouncementOutputData);
+            ArrayList<String> membersList = createAnnouncementDataAccessObject.getMembersEmails(announcement.getProjectName());
+            for (String email: membersList) {
+                try {
+                    gmailDataAccessObject.sendAnnouncementCreationEmail(announcement.getAuthor(), email, announcement.getAnnouncementTitle());
+                } catch (MessagingException | IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 
         } catch (Exception e) {
             // Handle any exceptions, e.g., database connection failure or email sending failure
